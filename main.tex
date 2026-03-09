@@ -1,0 +1,66 @@
+\documentclass{csnotes}
+
+% ==============================================================================
+% DOCUMENT SPECIFIC CUSTOMIZATIONS
+% ==============================================================================
+
+% --------------------------- START CUSTOMIZATIONS -----------------------------
+
+% You can add any custom packages or commands specific to this document here
+
+% ---------------------------- END CUSTOMIZATIONS ------------------------------
+
+
+
+% ==============================================================================
+% DOCUMENT INFORMATION
+% ==============================================================================
+\title{Logic for Computer Science}
+\author{Riccardo Elena}
+\date{\today}
+
+% Additional information for the title page
+\university{Università degli Studi Federico II di Napoli}
+\department{Dipartimento d'Ingegneria Elettrica e Tecnologie dell'Informazione}
+\course{Corso di Laurea Magistrale in Computer Science}
+\subject{Logic for Computer Science}
+\academicyear{Anno Accademico 2025/2026}
+
+% ==============================================================================
+% BIBLIOGRAPHY
+% ==============================================================================
+% Specify the .bib file with your bibliographic references
+% Uncomment the following line when you have created the bibliography.bib file
+% \addbibresource{bibliography.bib}
+
+% ==============================================================================
+% INIZIO DOCUMENTO
+% ==============================================================================
+
+\begin{document}
+
+\pagenumbering{gobble}
+
+\maketitlepage{}
+\whitepage{}
+
+\input{_chapters/0_intro.tex}
+\whitepage{}
+
+\newgeometry{top=2cm}
+\tableofcontents
+\restoregeometry{}
+
+\whitepage{}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{_chapters/1_introduction.tex}
+\input{_chapters/2_propositonal_logic.tex}
+\input{_chapters/draft.tex}
+
+\whitepage{}
+\makebackcover{}
+
+\end{document}

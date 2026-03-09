@@ -1,0 +1,116 @@
+\chapter{Logica Proposizionale}
+
+Abbiamo visto nel capitolo precedente che una logica è caratterizzata da tre componenti fondamentali: un linguaggio formale, una semantica e un calcolo.
+In questo capitolo studieremo in dettaglio la \textit{logica proposizionale}, la più semplice tra le logiche classiche, che costituisce il punto di partenza per comprendere sistemi logici più complessi.
+Procederemo sistematicamente, partendo dalla definizione del linguaggio (sintassi), per poi introdurre la semantica e infine studiare i sistemi di calcolo che permettono di derivare conseguenze logiche.
+
+\section{Sintassi della Logica Proposizionale}
+
+Il primo passo nella costruzione di una logica formale è definire il suo linguaggio, specificando quali simboli possiamo usare e come possiamo combinarli per formare espressioni ben formate.
+Un linguaggio logico è composto da due tipi di simboli: i \textit{simboli non logici}, su cui la logica non fa alcuna assunzione (nel caso della logica proposizionale sono variabili booleane), e i \textit{simboli logici}, i cui significati sono fissati dalla specifica logica.
+
+Per la logica proposizionale, l'insieme dei simboli non logici è denotato con \(AP = \set{A,B,\ldots}\) ed è infinito.
+Per comporre questi simboli utilizziamo i simboli logici \(\set{\land, \lor, \rightarrow, \neg,\leftrightarrow, (,)}\), che rappresentano rispettivamente le connessioni logiche di congiunzione, disgiunzione, implicazione, negazione, doppia implicazione, e le parentesi per disambiguare la struttura delle formule.
+
+Un'espressione è una sequenza finita di simboli del linguaggio. Tuttavia, non tutte le espressioni sono significative dal punto di vista logico: dobbiamo distinguere quelle che rispettano le regole grammaticali del linguaggio.
+
+\begin{definition}{Formula ben formata (WFF)}
+  Una formula ben formata (WFF) è un'espressione che può essere costruita usando una grammatica definita sui simboli del linguaggio.
+\end{definition}
+
+La definizione precisa di quali espressioni sono formule ben formate nella logica proposizionale è data ricorsivamente attraverso le seguenti regole di formazione.
+
+\begin{definition}{WFF Proposizionale}
+  Una formula è ben formata in logica proposizionale se è costruita secondo le seguenti regole:
+\begin{itemize}
+  \item \(AP \subseteq WFF\)
+  \item Se \(\phi \in WFF\), allora \(\neg \phi \in WFF\)
+  \item Se \(\phi,\psi \in WFF\), allora \((\phi \bigodot \psi)\in WFF\), dove \(\bigodot \in \set{\land, \lor, \rightarrow, \leftrightarrow}\) 
+  \item Nessuna altra espressione è una formula ben formata
+\end{itemize}
+  
+\end{definition}
+
+Questa definizione ricorsiva ci permette di utilizzare un potente strumento di ragionamento: l'\textit{induzione strutturale}.
+L'induzione strutturale ci permette di dimostrare proprietà delle formule procedendo per casi: il caso base tratta le formule atomiche (variabili proposizionali), mentre i passi induttivi si basano sulla costruzione della formula a partire da sottoformule più semplici.
+
+A differenza dell'induzione matematica semplice sui numeri naturali (dove per dimostrare \(P(n)\) assumiamo solo \(P(n-1)\)), l'induzione strutturale è basata sul principio di \textit{induzione completa} (o forte), dove per dimostrare una proprietà per una formula \(\phi\) assumiamo che valga per \textit{tutte} le sue sottoformule proprie.
+Tale metodo è ben fondato perché ogni formula ben formata è rappresentabile come un albero sintattico finito, e l'induzione strutturale è quindi equivalente a un'induzione completa su tale albero.
+Questo albero sintattico cattura la struttura gerarchica della formula, mostrando come essa sia stata costruita a partire dalle sue componenti.
+
+\begin{example}{Albero sintattico}
+  Consideriamo la formula \(\phi = (A \rightarrow (B \land \neg C))\). 
+  
+  Questa formula è ben formata secondo la definizione ricorsiva: a partire dalle variabili proposizionali \(A\), \(B\), \(C\) (che sono WFF per la prima regola), costruiamo \(\neg C\) (seconda regola), poi \((B \land \neg C)\) (terza regola), e infine \((A \rightarrow (B \land \neg C))\) (terza regola).
+  
+  L'albero sintattico di \(\phi\) rappresenta questa costruzione gerarchica:
+  
+  \begin{center}
+    \begin{forest}
+      [\(\rightarrow\)
+        [\(A\)]
+        [\(\land\)
+          [\(B\)]
+          [\(\neg\)
+            [\(C\)]
+          ]
+        ]
+      ]
+    \end{forest}
+  \end{center}
+  
+  In questo albero:
+  \begin{itemize}
+    \item Le foglie sono le variabili proposizionali \(A\), \(B\), \(C\)
+    \item I nodi interni sono i connettivi logici \(\rightarrow\), \(\land\), \(\neg\)
+    \item La struttura dell'albero riflette l'ordine di applicazione delle regole di costruzione delle WFF
+  \end{itemize}
+\end{example}
+
+\begin{definition}{Sottoformule}
+  Dato \(\phi \in WFF\), l'\textit{insieme delle sottoformule} di \(\phi\), denotato con \(Sub(\phi)\), è definito ricorsivamente come segue:
+  \[Sub(\phi) = \begin{cases}
+    \{\phi\} & ,\phi \in AP\\
+    Sub(\phi') \cup \{\neg \phi'\} & ,\phi = \neg \phi'\\
+    Sub(\phi') \cup Sub(\psi') \cup \{(\phi' \bigodot \psi')\} & ,\phi = (\phi' \bigodot \psi')
+  \end{cases}
+  \]
+\end{definition}
+
+\begin{note}{}
+  Dal collegamento tra WFF e rispettivi alberi sintattici, segue che l'insieme delle sottoformule di una formula \(\phi\) corrisponde all'insieme delle formule aventi come albero sintattico un sottoalbero dell'albero sintattico di \(\phi\).
+\end{note}
+
+Possiamo ora osservare una prima applicazione dell'induzione strutturale, dimostrando una proprietà fondamentale delle formule ben formate: il numero di sottoformule di una formula \(\phi\) è al più pari alla lunghezza della formula stessa.
+
+\begin{note}{}
+  Tale proprietà evidenzia l'importanza delle regole di formazione delle WFF, differenziandole da generiche successioni di simboli.
+  
+  Infatti, data una stringa qualsiasi, il numero di sottostringhe è esponenziale rispetto alla lunghezza della stringa, mentre per le WFF, grazie alla loro struttura ben definita, il numero di sottoformule è limitato linearmente dalla lunghezza della formula.
+\end{note}
+
+\begin{proposition}{}
+  Sia \(\phi \in WFF\). Siano inoltre \(\abs{\phi}\) la lunghezza della formula \(\phi\) in numero di simboli (parentesi escluse) e \(\abs{Sub(\phi)}\) la cardinalità dell'insieme delle sottoformule di \(\phi\). Allora
+  \[\abs{Sub(\phi)}\leq \abs{\phi}\]
+\end{proposition}
+
+\begin{proof}
+  Per dimostrare questa proposizione, procediamo per induzione strutturale sulla formula \(\phi\).
+  \begin{description}
+    \item[\(\phi \in AP\)]: In questo caso, \(\phi\) è una formula atomica, quindi \(Sub(\phi) = \{\phi\}\) e \(\abs{Sub(\phi)} = 1\). Dato che \(\abs{\phi} = 1\) (ogni simbolo ha lunghezza 1), abbiamo
+          \[\abs{Sub(\phi)} = 1 \leq 1 = \abs{\phi}\]
+    \item[\(\phi = \neg \phi'\)]: In questo caso, per induzione strutturale, assumiamo che \(\abs{Sub(\phi')} \leq \abs{\phi'}\). Dato che \(Sub(\phi) = Sub(\phi') \cup \{\neg \phi'\}\), abbiamo
+          \[\abs{Sub(\phi)} = \abs{Sub(\phi')} + 1\]
+          Inoltre, \(\abs{\phi} = \abs{\phi'} + 1\) (perché aggiungiamo il simbolo di negazione). Quindi,
+          \[\abs{Sub(\phi)} = \abs{Sub(\phi')} + 1 \leq \abs{\phi'} + 1 = \abs{\phi}\]
+    \item[\(\phi = (\phi' \bigodot \psi')\)]: Infine, sempre per induzione strutturale, assumiamo che \(\abs{Sub(\phi')} \leq \abs{\phi'}\) e \(\abs{Sub(\psi')} \leq \abs{\psi'}\). Dato che \(Sub(\phi) = Sub(\phi') \cup Sub(\psi') \cup \{(\phi' \bigodot \psi')\}\), abbiamo
+          \[\abs{Sub(\phi)} \leq \abs{Sub(\phi')} + \abs{Sub(\psi')} + 1\]
+          In questo caso non è detto valga l'uguaglianza, perché è possibile che \(Sub(\phi')\) e \(Sub(\psi')\) non siano disgiunti.
+          Inoltre, \(\abs{\phi} = \abs{\phi'} + \abs{\psi'} + 1\) (perché aggiungiamo il connettivo). Quindi partendo da:
+          \[\abs{Sub(\phi')} \leq \abs{\phi'}\]
+          essendo numeri naturali, possiamo sommare \(\abs{Sub(\psi')}\) a entrambi i membri dell'inequazione senza invertire il verso:
+          \[\abs{Sub(\phi')} +\abs{Sub(\psi')} \leq \abs{\phi'} + \abs{Sub(\psi')} \leq \abs{\phi'} + \abs{\psi'}\]
+          e dunque
+          \[\abs{Sub(\phi)} \leq \abs{Sub(\phi')} + \abs{Sub(\psi')} + 1 \leq \abs{\phi'} + \abs{\psi'} + 1 = \abs{\phi}\]
+  \end{description}
+\end{proof}
