@@ -3,6 +3,7 @@ name: Compile Course Notes
 on:
   push:
     branches:
+      - master
       - main
 
 permissions:
@@ -10,6 +11,6 @@ permissions:
 
 jobs:
   build:
-    uses: RiccardoElena/UniNotes_Template/.github/workflows/latex-compile.yaml@main
+    uses: RiccardoElena/UniNotes_Template/.github/workflows/latex-compile.yaml@master
     with:
       pdf_name: 'Logic_for_Computer_Science'
