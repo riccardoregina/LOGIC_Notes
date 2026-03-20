@@ -3,7 +3,7 @@
 Questo repository contiene appunti e materiali di studio relativi al corso di **Logic for Computer Science** tenuto dal Prof. M. Benerecetti presso l'Università degli Studi Federico II di Napoli nell'Anno Accademico 2025/2026.
 
 [![Download Latest Notes](https://img.shields.io/badge/Download-Latest_Notes-blue.svg)](https://github.com/RiccardoElena/Logic_Notes/releases/latest/download/Logic_for_Computer_Science.pdf)
-[![All Contributors](https://img.shields.io/github/all-contributors/RiccardoElena/LOGIC_Notes?color=ee8449&style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/github/all-contributors/RiccardoElena/LOGIC_Notes?color=ee8449&style=flat-square)](#contributors)
 
 ## Contenuti del Corso
 
@@ -18,6 +18,32 @@ Il corso fornisce una introduzione rigorosa alla logica formale e alle sue appli
 - Completezza e correttezza dei sistemi logici
 - Tecniche di dimostrazione automatica
 
+## Contributors
+
+<div style="width: 70%; margin-right: auto; margin-left: auto;"> 
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table align="center" >
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/RiccardoElena"><img src="https://avatars.githubusercontent.com/u/23059036?v=4?s=100" width="100px;" alt="Riccardo Elena"/><br /><sub><b>Riccardo Elena</b></sub></a><br /><a href="#content-RiccardoElena" title="Content">🖋</a> <a href="https://github.com/RiccardoElena/LOGIC_Notes/commits?author=RiccardoElena" title="Documentation">📖</a> <a href="#maintenance-RiccardoElena" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/riccardoregina"><img src="https://avatars.githubusercontent.com/u/126416822?v=4?s=100" width="100px;" alt="riccardoregina"/><br /><sub><b>riccardoregina</b></sub></a><br /><a href="https://github.com/RiccardoElena/LOGIC_Notes/commits?author=riccardoregina" title="Documentation">📖</a> <a href="#maintenance-riccardoregina" title="Maintenance">🚧</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+</div>
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
+Contributions of any kind welcome!
+
 ## Disclaimer
 
 **Questi appunti sono destinati a supportare gli studenti nel loro percorso di apprendimento e a fornire una risorsa di riferimento per gli argomenti discussi durante il corso, ma non sostituiscono in alcun modo il materiale ufficiale e le lezioni dei docenti.**
@@ -26,7 +52,7 @@ Questo documento è prodotto da studenti, per studenti, e potrebbe contenere err
 
 ## Compilazione del Documento
 
-Per compilare questo documento è necessario utilizzare il template LaTeX presente nella repository [https://github.com/RiccardoElena/UniNotes_Template].
+Per compilare questo documento è necessario utilizzare il template LaTeX presente in questa [repository](https://github.com/RiccardoElena/UniNotes_Template).
 
 Dopo il clone del repository, è necessario inizializzare i submodule per ottenere il template:
 
@@ -92,28 +118,6 @@ Per mantenere una cronologia chiara e leggibile dei commit e delle modifiche, si
 - `test`: Aggiunta o modifica di esempi, esercizi o casi di studio all'interno del documento.
 - `chore`: Modifiche di manutenzione, come aggiornamenti di dipendenze o configurazioni di build, senza alterare i contenuti del documento.
 - `ci`: Modifiche relative alla configurazione del Continuous Integration (CI) per la compilazione automatica del documento.
-
-## Contributors
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/RiccardoElena"><img src="https://avatars.githubusercontent.com/u/23059036?v=4?s=100" width="100px;" alt="Riccardo Elena"/><br /><sub><b>Riccardo Elena</b></sub></a><br /><a href="#content-RiccardoElena" title="Content">🖋</a> <a href="https://github.com/RiccardoElena/LOGIC_Notes/commits?author=RiccardoElena" title="Documentation">📖</a> <a href="#maintenance-RiccardoElena" title="Maintenance">🚧</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/riccardoregina"><img src="https://avatars.githubusercontent.com/u/126416822?v=4?s=100" width="100px;" alt="riccardoregina"/><br /><sub><b>riccardoregina</b></sub></a><br /><a href="https://github.com/RiccardoElena/LOGIC_Notes/commits?author=riccardoregina" title="Documentation">📖</a> <a href="#maintenance-riccardoregina" title="Maintenance">🚧</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
-Contributions of any kind welcome!
 
 ## Licenza
 
