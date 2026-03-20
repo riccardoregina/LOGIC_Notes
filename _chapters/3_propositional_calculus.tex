@@ -1,0 +1,141 @@
+\chapter{Calcolo deduttivo proposizionale}
+
+Nel capitolo precedente abbiamo definito una logica come una tripla \((\mathcal{L}, \models, \vdash)\), dove \(\mathcal{L}\) è un linguaggio, \(\models\) è la relazione di soddisfacibilità che ne esprime la semantica, e \(\vdash\) è un calcolo, che ci permette di dedurre formule a partire da altre, o verificare se una formula è valida o meno.
+
+Per quanto concerne la logica proposizionale, abbiamo definito il linguaggio \(\PL\) e fornito ben due semantiche, ma nonostante abbiamo visto una forma di calcolo tramite le tabelle di verità, questo non è sufficiente.
+Infatti, questo tipo di calcolo non \qi{scala} a logiche più complesse ed espressive, poiché assume il potersi ridurre a un numero finito di casi, cosa che già per il prim'ordine non è possibile.
+
+Vedremo in questo capitolo due calcoli, un primo detto \keyword{calcolo di deduzione naturale} più affine al ragionamento umano, e un secondo detto \keyword{calcolo di risoluzione} più affine a un'implementazione automatica, e che è alla base di molti sistemi di dimostrazione automatica.
+
+Entrambi questi calcoli sono di tipo puramente sintattico, e non fanno riferimento alla semantica, ma le regole di trasformazione che li caratterizzano sono formulate in modo da preservare le proprietà semantiche, e quindi ci permettono di dedurre conseguenze logiche, ovvero di ottenere la stessa relazione di deducibilità che abbiamo definito tramite la semantica, ma in maniera puramente sintattica.
+
+\begin{definition}{Calcolo inferenziale}
+  Definiamo un \keyword{calcolo inferenziale} come una coppia \((\Axi, \Rules)\) dove \(\Axi \subseteq \PL\) è un insieme di formule detto \keyword{assiomi}, e \(\Rules\) è un insieme di regole di trasformazione dette \keyword{regole di inferenza}.
+
+  Le formule in \(\Axi\) sono proposizioni considerate vere a priori, e le regole in \(\Rules\) sono regole che ci permettono a partire da un numero finito di formule, dette \keyword{premesse}, di dedurre una nuova formula, detta \keyword{conclusione}.
+\end{definition}
+
+Ovviamente, come anticipato non tutte le regole di trasformazioni sono regole d'inferenza valide, poiché vorremmo che queste regole preservassero delle proprietà semantiche.
+
+A prescindere da ciò però, a partire da un calcolo inferenziale \((\Axi, \Rules)\) possiamo definire una relazione di deducibilità.
+
+\begin{definition}{Deducibilità}
+  Dati un calcolo inferenziale \((\Axi, \Rules)\) e un insieme di formule \(\Gamma\), diciamo che \(\Gamma\) deduce una formula \(\phi\) tramite \(\Rules\), e scriviamo \(\Gamma \vdash_{\Rules} \phi\), se è possibile dedurre come conclusione \(\phi\) a partire da un numero finito di formule in \(\Gamma\) e \(\Axi\), applicando un numero finito di regole in \(\Rules\).
+
+  In caso non ci sia ambiguità sul calcolo inferenziale, scriveremo semplicemente \(\Gamma \vdash \phi\).
+\end{definition}
+
+Intuitivamente, l'obiettivo che vorremmo ottenere con un calcolo inferenziale, e quindi con la relazione di deducibilità, sarebbe quello di catturare, in maniera puramente sintattica, la conseguenza logica, ovvero vorremmo che:
+\[\Gamma \models \phi \iff \Gamma \vdash \phi\]
+
+Per quanto riguarda gli assiomi, sono un insieme minimale di tautologie dalle quali tramite il teorema di sostituzione varranno in diverse istansiazioni.\footnote{In un certo senso la regola di sostituzione fa parte di \(R\).}
+
+Il primo calcolo che vedremo però non ha assiomi, ma solo regole di inferenza, e si chiama \keyword{calcolo di deduzione naturale}.
+
+\section{Calcolo di deduzione naturale}
+
+Avendo già anticipato l'assenza di assiomi, il calcolo di deduzione naturale esclusivamente dalle regole di inferenza, che sono formulate in modo da catturare il significato semantico degli operatori logici, e quindi ci permettono di dedurre conseguenze logiche.\footnote{
+  La versione del calcolo di deduzione naturale presentato qui non è la sua versione minimale, e conterrà delle regole che non sono strettamente necessarie, ma che rendono più semplice la deduzione di formule, e quindi più affine al ragionamento umano.}
+
+In particolare, per ogni operatore logico avremo una regola detta di \keyword{introduzione}, che ci permetterà di dedurre una formula che ha quell'operatore come connettivo principale, e una regola detta di \keyword{eliminazione}, che ci permetterà di dedurre formule che non hanno quell'operatore come connettivo principale, a partire da formule che invece lo hanno.
+
+Nel nostro caso, consideremo i seguenti operatori logici: \(\land\), \(\lor\), \(\to\), \(\neg\) e \(\bot\), dove \(\bot\) è un operatore \(0\)-ario che rappresenta la contraddizione.
+
+\begin{note}{}
+  La notazione presentata è da intendersi come segue: sopra la linea ci sono le premesse, sotto la linea c'è la conclusione, e a destra della regola c'è il nome della regola, che è puramente indicativo, e serve solo a identificare la regola, ma non ha alcun significato formale.
+
+  Inoltre, quando ci sono delle assunzioni che è possibile scaricare, queste sono indicate tra parentesi quadre, mentre i puntini di sospensione indicano l'applicazione di un numero finito di regole da quelle assunzioni fino alla conclusione.
+\end{note}
+
+\paragraph{Regole per \(\land\)}
+
+Le regole di introduzione e eliminazione per \(\land\) sono le più intuitive, e sono le seguenti:
+
+\begin{equation*}
+  \infer[(\land I)]{A \land B}{A & B} \quad\quad\quad \infer[(\land E_l)]{A}{A \land B} \quad\quad\quad \infer[(\land E_r)]{B}{A \land B}
+\end{equation*}
+
+\paragraph{Regole per \(\to\)}
+
+Per quanto riguarda \(\to\), la regola di eliminazione è abbastanza intuitiva oltre che a essere molto conosciuta col nome di \textit{Modus Ponens}, mentre la regola di introduzione è un po' più complessa.
+
+\begin{equation*}
+  \infer[(\to E)]{B}{A \to B & A} \quad\quad\quad
+  \infer[(\to I)]{A \to B}{
+    \begin{array}{c}
+    [A] \\
+    \vdots \\
+    C
+  \end{array}
+    } 
+\end{equation*}
+
+Quello che ci dice è che, se assumendo \(A\) riusciamo a dedurre \(B\), allora possiamo dedurre \(A \to B\) senza più assumere \(A\) \keyword{scaricando l'assunzione}. Tale regola cattura il procedimento ususale di dimostrazione di un teorema che prevede un'implicazione, ovvero volendo dimostrare \(A \to B\), allora si assume \(A\) e si tenta di dedurre \(B\). In caso affermativo, si potrà concludere \(A \to B\).
+
+\paragraph{Regole per \(\lor\)}
+
+Le regole di introduzione per \(\lor\) sono abbastanza intuitive, mentre la regola di eliminazione è un po' più complessa.
+
+\begin{equation*}
+  \infer[(\lor I_l)]{A \lor B}{A} \quad\quad\quad \infer[(\lor I_r)]{A \lor B}{B} \quad\quad\quad
+  \infer[(\lor E)]{C}{
+    \begin{array}[b]{c}
+    A \lor B
+    \end{array} &
+    \begin{array}[b]{c}
+    [A] \\
+    \vdots \\
+    C
+  \end{array} &
+    \begin{array}[b]{c}
+    [B] \\
+    \vdots \\
+    C
+  \end{array}
+  }
+\end{equation*}
+
+Quest'ultima regola ci dice che, se abbiamo \(A \lor B\), e se assumendo \(A\) e \(B\) \textbf{separatamente} riusciamo a dedurre \(C\) in entrambi i casi, allora possiamo dedurre \(C\) senza più assumere \(A\) e \(B\), ovvero scaricando entrambe le assunzioni nelle rispettive deduzioni.
+Questa regola cattura il concetto di dimostrazione per casi, ovvero se si vuole dimostrare \(C\) a partire da \(A \lor B\), sarà mi è sufficiente dedurre \(C\) sia nel caso in cui sia vero \(A\), che nel caso in cui sia vero \(B\). In caso affermativo, si potrà concludere \(C\).
+ 
+\paragraph{Regoler per \(\neg\)}
+
+Le regole di introduzione e eliminazione per \(\neg\) sono le seguenti:
+
+\begin{equation*}
+  \infer[(\neg I)]{\neg A}{
+    \begin{array}{c}
+    [A] \\
+    \vdots \\
+    \bot
+  \end{array}
+  } \quad\quad\quad
+  \infer[(\neg E)]{\bot}{\neg A & A}
+\end{equation*}
+
+La prima regola ci dice che, se assumendo \(A\) riusciamo a dedurre \(\bot\), allora possiamo dedurre \(\neg A\) senza più assumere \(A\) scaricando l'assunzione. Tale regola cattura il procedimento ususale di dimostrazione di un teorema che prevede una negazione, ovvero volendo dimostrare \(\neg A\), allora si assume \(A\) e si tenta di dedurre \(\bot\). In caso affermativo, si potrà concludere \(\neg A\).
+
+\paragraph{Regola di riduzione all'assurdo}
+
+Infine, vediamo due regole che potremmo definire di eliminazione di \(\bot\), di cui una generalizzazione dell'altra.
+
+\begin{equation*}
+  \infer[(\bot E)]{A}{\bot} \quad\quad\quad
+  \infer[(RAA)]{A}{
+    \begin{array}{c}
+    [\neg A] \\
+    \vdots \\
+    \bot
+  \end{array}
+  }
+\end{equation*}
+
+La seconda regola è esattamente la \textit{Reductio ad Absurdum}, e ci dice che, se assumendo \(\neg A\) riusciamo a dedurre \(\bot\), allora possiamo dedurre \(A\) senza più assumere \(\neg A\) scaricando l'assunzione. Tale regola cattura il procedimento ususale di dimostrazione per assurdo, in cui negando la tesi si riesce a concludere una contraddizione. L'altra regola invece, che è una generalizzazione della seconda, cattura il concetto di implicazione da premesse false.
+Essenzialmente quello che esprime è che, a partire da premesse contraddittorie, è possibile dedurre qualsiasi formula, e quindi in particolare \(A\). Un analogia per avere più chiara una giustificazione intuitiva di questa regola è considerare la semantica usuale dell'implicazione, nella quale, con antecedente falso, non importa il valore di verità del conseguente, ovvero a partire da premesse false è vero tutto e il contrario di tutto.
+
+
+
+Il processo di deduzione naturale può quindi essere visto come una costruzione incrementale: si parte da un insieme di assunzioni iniziali e, mediante passi atomici costituiti da applicazioni di regole di inferenza, si ottiene progressivamente la formula obiettivo.
+Durante tale processo, alcune assunzioni vengono scaricate tramite le regole che lo consentono (ad esempio \((\to I)\), \((\neg I)\), \((\lor E)\), \((RAA)\)), mentre le altre restano attive fino alla fine della derivazione.
+Queste ultime costituiscono le assunzioni residue, e sono precisamente quelle che compaiono a sinistra del simbolo di deducibilità.
+In altri termini, una derivazione conclude \(\Gamma \vdash \phi\) quando \(\phi\) è ottenuta a partire da assunzioni non scaricate esattamente pari a \(\Gamma\).

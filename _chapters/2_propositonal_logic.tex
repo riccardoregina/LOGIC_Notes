@@ -513,7 +513,7 @@ Le due forme normali più importanti sono la forma normale congiuntiva (\(\CNF\)
 
 \begin{definition}{Conjunctive Normal Form}
   Definiamo la forma normale congiuntiva (\(\CNF\)) come l'insieme di tutte le formule con la seguente struttura:
-  \[\phi = \bigwedge_{i=1}^k(\bigvee_{j=1}^{r_i} l_{ij})\]
+  \[\phi = \bigwedge_{i=1}^k(\bigvee_{j=1}^{r_i} l_i^j)\]
   dove \(l_{ij} \in \mathcal{L}\) per ogni \(i\) e \(j\).
 \end{definition}
 
@@ -540,9 +540,9 @@ Ovviamente \(\CNF \cup \DNF \subseteq \PNF\). È possibile inoltre mostrare faci
       0 & 1 & 0 & 1\\
       0 & 1 & 1 & 0\\
       1 & 0 & 0 & 1\\
-      1 & 1 & 1 & 0\\
-      1 & 1 & 0 & 1\\
       1 & 0 & 1 & 0\\
+      1 & 1 & 0 & 1\\
+      1 & 1 & 1 & 0\\
     \end{tabular}
   \end{center}
 
@@ -557,3 +557,62 @@ Ovviamente \(\CNF \cup \DNF \subseteq \PNF\). È possibile inoltre mostrare faci
   
   Dunque è sufficiente notare che \((P\land \neg P) \in \DNF\). Nel metodo mostrato precedentemente tali formule insoddisfacibili sono escluse poiché non è possibile applicare la costruzione mostrata, ma è sufficiente aggiungere questa formula \q{ad hoc} per ottenere la completezza semantica anche per le formule insoddisfacibili.
 \end{note}
+
+Per la \(\CNF\) il ragionamento è simile.
+
+In questo caso però, poiché dobbiamo esprimere la formula come una congiunzione di clausole disgiuntive, non possiamo semplicemente elencare degli assegnamenti come in precedenza, poiché gli assegnamenti sono essenzialmente delle congiunzioni.
+
+Dunque, al posto di elencare gli assegnamenti che rendono vera la formula, elenchiamo in congiunzione la negazione di ogni assegnamento che la rende falsa. Questo poiché, l'unico modo per rendere vera una congiunzione è che tutte le sue componenti siano vere, e dunque, se ogni componente è la negazione di un assegnamento che rende falsa la formula, allora l'unica possibilità per rendere vera la congiunzione è che nessuno di questi assegnamenti che rendono falsa la formula sia vero, ovvero che la formula sia vera.
+
+In questo modo, ci troviamo con una formula della forma:
+\[\phi' = \neg(l_1^1 \land \ldots \land \ldots \land l_1^{r_1})\land\neg(l_2^{r_2}\land \ldots \land \ldots\land l_2^{r_2})\land\ldots\land \neg(l_k^1\land\ldots\land l_k^{r_k})\]
+A questo punto però, possiamo notare come, grazie alle leggi di De Morgan e della doppia negazione, la negazione di una congiunzione è equivalente alla disgiunzione delle negazioni, e dunque possiamo raggiungere una formula della forma:
+\[\phi'' = (\neg l_1^1 \lor \ldots \lor \neg l_1^{r_1})\land(\neg l_2^1 \lor \ldots \lor \neg l_2^{r_2})\land\ldots\land (\neg l_k^1 \lor \ldots \lor \neg l_k^{r_k})\]
+che è esattamente una formula in \(\CNF\).
+
+\begin{example}{}
+  Riprendendo la tabella di verità dell'esempio precedente, possiamo costruire la formula in \(\CNF\) equivalente a \(\phi\) come segue:
+  \[\neg(\neg A \land \neg B \land C) \land \neg(\neg A \land B \land C) \land \neg(A \land \neg B \land C) \land \neg(A \land B \land C)\]
+  \[\equiv (A \lor B \lor \neg C) \land (A \lor \neg B \lor \neg C) \land (\neg A \lor B \lor \neg C) \land (\neg A \lor \neg B \lor \neg C)\]
+\end{example}
+
+\begin{note}{}
+  Dualmente a come detto per la \(\DNF\), anche per la \(\CNF\) è necessario aggiungere una tautologia espressa in \(\CNF\) per garantire la completezza semantica anche per le formule valide. Ad esempio, è sufficiente aggiungere \(P \lor \neg P\), che è una tautologia espressa in \(\CNF\).
+\end{note}
+
+Ovviamente queste costruzioni sono estremamente inefficienti, e portano a formule di dimensione esponenziale rispetto alla formula di partenza. Questo poiché la dimensione della tabella di verità di una formula \(\phi\) è \(2^{\AP[\phi]}\) dovendo considerare tutti gli assegnamenti possibili, e dunque la formula in \(\DNF\) o \(\CNF\) costruita a partire da questa tabella di verità può avere un numero di clausole esponenziale. In particolare, se \(\phi\) è già in \(\DNF\) o in \(\CNF\), allora passare alla forma normale duale usando le leggi di De Morgan e la distribuitività porta a una formula di dimensione esponenziale.
+
+\begin{example}{}
+  Sia \(\phi \in\DNF\) tale che \(\phi\) sia:
+  \[(P_1 \land P_2)\lor (P_3 \land P_4)\]
+
+  Andiamo quindi a trasformarla in \(\CNF\) usando le tautologie note
+  \[(P_1 \land P_2)\lor (P_3 \land P_4)\equiv\]
+  \[\equiv ((P_1 \land P_2)\lor P_3)\land((P_1 \lor P_4)\lor P_4)\equiv\]
+  \[\equiv (P_1 \lor P_3) \land (P_2 \lor P_3) \land (P_1 \lor P_4) \land (P_2 \lor P_4)\]
+
+  In questo caso si è passati da una formula con \(2\) clausole a una formula con \(4\) clausole, che non è un evidenza sufficiente per la crescita esponenziale.
+
+  Consideriamo però una formula:
+  \[\phi = (l_1^1 \land l_2^1) \lor (l_1^2 \land l_2^2) \lor\ldots\lor (l_1^n \land l_2^n)\]
+  che è in \(\DNF\) e contiene \(n\) clausole congiuntive binarie.
+
+  Analizzando la distributività però, possiamo notare come venga generata una clausola disgiuntiva per ogni possibile combinazione di letterali.
+
+  In generale quindi, ogni clausola disgiuntiva prodotta con la distributività corrisponde a una scelta di un letterale per ogni clausola congiuntiva, ed è dunque equivalente a una funzione \(f:\set{1,2,\ldots,n} \to \{1,2\}\). Dunque, il numero di clausole disgiuntive generate è pari al numero di tali funzioni, che è \(\abs{\set{1,2}}^n = 2^n\).
+\end{example}
+
+Il motivo per cui abbiamo introdotto queste forme è che, se una formula è in \(\DNF\), la sua soddisfacibilità è facilmente verificabile; dualmente, se una formula è in \(\CNF\), la sua validità è facilmente verificabile.
+
+Infatti, sia
+\[\phi = C_1 \lor C_2 \lor \ldots \lor C_k\]
+con \(C_i = (l_1^i \land \ldots \land l_{r_i}^i)\), per ogni \(i \in \set{1,\ldots,k}\).
+Allora \(\phi\) è soddisfacibile se e solo se almeno una clausola congiuntiva \(C_i\) è soddisfacibile.
+Inoltre, una clausola congiuntiva \(C_i\) è insoddisfacibile se e solo se contiene due letterali complementari, cioè esistono \(l_j^i\) e \(l_h^i\) tali che \(l_j^i = \neg l_h^i\).
+Infatti, in presenza di una coppia complementare compare una contraddizione del tipo \(P \land \neg P\); viceversa, se non compaiono letterali complementari, è sempre possibile costruire un assegnamento che rende vera la clausola.
+
+Dualmente, sia
+\[\phi = D_1 \land D_2 \land \ldots \land D_k\]
+con \(D_i = (l_1^i \lor \ldots \lor l_{r_i}^i)\), per ogni \(i \in \set{1,\ldots,k}\).
+Allora \(\phi\) è valida se e solo se tutte le clausole disgiuntive \(D_i\) sono valide.
+Inoltre, una clausola disgiuntiva \(D_i\) è valida se e solo se contiene due letterali complementari, cioè esistono \(l_j^i\) e \(l_h^i\) tali che \(l_j^i = \neg l_h^i\).
