@@ -230,7 +230,7 @@ OR
 NOT
 \(\neg A , A \vdash \bot\) \([A]\ldots \bot \vdash \neg A\)
 BOT
-\(\bot \vdash A\) \([A] \ldots \bot \vdash A\) (RAA)
+\(\bot \vdash A\) \([A] \ldots \bot \vdash A\) (\RAA)
 
 Per il processo di deduzione l'idea è che partiremo da delle assunzioni e usando passi atomici di deduzione, che sono applicazioni di regole di inferenza, arriveremo a dedurre la formula che ci interessa. Alcune delle assunzioni potranno essere eliminate, tutte le altre saranno invece assunzioni residue, che andranno a formare \(\Gamma\) nella deducibilità \(\Gamma \vdash \phi\).
 
@@ -287,7 +287,7 @@ Infatti avendo una dimostrazione di \(\neg \neg A \to A\) potremmo usare la rego
 
 Per fare questo possiamo andare a retroso. Per dimostrare un implicazione \(\neg \neg A \to A\) realisticamente useremo la regola \(\to I\), e questo ci regala un assunzione di \(\neg \neg A\) che dobbiamo usare per dimostrare \(A\).
 
-Non abbiamo niente che ci permetta di dimostrare \(A\) direttamente, ma usando \(RAA\) possiamo farlo aggiungendo l'assunzione scaricata di \(\neg A\) che ci permette di dimostrare \(\bot\). Dobbiamo mostrare quindi che possiamo dimostrare \(\bot\) da \(\neg A\) e \(\neg \neg A\). Ma questo è facile, basta usare la regola \(\neg E\) con \(\neg A\) e \(\neg \neg A\) come premesse.
+Non abbiamo niente che ci permetta di dimostrare \(A\) direttamente, ma usando \(\RAA\) possiamo farlo aggiungendo l'assunzione scaricata di \(\neg A\) che ci permette di dimostrare \(\bot\). Dobbiamo mostrare quindi che possiamo dimostrare \(\bot\) da \(\neg A\) e \(\neg \neg A\). Ma questo è facile, basta usare la regola \(\neg E\) con \(\neg A\) e \(\neg \neg A\) come premesse.
 
 Proviamo ora che \((P\to Q)\to((Q\to R) \to (P\to R))\).
 
@@ -310,17 +310,17 @@ In altre parole, per poter essere sicuri che una assunzione è scaricata, dobbia
 Proviamo allora a dimostrare \(P \lor \neg P\).
 
 Un idea potrebbe essere quella di usare \(\lor I\) per ottenere \(P \lor \neg P\) da \(P\). Ora però dobbiamo dimostrare \(P\).
-L'unica strada ragionevole sembra essere quella di usare \({RAA}_1\) per ottenere \(P\) da \(\bot\) regalandoci l'assunzione scaricabile di \({[\neg P]}_1\). Ora però dobbiamo dimostrare \(\bot\) da \(\neg P\). Dovremmo però in qualche modo trovare un modo di scaricare \(P\).
+L'unica strada ragionevole sembra essere quella di usare \({\RAA}_1\) per ottenere \(P\) da \(\bot\) regalandoci l'assunzione scaricabile di \({[\neg P]}_1\). Ora però dobbiamo dimostrare \(\bot\) da \(\neg P\). Dovremmo però in qualche modo trovare un modo di scaricare \(P\).
 
-Possiamo notare che \(\lor E\) può essere applicata anche a partire da \(\neg P\). Allora possiamo dedurre \(P \lor \neg P\) dall'assunzione scaricata di \(\neg P\). Per arrivare a \(\bot\) ci basta assumere \(\neg (P\lor \neg P)\). Ma se possiamo fare questo posso applicare tale assunzione anche all'attuale radice, ottenendo \(\bot\) da \(P \lor \neg P\) e \(\neg (P\lor \neg P)\) tramite \(\neg E\). Ora però abbiamo ottenuto \(\bot\) con un unica assunzione non scaricata che è \(\neg (P\lor \neg P)\), ma allora per \(RAA\) posso ottenere \(P \lor \neg P\) scaricando l'assunzione di \(\neg (P\lor \neg P)\).
+Possiamo notare che \(\lor E\) può essere applicata anche a partire da \(\neg P\). Allora possiamo dedurre \(P \lor \neg P\) dall'assunzione scaricata di \(\neg P\). Per arrivare a \(\bot\) ci basta assumere \(\neg (P\lor \neg P)\). Ma se possiamo fare questo posso applicare tale assunzione anche all'attuale radice, ottenendo \(\bot\) da \(P \lor \neg P\) e \(\neg (P\lor \neg P)\) tramite \(\neg E\). Ora però abbiamo ottenuto \(\bot\) con un unica assunzione non scaricata che è \(\neg (P\lor \neg P)\), ma allora per \(\RAA\) posso ottenere \(P \lor \neg P\) scaricando l'assunzione di \(\neg (P\lor \neg P)\).
 
-Questo ci mostra che nonostante la regola di deduzione finale sia \(RAA\) anche partendo da un altra regola di deduzione (\(\lor I\)) siamo riusciti a dimostrare lo stesso \(P \lor \neg P\).
+Questo ci mostra che nonostante la regola di deduzione finale sia \(\RAA\) anche partendo da un altra regola di deduzione (\(\lor I\)) siamo riusciti a dimostrare lo stesso \(P \lor \neg P\).
 
 Abbiamo già accennato che \(P\to Q \equiv \neg P \lor Q\). Di conseguenza ci aspettiamo che si possano dimostrare entrambi i sequinti \(P\to Q \vdash \neg P \lor Q\) e \(\neg P \lor Q \vdash P\to Q\).
 
 In questo caso abbiamo \(\Gamma \neq \emptyset\), in particolare non dovremmo scaricare \(P\to Q\).
 
-Dalla dimostrazione di prima abbiamo visto che un altro modo per ottenere un \(\lor\) è tramite \(RAA\).
+Dalla dimostrazione di prima abbiamo visto che un altro modo per ottenere un \(\lor\) è tramite \(\RAA\).
 Andiamo quindi ad aggiungere come assunzione scaricata \(\neg(\neq P \lor Q)\), e dobbiamo dimostrare \(\bot\).
 Ragionevolmente useremo una \(\neg E\) e ci servono due formule. Da \(P \to Q\) ci aspettiamo che potremo ottenere \(Q\), mentre da \(\neg(\neg P \lor Q)\) ci aspettiamo di poter ottenere \(\neg Q\). Quindi possimao dedurre \(\bot\) proprio da \(Q\) e \(\neg Q\) tramite \(\neg E\). Dobbiamo allora dimostrare effettivamente \(Q\) da \(P \to Q\) e \(\neg Q\) da \(\neg(\neg P \lor Q)\).
 
@@ -328,7 +328,7 @@ Per ottenere \(Q\) possiamo usare \(\to E\) con \(P\) come premessa, ma \(P\) no
 
 Per l'altro lato, per ottenere \(\neg Q\) possiamo usare \(\neg I\). Dobbiamo allora dimostrare \(\bot\) da \(Q\) scaricata. Ma da \(Q\) per \(\lor I\) possiamo ottenere \(\neg P \lor Q\) che con \(\neg (\neg P \lor Q)\) ci permette di ottenere \(\bot\) tramite \(\neg E\).
 
-Ci manca quindi solo dimostrare \(P\). Possiamo quindi usare \(RAA\) per ottenere \(P\) da \(\bot\) scaricando l'assunzione di \(\neg P\). Qui ancora per \(\lor I\) possiamo ottenere \(\neg P \lor Q\) da \(\neg P\), e con \(\neg (\neg P \lor Q)\) otteniamo \(\bot\) tramite \(\neg E\).
+Ci manca quindi solo dimostrare \(P\). Possiamo quindi usare \(\RAA\) per ottenere \(P\) da \(\bot\) scaricando l'assunzione di \(\neg P\). Qui ancora per \(\lor I\) possiamo ottenere \(\neg P \lor Q\) da \(\neg P\), e con \(\neg (\neg P \lor Q)\) otteniamo \(\bot\) tramite \(\neg E\).
 
 Proviamo allora a dimostrare ora l'altro verso, ovvero \(\neg P \lor Q \vdash P\to Q\).
 

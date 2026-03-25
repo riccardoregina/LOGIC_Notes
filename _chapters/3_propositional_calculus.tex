@@ -52,7 +52,7 @@ Nel nostro caso, consideremo i seguenti operatori logici: \(\land\), \(\lor\), \
 Le regole di introduzione e eliminazione per \(\land\) sono le più intuitive, e sono le seguenti:
 
 \begin{equation*}
-  \infer[(\land I)]{A \land B}{A & B} \quad\quad\quad \infer[(\land E_l)]{A}{A \land B} \quad\quad\quad \infer[(\land E_r)]{B}{A \land B}
+  \infer[(\land I)]{A \land B}{A & B} \quad\quad\quad \infer[(\land E^l)]{A}{A \land B} \quad\quad\quad \infer[(\land E^r)]{B}{A \land B}
 \end{equation*}
 
 \paragraph{Regole per \(\to\)}
@@ -77,7 +77,7 @@ Quello che ci dice è che, se assumendo \(A\) riusciamo a dedurre \(B\), allora 
 Le regole di introduzione per \(\lor\) sono abbastanza intuitive, mentre la regola di eliminazione è un po' più complessa.
 
 \begin{equation*}
-  \infer[(\lor I_l)]{A \lor B}{A} \quad\quad\quad \infer[(\lor I_r)]{A \lor B}{B} \quad\quad\quad
+  \infer[(\lor I^l)]{A \lor B}{A} \quad\quad\quad \infer[(\lor I^r)]{A \lor B}{B} \quad\quad\quad
   \infer[(\lor E)]{C}{
     \begin{array}[b]{c}
     A \lor B
@@ -121,7 +121,7 @@ Infine, vediamo due regole che potremmo definire di eliminazione di \(\bot\), di
 
 \begin{equation*}
   \infer[(\bot E)]{A}{\bot} \quad\quad\quad
-  \infer[(RAA)]{A}{
+  \infer[(\RAA)]{A}{
     \begin{array}{c}
     [\neg A] \\
     \vdots \\
@@ -133,9 +133,484 @@ Infine, vediamo due regole che potremmo definire di eliminazione di \(\bot\), di
 La seconda regola è esattamente la \textit{Reductio ad Absurdum}, e ci dice che, se assumendo \(\neg A\) riusciamo a dedurre \(\bot\), allora possiamo dedurre \(A\) senza più assumere \(\neg A\) scaricando l'assunzione. Tale regola cattura il procedimento ususale di dimostrazione per assurdo, in cui negando la tesi si riesce a concludere una contraddizione. L'altra regola invece, che è una generalizzazione della seconda, cattura il concetto di implicazione da premesse false.
 Essenzialmente quello che esprime è che, a partire da premesse contraddittorie, è possibile dedurre qualsiasi formula, e quindi in particolare \(A\). Un analogia per avere più chiara una giustificazione intuitiva di questa regola è considerare la semantica usuale dell'implicazione, nella quale, con antecedente falso, non importa il valore di verità del conseguente, ovvero a partire da premesse false è vero tutto e il contrario di tutto.
 
-
-
 Il processo di deduzione naturale può quindi essere visto come una costruzione incrementale: si parte da un insieme di assunzioni iniziali e, mediante passi atomici costituiti da applicazioni di regole di inferenza, si ottiene progressivamente la formula obiettivo.
-Durante tale processo, alcune assunzioni vengono scaricate tramite le regole che lo consentono (ad esempio \((\to I)\), \((\neg I)\), \((\lor E)\), \((RAA)\)), mentre le altre restano attive fino alla fine della derivazione.
+Durante tale processo, alcune assunzioni vengono scaricate tramite le regole che lo consentono (ad esempio \((\to I)\), \((\neg I)\), \((\lor E)\), \((\RAA)\)), mentre le altre restano attive fino alla fine della derivazione.
 Queste ultime costituiscono le assunzioni residue, e sono precisamente quelle che compaiono a sinistra del simbolo di deducibilità.
 In altri termini, una derivazione conclude \(\Gamma \vdash \phi\) quando \(\phi\) è ottenuta a partire da assunzioni non scaricate esattamente pari a \(\Gamma\).
+
+Vediamo quindi una formalizzazione più rigorosa di questo processo, e in particolare di come si costruisce un albero di deduzione.
+
+\begin{definition}{Albero di deduzione ben formato}
+  Un \keyword{albero di deduzione} è un albero finito in cui nodi sono etichettati con formule di \(\PL\).
+  
+  Un tale albero è detto \keyword{ben formato} se ogni nodo interno è ottenuto dai suoi figli mediante un'istanza di una regola del calcolo naturale.
+  
+  Le etichette delle foglie sono \keyword{occorrenze di assunzioni}.
+  Se un nodo interno è ottenuto da una regola che scarica un'assunzione, allora tutte le occorrenze di quell'assunzione nel sottoalbero radicato in quel nodo sono dette \keyword{scaricate}.
+\end{definition}
+
+\begin{definition}{Deduzione nel calcolo naturale}
+  Dato \(\Gamma\subseteq \PL\) e \(\phi\in\PL\), il \keyword{sequente} \(\Gamma \vdash \phi\) è detto \keyword{deducibile} se esiste un albero di deduzione ben formato con radice etichettata da \(\phi\) e foglie etichettate da formule in \(\Gamma\) o assunzioni scaricate.
+\end{definition}
+
+Andiamo ora a vedere un primo esempio di deduzione naturale, per poi procedere con esempi più complessi che ci aiuteranno a costruire l'intuizione necessaria per affrontare deduzioni più complesse, guidando la scelta delle regole da applicare.
+
+\begin{example}[namedlabel={ex:natural_deduction}{Deduzione Naturale}]{Deduzione naturale}
+  Supponiamo di voler dimostrare che \(\vdash A \to \neg \neg A\).\footnote{Indichiamo con \(\vdash A\) per indicare che \(A\) è dimostrabile senza ipotesi, ovvero che \(A\) è un teorema.}
+
+  Chiaramente \(A \equiv \neg \neg A\), quindi ci aspettiamo di poter dimostrare questa formula.
+
+  Iniziamo assumendo \(A\) e \(\neg A\), quindi:
+  \begin{prooftree}\label{prtree:natural_deduction_example}
+    \AxiomC{\({[A]}_2\)}
+    \AxiomC{\({[\neg A]}_1\)}
+    \BinaryInfC{\(\bot\)}
+    \RuleLabel{\(\neg I_1\)}
+    \UnaryInfC{\(\neg\neg A\)}
+    \RuleLabel{\(\to I_2\)}
+    \UnaryInfC{\(A \to \neg\neg A\)}
+  \end{prooftree}
+
+  Andiamo a etichettare le inferenze scaricate con i numeri delle regole di inferenza che le scaricano, in modo da poterle identificare facilmente.
+
+  Possiamo vedere la rappresenzazione come albero della deduzione come segue:
+  \begin{center}
+    \begin{tikzpicture}
+      \node (root) {\(A \to \neg\neg A\)};
+      \node (n1) [above =of root] {\(\neg\neg A\)};
+      \node (n2) [above =of n1] {\(\bot\)};
+      \node (n3) [above left=of n2] {\([A]\)};
+      \node (n4) [above right=of n2] {\([\neg A]\)};
+      \draw (n1) -- (root);
+      \draw (n2) -- (n1);
+      \draw (n3) -- (n2);
+      \draw (n4) -- (n2);
+    \end{tikzpicture}
+  \end{center}
+\end{example}
+
+\section{Applicazione del calcolo naturale}
+
+In questa sezione andremo ad analizzare nel dettaglio alcuni esempi di deduzioni naturali che esploreranno tutte le regole di inferenza che abbiamo introdotto, in modo da avere un'idea più chiara di come funziona questo calcolo, e di come scegliere le regole da applicare per dedurre formule più complesse.
+
+\subsection*{Dimostrazione di \(\vdash A \leftrightarrow \neg \neg A\).}
+
+
+Sebbene nel calcolo non abbiamo considerato regole di deduzione per \(\leftrightarrow\), possiamo considerare sempre la formulazione equivalente mediante \(\land\) e \(\to\), ovvero \((A \to \neg \neg A) \land (\neg \neg A \to A)\).
+
+Possiamo facilmente notare che per dimostrare una formula con \(\land\) come connettivo principale, è ragionevole pensare di usare \(\land I\), che ci permette di dedurre una formula con \(\land\) come connettivo principale a partire da due formule che hanno come connettivo principale i due operandi di \(\land\). Quindi come primo passo, possiamo pensare di usare \(\land I\) per ottenere \((A \to \neg \neg A) \land (\neg \neg A \to A)\) a partire da \(A \to \neg \neg A\) e \(\neg \neg A \to A\).
+
+\begin{prooftree}
+  \AxiomC{\(A \to \neg \neg A\)}
+  \AxiomC{\(\neg \neg A \to A\)}
+  \RuleLabel{\(\land I\)}
+  \BinaryInfC{\((A \to \neg \neg A) \land (\neg \neg A \to A)\)}
+\end{prooftree}
+
+Ovviamente, \(A \to \neg \neg A\) è già stato dimostrato in \Cref{prtree:natural_deduction_example}, quindi possiamo banalmente sostituire quella foglia con l'albero di deduzione che abbiamo già costruito, e quindi ci resta da dimostrare \(\neg \neg A \to A\).
+
+\begin{prooftree}
+  \AxiomC{\Namedcref{ex:natural_deduction}}
+  \UnaryInfC{\(A \to \neg \neg A\)}
+  \AxiomC{\(\neg \neg A \to A\)}
+  \RuleLabel{\(\land I\)}
+  \BinaryInfC{\((A \to \neg \neg A) \land (\neg \neg A \to A)\)}
+\end{prooftree}
+
+Dobbiamo quindi dimostrare \(\neg \neg A \to A\). Per fare questo, possiamo andare a retroso, e pensare di usare la regola \(\to I\), che ci permette di dedurre un'implicazione a partire dal suo conseguente. Inoltre tale regola è particolarmente importante perché ci \qi{regala} un'assunzione scaricabile, ovvero ci permette di usare liberamente come assunzione il suo antecedente nel sottoalbero radicato in essa, avendo la possibilità di scaricarla alla fine della deduzione. Le assunzioni scaricabili possono essere da guida per la scelta dei passi successivi, poiché se abbiamo un'assunzione scaricabile di una formula \(A\), allora è ragionevole pensare di usare tale formula come premessa per dedurre altre formule, e quindi di usare regole di inferenza che hanno \(A\) come premessa.
+
+\begin{prooftree}
+  \AxiomC{\Namedcref{ex:natural_deduction}}
+  \UnaryInfC{\(A \to \neg \neg A\)}
+  \AxiomC{\(A\)}
+  \RuleLabel{\(\to I_1\)}[\({[\neg\neg A]}_1\)]
+  \UnaryInfC{\(\neg \neg A \to A\)}
+  \RuleLabel{\(\land I\)}
+  \BinaryInfC{\((A \to \neg \neg A) \land (\neg \neg A \to A)\)}
+\end{prooftree}
+
+A questo punto dobbiamo dimostrare \(A\), sapendo di poter usare liberamente \(\neg \neg A\) come assunzione. Osservando le regole che abbiamo a disposizione, nessuna ci permette direttamente di dedurre \(A\) da \(\neg \neg A\), ma \(\RAA\) ci permette di dedurre \(A\) da \(\bot\) scaricando l'assunzione di \(\neg A\).
+
+\begin{prooftree}
+  \AxiomC{\Namedcref{ex:natural_deduction}}
+  \UnaryInfC{\(A \to \neg \neg A\)}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\RAA_2\)}[\({[\neg A]}_2\)]
+  \UnaryInfC{\(A\)}
+  \RuleLabel{\(\to I_1\)}[\({[\neg\neg A]}_1\)]
+  \UnaryInfC{\(\neg \neg A \to A\)}
+  \RuleLabel{\(\land I\)}
+  \BinaryInfC{\((A \to \neg \neg A) \land (\neg \neg A \to A)\)}
+\end{prooftree}
+
+A questo punto il gioco è fatto, poiché ci resta da dimostrare \(\bot\), ma abbiamo come assunzioni scaricabili sia \(\neg A\) che \(A\), e quindi possiamo trivialmente usare \(\neg E\).
+
+\begin{prooftree}
+  \AxiomC{\Namedcref{ex:natural_deduction}}
+  \UnaryInfC{\(A \to \neg \neg A\)}
+  \AxiomC{\({[\neg\neg A]}_1\)}
+  \AxiomC{\({[\neg A]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_2\)}
+  \UnaryInfC{\(A\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(\neg \neg A \to A\)}
+  \RuleLabel{\(\land I\)}
+  \BinaryInfC{\((A \to \neg \neg A) \land (\neg \neg A \to A)\)}
+\end{prooftree}
+
+\subsection*{Dimostrazione di \((P\to Q)\to((Q\to R) \to (P\to R))\).}
+
+Anche qui, il connettivo principale è \(\to\), che vogliamo dimostrare partendo da un insieme vuoto di premesse, quindi dovremo scaricare ogni assunzione che facciamo.
+Possiamo ragionevolmente iniziare con \(\to I\) per ottenere la nostra formula a partire da \((Q\to R) \to (P\to R)\) e scaricando l'assunzione di \(P\to Q\).
+
+\begin{prooftree}
+  \AxiomC{\((Q\to R) \to (P\to R)\)}
+  \RuleLabel{\(\to I_1\)}[\({[P\to Q]}_1\)]
+  \UnaryInfC{\((P\to Q)\to((Q\to R) \to (P\to R))\)}
+\end{prooftree}
+
+Ci troviamo adesso a dover dimostrare un altra implicazione, e quindi possiamo pensare di usare nuovamente \(\to I\) per ottenere \((Q\to R) \to (P\to R)\) a partire da \(P\to R\) scaricando l'assunzione di \(Q\to R\).
+
+\begin{prooftree}
+  \AxiomC{\(P\to R\)}
+  \RuleLabel{\(\to I_2\)}[\({[Q\to R]}_2\)]
+  \UnaryInfC{\((Q\to R) \to (P\to R)\)}
+  \RuleLabel{\(\to I_1\)}[\({[P\to Q]}_1\)]
+  \UnaryInfC{\((P\to Q)\to((Q\to R) \to (P\to R))\)}
+\end{prooftree}
+
+Ancora una volta, ci troviamo a dover dimostrare un'altra implicazione, e quindi possiamo pensare di usare nuovamente \(\to I\) per ottenere \(P\to R\) a partire da\(R\) scaricando l'assunzione di \(P\).
+
+\begin{prooftree}
+  \AxiomC{\(R\)}
+  \RuleLabel{\(\to I_3\)}[\({[P]}_3\)]
+  \UnaryInfC{\(P\to R\)}
+  \RuleLabel{\(\to I_2\)}[\({[Q\to R]}_2\)]
+  \UnaryInfC{\((Q\to R) \to (P\to R)\)}
+  \RuleLabel{\(\to I_1\)}[\({[P\to Q]}_1\)]
+  \UnaryInfC{\((P\to Q)\to((Q\to R) \to (P\to R))\)}
+\end{prooftree}
+
+Adesso, facendoci guidare dalle assunzioni scaricabili, possiamo notare che usando \(\to E\) possiamo dedurre \(R\) a partire da \(Q\to R\) assumendo \(Q\).
+
+\begin{prooftree}
+  \AxiomC{\(Q\)}
+  \AxiomC{\({[Q\to R]}_2\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(R\)}
+  \RuleLabel{\(\to I_3\)}[\({[P]}_3\)]
+  \UnaryInfC{\(P\to R\)}
+  \RuleLabel{\(\to I_2\)}
+  \UnaryInfC{\((Q\to R) \to (P\to R)\)}
+  \RuleLabel{\(\to I_1\)}[\({[P\to Q]}_1\)]
+  \UnaryInfC{\((P\to Q)\to((Q\to R) \to (P\to R))\)}
+\end{prooftree}
+
+Se terminassimo ora la dimostrazione, avremmo una ottenuto una deduzione per il sequente \(Q\vdash (P\to Q)\to((Q\to R) \to (P\to R))\), poiché l'unica assunzione non scaricata è \(Q\). Usando però le assunzioni scaricabili, possiamo dedurre \(Q\) usando ancora una volta \(\to E\) a partire da \(P\to Q\) e \(P\).
+
+\begin{prooftree}
+  \AxiomC{\({[P\to Q]}_1\)}
+  \AxiomC{\({[P]}_3\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(Q\)}
+  \AxiomC{\({[Q\to R]}_2\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(R\)}
+  \RuleLabel{\(\to I_3\)}
+  \UnaryInfC{\(P\to R\)}
+  \RuleLabel{\(\to I_2\)}
+  \UnaryInfC{\((Q\to R) \to (P\to R)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\((P\to Q)\to((Q\to R) \to (P\to R))\)}
+\end{prooftree}
+
+Solo ora, possiamo concludere la dimostrazione, poiché ogni assunzione è stata scaricata.
+
+\subsection*{Dimostrazione di \(\neg(P\land\neg P)\).}
+
+Il connettivo principale ora è \(\neg\), e quindi la strada più promettente è quella di usare \(\neg I\) per ottenere \(\neg(P\land\neg P)\) a partire da \(\bot\) scaricando l'assunzione di \(P\land\neg P\).
+
+\begin{prooftree}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\neg I\)}[\({[P\land\neg P]}_1\)]
+  \UnaryInfC{\(\neg(P\land\neg P)\)}
+\end{prooftree}
+
+Dobbiamo quindi dimostrare \(\bot\) avendo a disposizione \(P\land\neg P\) come assunzione scaricabile. Essendo \(\neg E\) l'unica regola che ci permette di dedurre \(\bot\), è ragionevole pensare di usarla. In particolare, per poterla applicare è necessario avere una formula \(P\) e la sua negazione.
+
+\begin{prooftree}
+  \AxiomC{\(P\)}
+  \AxiomC{\(\neg P\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I\)}[\({[P\land\neg P]}_1\)]
+  \UnaryInfC{\(\neg(P\land\neg P)\)}
+\end{prooftree}
+
+Possiamo notare però che entrambe queste assunzioni sono deducibili dalle regole di eliminazione per \(\land\) a partire da \(P\land\neg P\), che sappiamo essere un'assunzione scaricabile, e quindi possiamo usarla come premessa per dedurre sia \(P\) che \(\neg P\).
+
+\begin{prooftree}
+  \AxiomC{\({[P\land\neg P]}_1\)}
+  \RuleLabel{\(\land E^l\)}
+  \UnaryInfC{\(P\)}
+  \AxiomC{\({[P\land\neg P]}_1\)}
+  \RuleLabel{\(\land E^r\)}
+  \UnaryInfC{\(\neg P\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I\)}[\({[P\land\neg P]}_1\)]
+  \UnaryInfC{\(\neg(P\land\neg P)\)}
+\end{prooftree}
+
+Questo esempio ci mostra come un assunzione scaricabile possa essere usata più volte come premessa per dedurre formule diverse, a patto che la regola che la scarica sia radice di un sottoalbero che contiene tutte le deduzioni che la usano come premessa. In questo caso, essendo che \(\neg I\) è la radice di tutto l'albero, possiamo usare \(P\land\neg P\) liberamente, ma se tale regola fosse stata un altro nodo interno, avremmo potuto scaricarla solo nei rami che discendevano da quel nodo, e non in altri rami.
+
+\begin{note}{}
+  Le deduzioni che abbiamo visto fino a ora sono tutte deduzioni di tautologie note. Un altro modo per farci guidare nella scelta delle regole da applicare è quello di pensare alla validità semantica della formuala che vogliamo dimostrare o a eventuali equivalenze, per capire da quale assunzione \q{estrarre} l'informazione che ci manca per la dimostrazione.
+
+  Formalemente questo processo non è corretto, poiché assume che il nostro calcolo inferenziale catturi la conseguenza logica, ovvero abbia le proprietà di correttezza e completezza, le quali, senza una dimostrazione formale, non possiamo dare per scontate.
+
+  Per quanto riguarda il calcolo di deduzione naturale però, come dimostreremo in seguito, è possibile dimostrare che esso è corretto e completo, e quindi possiamo usare questo tipo di ragionamento per guidarci nella scelta delle regole da applicare, avendo la certezza che se una formula è valida, allora sarà dimostrabile, e viceversa.
+\end{note}
+
+\subsection*{Dimostrazione di \(P \lor \neg P\).}
+
+In questo caso, il connettivo principale è \(\lor\), e quindi un idea ragionevole è quella di iniziare \(\lor I\) per ottenere \(P \lor \neg P\) a partire da \(P\) o \(\neg P\).
+Per ora iniziamo a ottenerlo assumendo \(P\) e usando \(\lor I^l\).
+
+\begin{prooftree}
+  \AxiomC{\(P\)}
+  \RuleLabel{\(\lor I^l\)}
+  \UnaryInfC{\(P \lor \neg P\)}
+\end{prooftree}
+
+Non avendo alcuna assunzione scaricabile, la strada più promettente è quella di usare \(\RAA\) per ottenere \(P\) a partire da \(\bot\) scaricando l'assunzione di \(\neg P\).
+
+\begin{prooftree}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}[\({[\neg P]}_1\)]
+  \UnaryInfC{\(P\)}
+  \RuleLabel{\(\lor I^l\)}
+  \UnaryInfC{\(P \lor \neg P\)}
+\end{prooftree}
+
+Ora però dobbiamo dimostrare \(\bot\) avendo a disposizione \(\neg P\) come assunzione scaricabile. Come già visto, l'unica regola che ci permette di dedurre \(\bot\) è \(\neg E\), ma per poterla applicare in questo caso è necessario assumere \(P\) come premessa andando a creare un circolo vizioso.
+
+\begin{prooftree}
+  \AxiomC{\(P\)}
+  \AxiomC{\({[\neg P]}_1\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}
+  \UnaryInfC{\(P\)}
+  \RuleLabel{\(\lor I^l\)}
+  \UnaryInfC{\(P \lor \neg P\)}
+\end{prooftree}
+
+Dobbiamo quindi pensare a un altro modo per dedurre \(\bot\) a partire da \(\neg P\). Come detto prima, \(\lor I\) può essere usato per dedurre \(P \lor \neg P\) a partire sia da \(P\) che da \(\neg P\). Possiamo quindi dedurre \(P \lor \neg P\) a partire da \(\neg P\) usando \(\lor I^r\), in modo da poter dedurre \(\bot\) assumendo \(\neg(P\lor\neg P)\).
+
+\begin{prooftree}
+  \AxiomC{\({[\neg P]}_1\)}
+  \RuleLabel{\(\lor I^r\)}
+  \UnaryInfC{\(P \lor \neg P\)}
+  \AxiomC{\(\neg(P\lor\neg P)\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}
+  \UnaryInfC{\(P\)}
+  \RuleLabel{\(\lor I^l\)}
+  \UnaryInfC{\(P \lor \neg P\)}
+\end{prooftree}
+
+A questo punto abbiamo dimostrato \(\neg (P\lor \neg P)\vdash P \lor \neg P\). Per poter arrivare al teorema, ovvero \(\vdash P \lor \neg P\), dobbiamo scaricare l'assunzione di \(\neg (P\lor \neg P)\). Per farlo possiamo pensare di riutilizzarla, in modo da riottenere \(\bot\) usando \(\neg E\), e a quel punto scaricarla con \(\RAA\) per ottenere \(P \lor \neg P\).
+
+\begin{prooftree}
+  \AxiomC{\({[\neg P]}_1\)}
+  \RuleLabel{\(\lor I^r\)}
+  \UnaryInfC{\(P \lor \neg P\)}
+  \AxiomC{\({[\neg(P\lor\neg P)]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}
+  \UnaryInfC{\(P\)}
+  \RuleLabel{\(\lor I^l\)}
+  \UnaryInfC{\(P \lor \neg P\)}
+  \AxiomC{\({[\neg(P\lor\neg P)]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_2\)}
+  \UnaryInfC{\(P \lor \neg P\)}
+\end{prooftree}
+
+Questo ci mostra che nonostante la regola di deduzione finale sia \(\RAA\) anche partendo da un altra regola di deduzione (\(\lor I\)) siamo riusciti a dimostrare lo stesso \(P \lor \neg P\).
+
+\subsection*{Dimostrazione di \((P \to Q) \leftrightarrow (\neg P \lor Q)\).}
+
+Come abbiamo già visto nell'\Namedcref{ex:notable_tautologies}, \((P \to Q) \leftrightarrow (\neg P \lor Q)\) è una tautologia, quindi ci aspettiamo di poterla dimostrare. Come abbiamo già visto per dimostrare un equivalenza basta dimostrare entrambe le implicazioni che la compongono per poi concludere usando \(\land I\).
+
+Andiamo quindi a dimostrare separatamente \((P \to Q) \to (\neg P \lor Q)\) e \((\neg P \lor Q) \to (P \to Q)\). Banalmente però, sfruttando \(\to I\) possiamo passare al dover dimostrare i sequenti \(P \to Q \vdash \neg P \lor Q\) e \(\neg P \lor Q \vdash P \to Q\), il che ci permette di non doverci preoccupare di scaricare l'assunzione di \(P \to Q\) e \(\neg P \lor Q\) rispettivamente, e quindi di poterle usare liberamente come assunzioni.
+
+\paragraph{Dimostrazione di \(P \to Q \vdash \neg P \lor Q\).}
+
+Dalla dimostrazione precedente, abbiamo visto che un modo per dimostrare formule con \(\lor\) come connettivo principale è quello di usare \(\RAA\).
+
+\begin{prooftree}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}[\({[\neg(\neg P \lor Q)]}_1\)]
+  \UnaryInfC{\(\neg P \lor Q\)}
+\end{prooftree}
+
+Come già detto numerose volte, per dimostrare \(\bot\) l'idea più promettente è quella di usare \(\neg E\), per la quale ci servono due formule, una la negazione dell'altra. Dall'assunzione di \(P \to Q\) possiamo dedurre \(Q\) assumendo \(P\). Quindi speriamo di poter usare \(\neg E\) con \(Q\) e \(\neg Q\).
+
+\begin{prooftree}
+  \AxiomC{\(P\)}
+  \AxiomC{\(P \to Q\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(Q\)}
+  \AxiomC{\(\neg Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}[\({[\neg(\neg P \lor Q)]}_1\)]
+  \UnaryInfC{\(\neg P \lor Q\)}
+\end{prooftree}
+
+A questo punto dobbiamo scaricare o dimostrare sia \(P\) che \(\neg Q\), poiché \(P \to Q\) non è necessario che venga scaricata.
+Dall'assunzione scaricabile di \(\neg(\neg P \lor Q)\) però, dall'equivalenza semantica con \(P \land \neg Q\), ci aspettiamo di poter dedurre sia \(P\) che \(\neg Q\) da \(\land E\).
+
+Iniziamo con \(\neg Q\). Per poter introdurre una negazione, possiamo utilizzare \(\neg I\), che ci permette di dedurre \(\neg Q\) a partire da \(\bot\) scaricando l'assunzione di \(Q\).
+
+\begin{prooftree}
+  \AxiomC{\(P\)}
+  \AxiomC{\(P \to Q\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(Q\)}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\neg I_2\)}[\({[Q]}_2\)]
+  \UnaryInfC{\(\neg Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}[\({[\neg(\neg P \lor Q)]}_1\)]
+  \UnaryInfC{\(\neg P \lor Q\)}
+\end{prooftree}
+
+A questo punto per dimostrare questo \(\bot\) dobbiamo introdurre una contraddizione. Avendo a disposizione \(Q\) e \(\neg(\neg P \lor Q)\) possiamo pensare di questa seconda insieme a \(\neg P \lor Q\) per dedurre una contraddizione usando \(\neg E\).
+
+\begin{prooftree}
+  \AxiomC{\(P\)}
+  \AxiomC{\(P \to Q\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(Q\)}
+  \AxiomC{\({[\neg(\neg P \lor Q)]}_1\)}
+  \AxiomC{\(\neg P \lor Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I_2\)}[\({[Q]}_2\)]
+  \UnaryInfC{\(\neg Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+\end{prooftree}
+
+Ma \(\neg P \lor Q\) è deducibile da \(Q\) tramite \(\lor I^r\), permettendoci di chiudere questo ramo di deduzione.
+
+\begin{prooftree}
+  \AxiomC{\(P\)}
+  \AxiomC{\(P \to Q\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(Q\)}
+  \AxiomC{\({[\neg(\neg P \lor Q)]}_1\)}
+  \AxiomC{\({[Q]}_2\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I_2\)}
+  \UnaryInfC{\(\neg Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+\end{prooftree}
+
+Ci rimane quindi solo da dimostrare \(P\). Per farlo però possiamo applicare un ragionamento simile a quello fatto per \(\neg Q\), ma utilizzando \(\RAA\) invece di \(\neg I\) per dedurre \(P\) a partire da \(\bot\) scaricando l'assunzione di \(\neg P\).
+
+\begin{prooftree}
+  \AxiomC{\({[\neg(\neg P \lor Q)]}_1\)}
+  \AxiomC{\({[\neg P]}_3\)}
+  \RuleLabel{\(\lor I^r\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_3\)}
+  \UnaryInfC{\(P\)}
+  \AxiomC{\(P \to Q\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(Q\)}
+  \AxiomC{\({[\neg(\neg P \lor Q)]}_1\)}
+  \AxiomC{\({[Q]}_2\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I_2\)}
+  \UnaryInfC{\(\neg Q\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+\end{prooftree}
+
+L'unica assunzione non scaricata che ci rimane è \(P \to Q\), e quindi abbiamo dimostrato \(P \to Q \vdash \neg P \lor Q\).
+
+\paragraph{Dimostrazione di \(\neg P \lor Q \vdash P \to Q\).}
+
+Ancora una volta, per dimostrare \(P \to Q\) è ragionevole pensare di usare \(\to I\) per ottenere \(P \to Q\) a partire da \(Q\) scaricando l'assunzione di \(P\).
+
+\begin{prooftree}
+  \AxiomC{\(Q\)}
+  \RuleLabel{\(\to I_1\)}[\({[P]}_1\)]
+  \UnaryInfC{\(P \to Q\)}
+\end{prooftree}
+
+Ora però dobbiamo dimostrare \(Q\) avendo a disposizione \(\neg P \lor Q\) e \(P\) come assunzioni. Essendoci un \(\lor\) che contiene \(Q\) come operando, è possibile pensare di utilizzare \(\lor E\) per dedurre \(Q\) a partire da \(\neg P \lor Q\), ma per poterlo applicare è necessario dimostrare \(Q\) sia assumendo \(\neg P\) che assumendo \(Q\).
+
+\begin{prooftree}
+  \AxiomC{\(\neg P \lor Q\)}
+  \AxiomC{\(Q\)}
+  \AxiomC{\(Q\)}
+  \RuleLabel{\(\lor E_2\)}[\({[\neg P]}_2,\ {[Q]}_2\)]
+  \TrinaryInfC{\(Q\)}
+  \RuleLabel{\(\to I_1\)}[\({[P]}_1\)]
+  \UnaryInfC{\(P \to Q\)}
+\end{prooftree}
+
+Per quanto riguarda dimostrare \(Q\) assumendo \(Q\), questo è immediato.
+\begin{prooftree}
+  \AxiomC{\(\neg P \lor Q\)}
+  \AxiomC{\({[Q]}_2\)}
+  \UnaryInfC{\(Q\)}
+  \AxiomC{\(Q\)}
+  \RuleLabel{\(\lor E_2\)}[\({[\neg P]}_2\)]
+  \TrinaryInfC{\(Q\)}
+  \RuleLabel{\(\to I_1\)}[\({[P]}_1\)]
+  \UnaryInfC{\(P \to Q\)}
+\end{prooftree}
+
+Ora rimane da dimostrare \(Q\) assumendo \(\neg P\). Per farlo, possiamo utilizzare \(\bot E\), poiché tra le assunzioni scaricabili abbiamo sia \(P\) che \(\neg P\), e quindi possiamo dedurre \(\bot\) usando \(\neg E\), per poi dedurre \(Q\) da \(\bot\).
+\begin{prooftree}
+  \AxiomC{\(\neg P \lor Q\)}
+  \AxiomC{\({[Q]}_2\)}
+  \UnaryInfC{\(Q\)}
+  \AxiomC{\({[\neg P]}_2\)}
+  \AxiomC{\({[P]}_1\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\bot E\)}
+  \UnaryInfC{\(Q\)}
+  \RuleLabel{\(\lor E_2\)}
+  \TrinaryInfC{\(Q\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(P \to Q\)}
+\end{prooftree}
+
+In questo esempio, abbiamo potuto osservare come anche le regole di inferza più controintuitive e complesse, come \(\bot E\) e \(\lor E\) possano trovare applicazione.
