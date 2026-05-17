@@ -14,7 +14,7 @@ Per dimostrare questa equivalenza andiamo a dimostrare i due sequenti \(P \land 
 
 \paragraph{Dimostrazione di \(P \land Q \vdash \neg (\neg P \lor \neg Q)\).}
 
-Essendo che l'operatore principaele è la una contradizzione possiamo inziare con una \(\neg I\).
+Essendo che l'operatore principale è la una contraddizione possiamo iniziare con una \(\neg I\).
 
 \begin{prooftree}
   \AxiomC{\(\bot\)}
@@ -336,7 +336,7 @@ Per dimostrare questa implicazione, avendo una congiunzione come operatore princ
   \BinaryInfC{\((A \lor C) \land (B \lor C)\)}
 \end{prooftree}
 
-Ancora una volta, la presenza di una disgiunzione tra le assunzioni ci porta ad usare \(\lor E\) per ottenere assunzioni scaricabili che ci permettono di dimostrare \(A \lor C\) e \(B \lor C\). Iniziamo con \(A \lor C\).
+Ancora una volta, la presenza di una disgiunzione tra le assunzioni ci porta a usare \(\lor E\) per ottenere assunzioni scaricabili che ci permettono di dimostrare \(A \lor C\) e \(B \lor C\). Iniziamo con \(A \lor C\).
 
 \begin{prooftree}
   \AxiomC{\({[A \land B]}_1\)}
@@ -385,7 +385,7 @@ Un ramo possiamo subito dimostrarlo, usando \(\lor I\) per introdurre la disgiun
   \TrinaryInfC{\((A \land B) \lor C\)}
 \end{prooftree}
 
-Per l'altro ramo, invece, si potrebbe essere tentati di usare nuovamente \(\lor I\) tentando di dimostrare \(A \land B\). Possiamo però subito accorgerci che le assunzioni che abbiamo a disposizione non sono sufficienti per dimostrare direttamente \(A \land B\). Abbiamo infatti \(A\) e \(B \lor C\), dalle quali sappiamo solo che è necessaiamente vero uno tra \(B\) e \(C\), e quindi non possiamo concludere con certezza che \(B\) sia vero, necessario a \(A \land B\).
+Per l'altro ramo, invece, si potrebbe essere tentati di usare nuovamente \(\lor I\) tentando di dimostrare \(A \land B\). Possiamo però subito accorgerci che le assunzioni che abbiamo a disposizione non sono sufficienti per dimostrare direttamente \(A \land B\). Abbiamo infatti \(A\) e \(B \lor C\), dalle quali sappiamo solo che è necessariamente vero uno tra \(B\) e \(C\), e quindi non possiamo concludere con certezza che \(B\) sia vero, necessario a \(A \land B\).
 
 Possiamo allora utilizzare nuovamente \(\lor E\), in modo da poter avere sui nuovi rami una volta \(C\), che da sola come visto ci permette di dimostrare \((A \land B) \lor C\), e una volta \(B\), che insieme ad \(A\) ci permette di dimostrare \(A \land B\) e quindi di introdurre la disgiunzione con \(\lor I\).
 
@@ -420,7 +420,7 @@ Possiamo allora utilizzare nuovamente \(\lor E\), in modo da poter avere sui nuo
 \end{prooftree}
 
 \begin{note}{}
-  Mai come questo esercizio mosta come la regola di \(\lor E\) sia sottile. Infatti, nonostante ci dicesse già nella prima applicazione che avremmo potuto scaricare \(C\), questo era possibile solo in uno dei due rami, e non in entrambi. Per poterla scaricare anche nell'altro siamo stati costretti ad una seconda applicazione di \(\lor E\),
+  Mai come questo esercizio mostra come la regola di \(\lor E\) sia sottile. Infatti, nonostante ci dicesse già nella prima applicazione che avremmo potuto scaricare \(C\), questo era possibile solo in uno dei due rami, e non in entrambi. Per poterla scaricare anche nell'altro siamo stati costretti a una seconda applicazione di \(\lor E\),
 \end{note}
 
 \subsection{Non svolti}

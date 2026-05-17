@@ -85,7 +85,7 @@ Quindi applicando \(\forall E\) avremmo
 
 Tale conclusione è chiaramente non valida, perché già solo considerando come struttura \(\N\) con interpretazione usuale la premessa è soddisfatta, mentre la conclusione è falsificata, essendo \(y\) un elemento di \(\N\) e quindi non è vero che \(y < y\).
 
-Questo si ha perché \(y\) non è libero per \(x\) in \(\exists y\st x < y\), poiché \(y\) è legato da un quantificatore esistenziale, e quindi non essendo soddisfatte le condizioni per l'applicazione di \(\forall E\), ovvero le premesse del \namecref{thm:fol_substitution}, non è garantito che la sostituzione sintattica di \(y\) per \(x\) in \(\exists y\st x < y\) sia semanticamente equivalente alla formula originale, e quindi non è garantito che la deduzione sia corretta.
+Questo si ha perché \(y\) non è libero per \(x\) in \(\exists y\st x < y\), poiché \(y\) è legato da un quantificatore esistenziale, e quindi non essendo soddisfatte le condizioni per l'applicazione di \(\forall E\), ovvero le premesse del \Namedcref{thm:fol_substitution}, non è garantito che la sostituzione sintattica di \(y\) per \(x\) in \(\exists y\st x < y\) sia semanticamente equivalente alla formula originale, e quindi non è garantito che la deduzione sia corretta.
 
 Passiamo ora a \(\forall I\). Consideriamo \(\forall x, (x=0\to x+1=1)\), che è vera in \(\N\) con interpretazione usuale. Ora, applicando \(\forall E\) correttamente otteniamo:
 
@@ -338,7 +338,7 @@ Mostrati dunque esempi errati di deduzione naturale in prim'ordine, per evidenzi
   Anche qui possiamo verificare che i vincoli di \(\forall E\) sono rispettati, poiché \(y\) è libero per \(x\) in \(P(x)\) e \(R(x)\) non apparendo.
 \end{example}
 
-\subsection{Applicazione del calcolo naturale per il prim'ordine}
+\subsection{Applicazione del calcolo naturale con i quantificatori}
 
 Come fatto per la logica proposizionale, andiamo ad analizzare nel dettaglio alcuni esempi di deduzioni naturali che esploreranno tutte le nuove regole di inferenza che abbiamo introdotto, in modo da avere un'idea più chiara di come funziona questo calcolo, e di come scegliere le regole da applicare per dedurre formule più complesse.
 
@@ -469,3 +469,926 @@ Per \(\exists E\) dobbiamo verificare che \(y\) non occorre in \(\phi\), ovvero 
 
   Infatti, \(y\) occorre libera in \(\psi\), ovvero in \(P(y) \lor R(y)\), e quindi non è possibile applicare \(\exists E\) stesso. Nonostante le deduzioni siano estremamente simili, e in particolare usino le stesse regole, il solo scambiare l'ordine di applicazione di due di queste ci porta a una deduzione errata.
 \end{warning}
+
+\subsubsection*{Dimostrazione di \(\vdash (\exists x, P(x) \lor \exists x, R(x))\to (\exists x, (P(x)\lor R(x)) )\)}
+
+Passiamo a dimostrare il verso opposto, ovvero \(\exists x\st P(x) \lor \exists x\st R(x) \vdash \exists x\st (P(x)\lor R(x))\).
+
+Essendo che la premessa, e quindi unica assunzione che è possibile non scaricare, è una disgiunzione, è ragionevole pensare di provare a dedurre la conclusione per casi assumendo un congiunto della disgiunzione alla volta, per poi chiudere la dimostrazione con \(\lor E\).
+
+Assumendo \(\exists x\st P(x)\) potremo scaricare \(P(y)\) per \(\exists E\), di conseguenza possiamo assumere \(P(y)\), da cui, con \(\lor I\) otteniamo \(P(y)\lor R(y)\). A questo punto, con \(\exists I\) otteniamo \(\exists x\st (P(x)\lor R(x))\).
+
+\begin{prooftree}
+  \AxiomC{\({[P(y)]}_1\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(P(y)\lor R(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x\st (P(x)\lor R(x))\)}
+  \AxiomC{\(\exists x\st P(x)\)}
+  \RuleLabel{\(\exists E_1\)}
+  \BinaryInfC{\(\exists x\st (P(x)\lor R(x))\)}
+\end{prooftree}
+
+È importante notare che è possibile applicare \(\exists E\) solo alla fine di questo ramo di dimostrazione e non prima, poiché in ogni altro punto del sottoalbero radicato in \(\exists E\) si avrebbe \(y\) libera nella conclusione raggiunta, e quindi si violerebbe il vincolo di applicabilità di \(\exists E\).
+
+A questo punto possiamo ripetere la stessa dimostrazione assumendo \(\exists x\st R(x)\) e scaricando \(R(y)\) per \(\exists E\). Infine, per \(\lor E\), possiamo scaricare i due disgiunti, lasciando come unica assunzione non scaricata l'unica premessa, ovvero \(\exists x\st P(x) \lor \exists x\st R(x)\), e concludere la dimostrazione.
+
+\begin{prooftree}
+  \tiny
+  \AxiomC{\({[P(y)]}_1\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(P(y)\lor R(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x\st (P(x)\lor R(x))\)}
+  \AxiomC{\({[\exists x\st P(x)]}_3\)}
+  \RuleLabel{\(\exists E_1\)}
+  \BinaryInfC{\(\exists x\st (P(x)\lor R(x))\)}
+
+  \AxiomC{\({[\exists x\st R(x)]}_4\)}
+  \AxiomC{\({[R(y)]}_2\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(P(y)\lor R(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x\st (P(x)\lor R(x))\)}
+  \RuleLabel{\(\exists E_2\)}
+  \BinaryInfC{\(\exists x\st (P(x)\lor R(x))\)}
+
+  \AxiomC{\(\exists x\st P(x) \lor \exists x\st R(x)\)}
+  \RuleLabel{\(\lor E_{3,4}\)}
+  \TrinaryInfC{\(\exists x\st (P(x)\lor R(x))\)}
+\end{prooftree}
+
+\subsubsection*{Dimostrazione di \(\forall x, (A(y) \to B(x)) \dashv\vdash A(y) \to \forall x, B(x)\)}
+
+Continuiamo con la dimostrazione di equivalenze semantiche che coinvolgono quantificatori, dimostrando \(\forall x, (A(y) \to B(x)) \dashv\vdash A(y) \to \forall x, B(x)\).
+
+\paragraph{Dimostrazione di \(\forall x, (A(y) \to B(x)) \vdash A(y) \to \forall x, B(x)\)}
+
+Iniziamo col primo verso, ovvero \(\forall x, (A(y) \to B(x)) \vdash A(y) \to \forall x, B(x)\).
+
+Qui l'operatore principale è l'implicazione, quindi come solito è ragionevole iniziare con \(\to I\).
+
+\begin{prooftree}
+  \AxiomC{\(\forall x, B(x)\)}
+  \RuleLabel{\(\to I\)}[\(A(y)\)]
+  \UnaryInfC{\(A(y) \to \forall x, B(x)\)}
+\end{prooftree}
+
+Ora per dimostrare una formula quantificata universalmente potremmo procedere con \(\forall I\), ovvero cercando di dimostrare \(B(y)\) per una variabile arbitraria \(y\).
+
+\begin{prooftree}
+  \AxiomC{\(B(z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, B(x)\)}
+  \RuleLabel{\(\to I\)}[\(A(y)\)]
+  \UnaryInfC{\(A(y) \to \forall x, B(x)\)}
+\end{prooftree}
+
+Chiaramente, se ci fermassimo qui, l'applicazione di \(\forall I\) non sarebbe legittima, poiché \(z\) occorre libera in un'assunzione non scaricata, ovvero \(B(z)\). In ogni caso questo non è il punto d'arrivo sperato, poiché la deduzione esposta fin'ora è quella del sequente \(B(z) \vdash A(y) \to \forall x, B(x)\), che è molto lontano da quello che vogliamo dimostrare.
+
+Per rendere legittima l'applicazione di \(\forall I\) sarò necessario o scaricare \(B(z)\) o dimostrarlo senza assumerlo. Avendo a disposizione le assunzioni \(\forall x, A(y)\to B(x)\) e \(A(y)\), per dimostrare \(B(z)\) è sufficiente applicare \(\forall E\) a \(\forall x, A(y)\to B(x)\) per ottenere \(A(y)\to B(z)\), da cui, con \(A(y)\) e \(\to E\) otteniamo \(B(z)\), chiudendo la dimostrazione.
+
+\begin{prooftree}
+  \AxiomC{\({[A(y)]}_1\)}
+  \AxiomC{\(\forall x, A(y)\to B(x)\)}
+  \RuleLabel{\(\forall E\)}
+  \UnaryInfC{\(A(y)\to B(z)\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(B(z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, B(x)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(A(y) \to \forall x, B(x)\)}
+\end{prooftree}
+
+Un modo per facilitare la verifica dei vincoli di applicabilità è, come in questo caso, di usare variabili nuove dove possibile, in modo da evitare le occorrenze di tali variabili nelle formule coinvolte nelle regole. Da verificare in questo caso c'è, per \(\forall E\), che \(z\) non sia libera per \(x\) in \(A(y)\to B(x)\), e per \(\forall I\) che \(z\) non occorra in \(B(x)\) e che \(z\) non occorra libera in assunzioni non scaricate per \(B(z)\). Per quanto riguarda l'occorrere di \(z\) in \(B(x)\) e in \(A(y) \to B(x)\) la verifica è immediata avendo usato una variabile nuova, mentre per la verifica che \(z\) non occorra libera in assunzioni non scaricate per \(B(z)\) è sufficiente notare che \(A(y)\) non contiene \(z\) e che \(\forall x, A(y)\to B(x)\) non contiene variabili libere, e quindi \(z\) non occorre libera in nessuna assunzione.
+
+È importante notare che i vincoli di applicabilità considerando non scaricata \(A(y)\), poiché, essendo che verrà scaricata da \(\to I\) in radice, nel momento in cui si applica \(\forall I\) l'assunzione non è ancora scaricata.
+
+\paragraph{Dimostrazione di \(A(y) \to \forall x, B(x) \vdash \forall x, (A(y) \to B(x))\)}
+
+Continuando con la dimostrazione dell'equivalenza, passiamo a dimostrare \(A(y) \to \forall x, B(x) \vdash \forall x, (A(y) \to B(x))\).
+
+Ancora una volta ci troviamo a dimostrare una formula quantificata universalmente, e quindi è ragionevole pensare di procedere con \(\forall I\) dimostrando \(A(y) \to B(z)\) per una variabile arbitraria \(z\), ovvero, per \(\to I\), dimostrare \(B(z)\) potendo scaricare \(A(y)\).
+
+\begin{prooftree}
+  \AxiomC{\(B(z)\)}
+  \RuleLabel{\(\to I\)}[\(A(y)\)]
+  \UnaryInfC{\(A(y) \to B(z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, (A(y) \to B(x))\)}
+\end{prooftree}
+
+Come prima, dobbiamo fare in modo di scaricare o dimostrare \(B(z)\) senza assumerlo, altrimenti l'applicazione di \(\forall I\) risulterà illegittima. Possiamo notare però che, avendo a disposizione \(A(y) \to \forall x, B(x)\) e \(A(y)\), è sufficiente applicare \(\to E\) per ottenere \(\forall x, B(x)\), da cui, con \(\forall E\) otteniamo \(B(z)\), chiudendo la dimostrazione.
+
+\begin{prooftree}
+  \AxiomC{\({[A(y)]}_1\)}
+  \AxiomC{\(A(y) \to \forall x, B(x)\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(\forall x, B(x)\)}
+  \RuleLabel{\(\forall E\)}
+  \UnaryInfC{\(B(z)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(A(y) \to B(z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, (A(y) \to B(x))\)}
+\end{prooftree}
+
+Venendo quindi alla verifica dei vincoli di applicabilità, per \(\forall E\) dobbiamo verificare che \(z\) sia libero per \(x\) in \(B(x)\), e questo è verificato poiché \(z\) non occorre in \(B(x)\). Per \(\forall I\) invece dobbiamo verificare che \(z\) non occorra in \(A(y)\to B(x)\), che è verificato poiché \(z\) non occorre in \(A(y)\to B(x)\), e che \(z\) non occorra libera in assunzioni non scaricate per \(B(z)\). Nel momento dell'applicazione di \(\forall I\) le assunzioni non scaricate sono \(A(y)\) e \(A(y) \to \forall x, B(x)\), e nessuna delle due contiene \(z\).
+
+\subsubsection*{Dimostrazione di \(\forall x, P(x) \dashv \vdash \neg \exists x\st \neg P(x)\)}
+
+Passiamo ora a un esempio più complesso, ovvero alla dimostrazione della dualità dei quantificatori. Essendo questa la generalizzazione di una legge di De Morgan, è ragionevole aspettarsi che la sua dimostrazione abbia una struttura simile a quella di una legge di De Morgan vista in precedenza.
+
+\paragraph{Dimostrazione di \(\forall x, P(x) \dashv \neg \exists x\st \neg P(x)\)}
+
+Iniziamo con la prima direzione, ovvero \(\forall x, P(x) \dashv \neg \exists x\st \neg P(x)\).
+
+Qui l'unica assunzione a disposizione è \(\neg \exists x\st \neg P(x)\), che essendo una negazione non è molto usabile se non avendo a disposizione la versione positiva.
+
+Per dimostrare \(\forall x, P(x)\) possiamo iniziare con \(\forall I\), in modo da rimuovere il quantificatore e dover dimostrare solo \(P(y)\) per una variabile arbitraria \(y\).
+Chiaramente a questo punto non c'è altra strada che quella di procedere per contraddizione, ovvero applicando \(\RAA\), che ci permette di scaricare \(\neg P(y)\).
+
+\begin{prooftree}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\RAA\)}[\(\neg P(y)\)]
+  \UnaryInfC{\(P(y)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, P(x)\)}
+\end{prooftree}
+
+A questo punto dobbiamo ottenere una contraddizione avendo a disposizione \(\neg \exists x\st \neg P(x)\) e \(\neg P(y)\). Possiamo subito notare però che \(\neg P(y)\) è proprio la formula che \(\exists x\st \neg P(x)\) quantifica, e che quindi possiamo ottenere la versione positiva di \(\neg \exists x\st \neg P(x)\) applicando \(\exists I\) a \(\neg P(y)\). A questo punto, con \(\neg E\) otteniamo la contraddizione che ci serve per chiudere la dimostrazione.
+
+\begin{prooftree}
+  \AxiomC{\({[\neg P(y)]}_1\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x\st \neg P(x)\)}
+  \AxiomC{\(\neg \exists x\st \neg P(x)\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}
+  \UnaryInfC{\(P(y)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, P(x)\)}
+\end{prooftree}
+
+Veniamo dunque alla verifica dei vincoli di applicabilità. Per \(\exists I\) l'unico vincolo da verificare è che \(y\) sia libero per \(x\) in \(\neg P(x)\), e questo è verificato poiché \(y\) non occorre in \(\neg P(x)\). Per \(\forall I\) invece dobbiamo verificare che \(y\) non occorra in \(P(x)\), il che è banale, e che \(y\) non occorra libera in assunzioni non scaricata per \(P(y)\). Nel momento in cui si applica \(\forall I\) l'unica assunzione non scaricata è \(\neg \exists x\st \neg P(x)\), che non contiene \(y\), e quindi il vincolo è verificato.
+
+L'analogo proposizionale di questa dimostrazione è la dimostrazione del sequente \(\neg(\neg A \lor \neg B) \vdash A \land B\). La dimostrazione è come segue:
+
+\begin{prooftree}
+  \AxiomC{\({[\neg A]}_1\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(\neg A \lor \neg B\)}
+  \AxiomC{\(\neg(\neg A \lor \neg B) \)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_1\)}
+  \UnaryInfC{\(A\)}
+  
+  \AxiomC{\({[\neg B]}_2\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(\neg A \lor \neg B\)}
+  \AxiomC{\(\neg(\neg A \lor \neg B) \)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_2\)}
+  \UnaryInfC{\(B\)}
+
+  \RuleLabel{\(\land I\)}
+  \BinaryInfC{\(A \land B\)}
+\end{prooftree}
+
+Possiamo notare che la dimostrazione è del tutta analoga a quella appena vista con i quantificatori, in cui le regole per \(\forall\) lasciano spazio a quelle per \(\land\) e quelle per \(\exists\) lasciano spazio a quelle per \(\lor\). L'unica differenza un po' più sostanziale è che, essendo \(\land\) e \(\lor\) operatori binari, è necessario lavorare su due rami di dimostrazione, mentre con i quantificatori è sufficiente lavorare su un solo ramo, essendo unari.
+
+\paragraph{Dimostrazione di \(\forall x, P(x) \vdash \neg \exists x\st \neg P(x)\)}
+
+Vediamo dunque l'altro verso dell'equivalenza, ovvero \(\forall x, P(x) \vdash \neg \exists x\st \neg P(x)\).
+
+In questo caso dobbiamo dimostrare una negazione, e quindi è immediato pensare di procedere con \(\neg I\), la quale ci fornisce come assunzione scaricabile \(\exists x, \neg P(x)\), dalla quale potremmo poi, mediante \(\exists E\), scaricare anche \(\neg P(y)\).
+
+\begin{prooftree}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\neg I\)}
+  \UnaryInfC{\(\neg \exists x\st \neg P(x)\)}
+\end{prooftree}
+
+A questo punto, da \(\forall x, P(x)\) possiamo dedurre \(P(y)\) per \(\forall E\) e, mediante \(\neg E\) assumendo \(\neg P(y)\), ottenere la contraddizione cercata.
+
+\begin{prooftree}
+  \AxiomC{\(\neg P(y)\)}
+  \AxiomC{\(\forall x, P(x)\)}
+  \RuleLabel{\(\forall E\)}
+  \UnaryInfC{\(P(y)\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I\)}[\(\exists x\st \neg P(x)\)]
+  \UnaryInfC{\(\neg \exists x\st \neg P(x)\)}
+\end{prooftree}
+
+Come anticipato, per scaricare \(\neg P(y)\) andremo a usare \(\exists E\) con \(\exists x\st \neg P(x)\). È importante notare come l'unico punto adatto in cui è possibile applicare \(\exists E\) è subito prima della \(\neg I\), poiché applicarlo più in alto non ci permetterebbe di scaricare \(\exists x\st \neg P(x)\), e applicarlo più in bassi ci chiederebbe di dedurre tramite \(\exists E\) una formula che contiene \(y\) libera, e quindi violerebbe il vincolo di applicabilità di \(\exists E\). Di conseguenza, la deduzione completa è la seguente:
+
+\begin{prooftree}
+  \AxiomC{\({[\neg P(y)]}_2\)}
+  \AxiomC{\(\forall x, P(x)\)}
+  \RuleLabel{\(\forall E\)}
+  \UnaryInfC{\(P(y)\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \AxiomC{\({[\exists x\st \neg P(x)]}_1\)}
+  \RuleLabel{\(\exists E_2\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I_1\)}
+  \UnaryInfC{\(\neg \exists x\st \neg P(x)\)}
+\end{prooftree}
+
+Analogamente a come visto prima, sostituendo le regole per i quantificatori con quelle per le congiunzioni e disgiunzioni, è possibile ottenere una dimostrazione del sequente \(A \land B \vdash \neg(\neg A \lor \neg B)\) del tutto analoga a quella appena vista.
+
+\subsubsection*{Dimostrazione di \(\neg \exists x \st P(x)\vdash \exists x \st \neg P(x)\)} 
+
+Passiamo ora a dimostrare \(\neg \exists x \st P(x)\vdash \exists x \st \neg P(x)\).\footnote{È importante notare che questa formula è vera vista la semantica dei modelli che abbiamo definito, ovvero di insiemi non vuoti. In questo caso infatti, se \(\neg \exists x \st P(x)\) è vera, essendo che almeno un elemento del esiste, l'unico motivo per cui \(\neg \exists x \st P(x)\) è vera è che \(P(x)\) è falsa per ogni elemento, e quindi ce n'è almeno uno per cui \(\neg P(x)\) è vera, e quindi \(\exists x \st \neg P(x)\) è vera. Se nella semantica ammettessimo anche insiemi vuoti, invece, questa formula non sarebbe vera, poiché se l'insieme è vuoto, \(\neg \exists x \st P(x)\) è vera, ma \(\exists x \st \neg P(x)\) è falsa.}
+
+Partendo da una formula quantificata esistenzialmente, è ragionevole pensare di procedere con \(\exists I\).
+
+\begin{prooftree}
+  \AxiomC{\(\neg P(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st \neg P(x)\)}
+\end{prooftree}
+
+Avendo ora da dimostrare una negazione che non è presente neanche indirettamente nelle assunzioni che abbiamo a disposizione, è ragionevole pensare di procedere con \(\neg I\), che ci fornisce come assunzione scaricabile \(P(y)\).
+
+\begin{prooftree}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\neg I\)}[\(P(y)\)]
+  \UnaryInfC{\(\neg P(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st \neg P(x)\)}
+\end{prooftree}
+
+A questo punto è semplice ottenere la contraddizione, poiché ancora per \(\exists I\) possiamo ottenere \(\exists x \st P(x)\) da \(P(y)\), ovvero la forma positiva di \(\neg \exists x \st P(x)\), e quindi, con \(\neg E\) otteniamo la contraddizione che ci serve per chiudere la dimostrazione.
+
+\begin{prooftree}
+  \AxiomC{\({[P(y)]}_1\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st P(x)\)}
+  \AxiomC{\(\neg \exists x \st P(x)\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I_1\)}
+  \UnaryInfC{\(\neg P(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st \neg P(x)\)}
+\end{prooftree}
+
+Qui verificare i vincoli di applicabilità è immediato avendo usato una variabile nuova.
+
+Chiaramente la direzione opposta, ovvero \(\exists x \st \neg P(x) \vdash \neg \exists x \st P(x)\), è falsa, poiché un qualsiasi modello con un oggetto che soddisfa \(P(x)\) e un oggetto che soddisfa \(\neg P(x)\) è un controesempio per questa direzione. Se il calcolo fosse inconsistente, però, sarebbe possibile dimostrare anche questa direzione. Vediamo dunque se è possibile dimostrare \(\exists x \st \neg P(x) \vdash \neg \exists x \st P(x)\).
+
+Chiaramente come primo passo è ragionevole pensare di procedere con \(\neg I\) per dimostrare \(\neg \exists x \st P(x)\), e quindi assumere \(\exists x \st P(x)\).
+
+\begin{prooftree}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\neg I\)}[\(\exists x \st P(x)\)]
+  \UnaryInfC{\(\neg \exists x \st P(x)\)}
+\end{prooftree}
+
+A questo punto, l'unico modo per ottenere una contraddizione è mediante \(\neg E\) con \(P(y)\) e \(\neg P(y)\). Fortunatamente però tali assunzioni non sono scaricabili mediante \(\exists E\) dalle assunzioni che abbiamo, poiché nell'applicare \(\exists E\) dovremmo dedurre \(\psi = P(y)\) e \(\psi = \neg P(y)\), e in entrambi i casi \(y\) occorre libera in \(\psi\), violando così il vincolo di applicabilità di \(\exists E\). Di conseguenza, non è possibile ottenere la contraddizione che ci serve per chiudere la dimostrazione, e quindi non è possibile dimostrare \(\exists x \st \neg P(x) \vdash \neg \exists x \st P(x)\).
+
+\subsubsection*{Dimostrazione di \(\vdash \exists x \st (C(x)\to \forall y, C(y))\)}
+
+Vediamo ora una dimostrazione di una formula che a primo impatto può non sembrare vera, ovvero \(\vdash \exists x \st (C(x)\to \forall y, C(y))\). Possiamo notare però che questa formula è equivalente a \(\exists x\st (\neg C(x) \lor \forall y, C(y))\). A questo punto è chiaro che, preso un qualsiasi modello, o questo contiene un oggetto che non soddisfa \(C(x)\), e quindi \(\neg C(x)\) è vera per almeno un oggetto, e quindi \(\exists x\st \neg C(x)\) è vera, oppure \(C(x)\) è vera per ogni oggetto, e quindi \(\forall y, C(y)\) è vera, e quindi \(\exists x\st \forall y, C(y)\) è vera. In entrambi i casi, dunque, \(\exists x\st (\neg C(x) \lor \forall y, C(y))\) è vera.
+
+Cerchiamo dunque di dimostrare questo sequente.
+Partendo da una formula quantificata esistenzialmente, è ragionevole pensare di procedere con \(\exists I\), seguendo con \(\to I\) per dimostrare \(C(z)\to \forall y, C(y)\).
+
+\begin{prooftree}
+  \AxiomC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I\)}[\(C(z)\)]
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+
+A questo punto, per dimostrare \(\forall y, C(y)\) si potrebbe procedere sia per contraddizione che per \(\forall I\). La seconda opzione può sembrare più diretta, ma purtroppo è errata. Per farla infatti si potrebbe pensare di dimostrare \(\forall y, C(y)\) con la seguente deduzione:
+
+\begin{prooftree}
+  \AxiomC{\({[C(z)]}_1\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+
+Purtroppo però, nel momento in cui si applica \(\forall I\) l'assunzione \(C(z)\) non è ancora scaricata, e quindi \(z\) occorre libera in un'assunzione non scaricata, violando così il vincolo di applicabilità di \(\forall I\). Di conseguenza, questa deduzione è errata, e dobbiamo necessariamente procedere per contraddizione per \(\bot E\).
+
+\begin{prooftree}
+  \AxiomC{\(\bot\)}
+  \RuleLabel{\(\bot E\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I\)}[\(C(z)\)]
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+
+Avendo a disposizione \(C(z)\) scaricabile possiamo pensare di ottenere la contraddizione che ci serve tramite \(\neg E\) con \(\neg C(z)\).
+
+\begin{prooftree}
+  \AxiomC{\({[C(z)]}_1\)}
+  \AxiomC{\(\neg C(z)\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\bot E\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+
+Dobbiamo quindi capire come scaricare \(\neg C(z)\). Si può pensare di scaricarlo mediante \(\RAA\) ottenendo \(C(z)\). Per fare ciò però necessaria una nuova contraddizione, questa volta con \(\exists x \st (C(x) \to \forall y, C(y))\), e di conseguenza assumendo \(\neg \exists x \st (C(x) \to \forall y, C(y))\).
+
+\begin{prooftree}
+  \AxiomC{\({[C(z)]}_1\)}
+  \AxiomC{\({[\neg C(z)]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\bot E\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+  \AxiomC{\(\neg \exists x \st (C(x) \to \forall y, C(y))\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_2\)}
+  \UnaryInfC{\(C(z)\)}
+\end{prooftree}
+
+Possiamo notare che ora, essendo che \(C(z)\) non è più assunzione, bensì è stata dimostrata, possiamo riprender l'idea di dimostrare \(\forall y, C(y)\) con \(\forall I\) senza violare il vincolo di applicabilità.
+
+\begin{prooftree}
+  \AxiomC{\({[C(z)]}_1\)}
+  \AxiomC{\({[\neg C(z)]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\bot E\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+  \AxiomC{\(\neg \exists x \st (C(x) \to \forall y, C(y))\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_2\)}
+  \UnaryInfC{\(C(z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I\)}[\(C(z)\)]
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+
+Ci manca solo da scaricare \(\neg \exists x \st (C(x) \to \forall y, C(y))\). Per fare ciò però è sufficiente riutilizzarla con un ultima applicazione di \(\RAA\).
+
+\begin{prooftree}
+  \small
+  \AxiomC{\({[C(z)]}_1\)}
+  \AxiomC{\({[\neg C(z)]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\bot E\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+  \AxiomC{\({[\neg \exists x \st (C(x) \to \forall y, C(y))]}_3\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_2\)}
+  \UnaryInfC{\(C(z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+  \AxiomC{\({[\neg \exists x \st (C(x) \to \forall y, C(y))]}_3\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_3\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+
+È importante ricordare, come abbiamo già visto per la logica proposizionale, che il fatto che una regola permetta di scaricare un assunzione non ci obbliga a usarla per scaricarla.
+
+Analizziamo ora invece una differenza importante tra le deduzioni in logica proposizionale e in logica del prim'ordine, dovuta dai vincoli di applicabilità delle regole per i quantificatori. Consideriamo di avere una deduzione \(\pi_1\) per una formula \(\psi\) a partire da un assunzione \(P\), e un altra deduzione indipendente \(\pi_2\) che dimostra sempre \(\psi\) a partire da un assunzione \( \neg P\). In logica proposizionale, è sempre possibile combinare queste due deduzioni in una deduzione di \(\psi\) senza assunzioni, semplicemente applicando \(\lor E\) a \(P \lor \neg P\), che abbiamo dimostrato in precedenza (\ref{subsubsec:excluded_middle_dem}).
+
+\begin{prooftree}
+  \AxiomC{\({[P]}_1\)}
+  \UnaryInfC{\(\vdots\)}
+  \RuleLabel{\(\pi_1\)}
+  \UnaryInfC{\(\psi\)}
+  
+  \AxiomC{\({[\neg P]}_2\)}
+  \UnaryInfC{\(\vdots\)}
+  \RuleLabel{\(\pi_2\)}
+  \UnaryInfC{\(\psi\)}
+
+  \AxiomC{\ref{subsubsec:excluded_middle_dem}}
+
+  \UnaryInfC{\(P \lor \neg P\)}
+  \RuleLabel{\(\lor E_{1,2}\)}
+  \TrinaryInfC{\(\psi\)}
+\end{prooftree}
+
+Avendo sempre a disposizione \(\pi_1\) e \(\pi_2\), è possibile ottenere una dimostrazione di \(\psi\) senza assunzioni anche ragionando per contraddizioni come segue:
+
+\begin{prooftree}
+  \AxiomC{\({[P]}_1\)}
+  \UnaryInfC{\(\vdots\)}
+  \RuleLabel{\(\pi_1\)}
+  \UnaryInfC{\(\psi\)}
+  \AxiomC{\({[\neg \psi]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I_1\)}
+  \UnaryInfC{\(\neg P\)}
+  \UnaryInfC{\(\vdots\)}
+  \RuleLabel{\(\pi_2\)}
+  \UnaryInfC{\(\psi\)}
+
+  \AxiomC{\({[\neg \psi]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_{2}\)}
+  \UnaryInfC{\(\psi\)}
+\end{prooftree}
+
+Un esempio di questo schema è la dimostrazione di \(P\to Q \vdash \neg P \lor Q\) vista in precedenza (\ref{subsubsec:material_implication_dem}), anche se in forma diversa.
+
+In particolare, il primo schema applicato a questo caso è:
+
+\begin{prooftree}
+  \AxiomC{\({[P]}_1\)}
+  \AxiomC{\(P\to Q\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(Q\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+
+  \AxiomC{\({[\neg P]}_2\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+
+  \AxiomC{\ref{subsubsec:excluded_middle_dem}}
+  \UnaryInfC{\(P \lor \neg P\)}
+  \RuleLabel{\(\lor E_{1,2}\)}
+  \TrinaryInfC{\(\neg P \lor Q\)}
+\end{prooftree}
+
+Mentre il secondo schema è:
+
+\begin{prooftree}
+  \AxiomC{\({[P]}_1\)}
+  \AxiomC{\(P\to Q\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(Q\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+  \AxiomC{\({[\neg (\neg P \lor Q)]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\neg I_1\)}
+  \UnaryInfC{\(\neg P\)}
+  \RuleLabel{\(\lor I\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+  \AxiomC{\({[\neg (\neg P \lor Q)]}_2\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\RAA_2\)}
+  \UnaryInfC{\(\neg P \lor Q\)}
+\end{prooftree}
+
+Passando al prim'ordine questa equivalenza di dimostrazioni purtroppo si perde. In particolare, se abbiamo una deduzione della prima forma, essendo che \(\pi_1\) e \(\pi_2\) sono deduzioni indipendenti, è sempre possibile combinare le due deduzioni in una deduzione della seconda forma mentre se abbiamo una deduzione della seconda forma, non è sempre possibile combinare le due deduzioni in una deduzione della prima forma, poiché, scomponendo l'unico ramo di deduzione in due rami indipendenti si rischia di violare dei vincoli di applicabilità.
+
+Nell'ultima dimostrazione vista, ovvero \(\vdash \exists x \st (C(x)\to \forall y, C(y))\), ci troviamo proprio in questo secondo schema, con \(\pi_1\) che corrisponde a:
+
+\begin{prooftree}
+  \AxiomC{\({[C(z)]}_1\)}
+  \AxiomC{\(\neg C(z)\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\bot E\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+dove \(P = \neg C(z)\) e \(\psi = \exists x \st (C(x)\to \forall y, C(y))\), e \(\pi_2\) che corrisponde a:
+
+\begin{prooftree}
+  \AxiomC{\(C(z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+con \(\neg P = C(z)\).
+
+In questo caso, se proviamo ad applicare il primo schema otterremo la seguente deduzione:
+
+\begin{prooftree}
+  \AxiomC{\({[C(z)]}_1\)}
+  \AxiomC{\({[\neg C(z)]}_3\)}
+  \RuleLabel{\(\neg E\)}
+  \BinaryInfC{\(\bot\)}
+  \RuleLabel{\(\bot E\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+
+  \AxiomC{\({[C(z)]}_2\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, C(y)\)}
+  \RuleLabel{\(\to I\)}
+  \UnaryInfC{\(C(z)\to \forall y, C(y)\)}
+  \RuleLabel{\(\exists I\)}
+  \UnaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+
+  \AxiomC{\ref{subsubsec:excluded_middle_dem}}
+  \UnaryInfC{\(C(z) \lor \neg C(z)\)}
+  \RuleLabel{\(\lor E_{2,3}\)}
+  \TrinaryInfC{\(\exists x \st (C(x)\to \forall y, C(y))\)}
+\end{prooftree}
+
+Come abbiamo già osservato però \(\pi_2\) è legittima nel secondo schema poiché \(C(z)\) non è un assunzione, ma una formula dimostrata, mentre non è legittima nel primo schema poiché \(C(z)\) è un assunzione, e quindi \(z\) occorre libera in un'assunzione non scaricata, violando così il vincolo di applicabilità di \(\forall I\).
+
+\subsection{Regole di deduzione per la logica del prim'ordine con uguaglianza}
+
+Come già accennato numerose volte, spesso \(=\) è considerato un simbolo logico, e quindi come tale sarà necessario introdurre delle regole di deduzione per poterlo usare nelle dimostrazioni. L'alternativa sarebbe quella di considerare \(=\) come un simbolo non logico, assiomatizzando il suo comportamento.
+
+Formalmente, va arricchito il linguaggio con un concetto di \keyword{teoria}, ovvero un insieme di formule vere in ogni interpretazione. Tale teoria è rappresentabile se esiste un insieme di formule dette \keyword{assiomi} assunte come vere, da cui ogni altra formula della teoria è dimostrabile. Nonostante abbiamo sempre considerato l'insieme di assiomi \(\Axi\) vuoto, nella \Namedcref{def:deducibility} abbiamo già definito il concetto di deducibilità a partire da un insieme di assiomi, e quindi non è necessario modificare la definizione di deducibilità per poter considerare teorie con assiomi.
+
+In particolare, per la deduzione naturale, la differenza principale sarà nel poter lasciare come assunzioni non scaricate oltre alle dell'insieme delle premesse \(\Gamma\) anche quelle presenti in \(\Axi\).
+
+Tratteremo più nel dettaglio successivamente il concetto di teoria, ma possiamo iniziare subito con un esempio di teoria semplice, ovvero la teoria dell'uguaglianza.
+
+In particolare, l'insieme degli assiomi necessari per la teoria dell'uguaglianza è il seguente:
+
+\begin{enumerate}
+  \item \(\forall x, x=x\)
+  \item \(\forall x_1,\ldots, \forall x_n, \forall y_1, \ldots, \forall y_n, (\bigwedge_{i=1}^n x_i = y_i) \to (f(x_1, \ldots, x_n) = f(y_1, \ldots, y_n))\) per ogni \(f \in \FuncSyms\) con \(\arty(f) = n\).
+  \item \(\forall x_1,\ldots, \forall x_n, \forall y_1, \ldots, \forall y_n, (\bigwedge_{i=1}^n x_i = y_i) \to (P(x_1, \ldots, x_n) \to P(y_1, \ldots, y_n))\) per ogni \(P \in \PredSyms\) con \(\arty(P) = n\).
+\end{enumerate}
+
+Tale insieme è sufficiente per garantire che \(=\) si comporti come una relazione di equivalenza, e che sia rispettata la sostituzione di termini uguali in ogni formula.
+
+In particolare ci si aspetterebbe che valgano simmetria, transitività e che l'ultimo assioma presenti una doppia implicazione. Andiamo a vedere uno alla volta come queste tre proprietà siano dimostrabili.
+
+\paragraph{Simmetria}
+
+Per dimostrare la simmetria vorremmo mostrare che vale \(\vdash \forall x, \forall y, x=y \to y=x\). È importante notare che, avendo assiomatizzato l'uguaglianza, si ha che \(=\in\PredSyms\) e di conseguenza il terzo schema di assiomi è applicabile anche a \(P\eqdef =\) e quindi in particolare \(P(x_1,x_2)\eqdef x_1=x_2\).
+
+Allora dal terzo assioma istanziato con \(x_1\eqdef x\), \(y_1\eqdef y\), \(x_2 \eqdef x\) \(y_2 \eqdef x\) abbiamo:
+\todo{Fai controllare al prof}
+\begin{prooftree}
+  \tiny
+  \AxiomC{\(\forall x_1, x_2, y_1, y_2, (x_1 = y_1 \land x_2 = y_2) \to (P(x_1, x_2) \to P(y_1, y_2))\)}
+  \RuleLabel{\(\forall E^*\)}
+  \UnaryInfC{\(z=w \land z = z \to (P(z,z) \to P(w,z))\)}
+  \RuleLabel{\(P\eqdef =\)}
+  \UnaryInfC{\(z=w \land z = z \to (z=z \to w=z)\)}
+
+  \AxiomC{\(\forall x, x=x\)}
+  \RuleLabel{\(\forall E\)}
+  \UnaryInfC{\(z=z\)}
+  \AxiomC{\({[z=w]}_1\)}
+  \RuleLabel{\(\land I\)}
+  \BinaryInfC{\(z=w \land z=z\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(z=z \to w=z\)}
+  \AxiomC{\(\forall x, x=x\)}
+  \RuleLabel{\(\forall E\)}
+  \UnaryInfC{\(z=z\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(w=z\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(z=w \to w=z\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, z=y \to y=z\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, \forall y, x=y \to y=x\)}
+\end{prooftree}
+
+Dove con \(\forall E^*\) indichiamo l'applicazione di \(\forall E\) ripetuta più volte, e con \(P\eqdef =\) indichiamo l'applicazione dell'aver definito \(P\) come \(=\).
+
+\paragraph{Transitività}
+
+Una volta dimostrata la simmetria, è immediato dimostrare la transitività, ovvero \(\vdash \forall x, \forall y, \forall z, (x=y \land y=z) \to x=z\).
+
+\begin{prooftree}
+  \tiny
+  \AxiomC{\(\forall x_1, x_2, y_1, y_2, (x_1 = y_1 \land x_2 = y_2) \to (P(x_1, x_2) \to P(y_1, y_2))\)}
+  \RuleLabel{\(\forall E^*\)}
+  \UnaryInfC{\(t=s \land t=r \to (P(t,t) \to P(s,r))\)}
+  \RuleLabel{\(P\eqdef =\)}
+  \UnaryInfC{\(t=s \land t=r \to (t=t \to s=r)\)}
+
+  \AxiomC{\({[s=t \land t=r]}_1\)}
+  \RuleLabel{\(\land E^r\)}
+  \UnaryInfC{\(t=r\)}
+
+  \AxiomC{\({[s=t \land t=r]}_1\)}
+  \RuleLabel{\(\land E^l\)}
+  \UnaryInfC{\(s=t\)}
+  \RuleLabel{\(Symm\)}
+  \UnaryInfC{\(t=s\)}
+  \RuleLabel{\(\land I\)}
+  \BinaryInfC{\(t=s \land t=r\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(t=t \to s=r\)}
+
+  \AxiomC{\(\forall x, x=x\)}
+  \RuleLabel{\(\forall E\)}
+  \UnaryInfC{\(t=t\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(s=r\)}
+
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\((s=t \land t=r) \to (s=r)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall z, (s=t \land t=z) \to (s=z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, \forall z, (s=y \land y=z) \to (s=z)\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, \forall y, \forall z, (x=y \land y=z) \to x=z\)}
+\end{prooftree}
+
+Infine, possiamo mostrare l'altra direzione dell'implicazione nel terzo schema di assioma, ovvero \(\forall x_1,\ldots, \forall x_n, \forall y_1, \ldots, \forall y_n, (P(x_1, \ldots, x_n) \to P(y_1, \ldots, y_n))\to (\bigwedge_{i=1}^n x_i = y_i)\).
+
+Ancora una volta mostreremo il caso più semplice, ovvero con \(n=1\), che risulta essere
+\[\forall x,\forall y, (x = y) \to (P(y) \to P(x))\]
+
+\begin{prooftree}
+  \AxiomC{\(\forall x_1, y_1, (x_1 = y_1) \to (P(x_1) \to P(y_1))\)}
+  \RuleLabel{\(\forall E^*\)}
+  \UnaryInfC{\(s=t \to (P(s) \to P(t))\)}
+
+  \AxiomC{\({[t=s]}_1\)}
+  \RuleLabel{\(Symm\)}
+  \UnaryInfC{\(s=t\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(P(s) \to P(t)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(t=s \to (P(s) \to P(t))\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, t=y \to (P(s) \to P(y))\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, \forall y, x=y \to (P(x) \to P(y))\)}
+\end{prooftree}
+
+Passando quindi all'utilizzo di \(=\) come simbolo logico, è chiaro per la natura del calcolo di deduzione naturale vorremmo avere una regola di deduzione per ogni assioma descritto precedentemente, dovendo le regole catturare la semantica dei simboli a cui si applicano. Di conseguenza, con \(t_i, s_i \in \Terms\) le regole di inferenza per \(=\) sono le seguenti:
+
+\[\infer[Refl]{t=t}{}\]
+\[\infer[Sub_f]{\subs{f(x_1, \ldots, x_n)}{x_1,\ldots,x_n}{t_1,\ldots, t_n} = \subs{f(x_1, \ldots, x_n)}{x_1,\ldots,x_n}{s_1,\ldots,s_n}}{t_1 = s_1 & \ldots & t_n = s_n}\]
+\[\infer[Sub_P]{\subs{P(x_1, \ldots, x_n)}{x_1,\ldots,x_n}{t_1,\ldots,t_n}\to\subs{P(x_1, \ldots, x_n)}{x_1,\ldots,x_n}{s_1,\ldots, s_n}}{t_1 = s_1 & \ldots & t_n = s_n}\]
+
+È facile vedere come, applicando queste regole di deduzione dove sono stati usati gli assiomi nelle dimostrazioni precedente, è possibile dimostrare simmetria, transitività e direzione inversa della terza regola. Chiaramente, tali dimostrazioni sono decisamente più succinte non dovendo passare dall'eliminazione dei quantificatori dagli assiomi. Avremo infatti per \(x=y\vdash y = x\):
+
+\begin{prooftree}
+  \AxiomC{\(x=y\)}
+  \AxiomC{}
+  \RuleLabel{\(Refl\)}
+  \UnaryInfC{\(x=x\)}
+  \RuleLabel{\(Sub_P\)}
+  \BinaryInfC{\(P(x,x) \to P(y,x)\)}
+  \RuleLabel{\(P\eqdef =\)}
+  \UnaryInfC{\(x=x \to y=x\)}
+  \AxiomC{}
+  \RuleLabel{\(Refl\)}
+  \UnaryInfC{\(x=x\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(y=x\)}
+\end{prooftree}
+
+Per \(x=y, y=z \vdash x=z\):
+
+\begin{prooftree}
+  \AxiomC{\(x=y\)}
+  \RuleLabel{\(Symm\)}
+  \UnaryInfC{\(y=x\)}
+  \AxiomC{\(y=z\)}
+  \RuleLabel{\(Sub_P\)}
+  \BinaryInfC{\(P(y,y) \to P(x,z)\)}
+  \RuleLabel{\(P\eqdef =\)}
+  \UnaryInfC{\(y=y \to x=z\)}
+  \AxiomC{}
+  \RuleLabel{\(Refl\)}
+  \UnaryInfC{\(y=y\)}
+  \RuleLabel{\(\to E\)}
+  \BinaryInfC{\(x=z\)}
+\end{prooftree}
+
+Infine per \(\forall x, \forall y, (x=y) \to (P(y) \to P(x))\):
+
+\begin{prooftree}
+  \AxiomC{\({[w=z]}_1\)}
+  \RuleLabel{\(Symm\)}
+  \UnaryInfC{\(w=z\)}
+  \RuleLabel{\(Sub_P\)}
+  \UnaryInfC{\(P(w) \to P(z)\)}
+  \RuleLabel{\(\to I_1\)}
+  \UnaryInfC{\(w=z \to (P(w) \to P(z))\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall y, w=y \to (P(y) \to P(w))\)}
+  \RuleLabel{\(\forall I\)}
+  \UnaryInfC{\(\forall x, \forall y, x=y \to (P(x) \to P(y))\)}
+\end{prooftree}
+
+Inoltre, le regole di sostituzione \(Sub_f\) e \(Sub_P\) possono essere generalizzate rispettivamente a termini e formule arbitrari, ottenendo così le seguenti regole:
+
+\[\infer[Sub_t]{\subs{t}{x_1,\ldots,x_n}{t_1,\ldots,t_n} = \subs{t}{x_1,\ldots,x_n}{s_1,\ldots,s_n}}{t_1 = s_1 & \ldots & t_n = s_n}\]
+\[\infer[Sub_\phi]{\subs{\phi}{x_1,\ldots,x_n}{t_1,\ldots,t_n}\to\subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots, s_n}}{t_1 = s_1 & \ldots & t_n = s_n}\]
+
+È possibile dimostrare che queste regole equivalgono all'applicazione iterata di \(Sub_f\) e \(Sub_P\) rispettivamente, e che quindi la loro validità deriva direttamente da quella di \(Sub_f\) e \(Sub_P\). In particolare possiamo dimostrare la validità di tali regole mediante induzione strutturale.
+
+\begin{proposition}{Validità di \(Sub_t\)}
+  Sia \(\Gamma = \set{r_1 = s_1, \ldots, r_n = s_n}\), con \(r_1, \ldots, r_n, s_1,\ldots s_n \in \Terms\). Dato \(t \in \Terms\) si ha che
+  \[\Gamma \vdash \subs{t}{x_1,\ldots,x_n}{s_1,\ldots,s_n} = \subs{t}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\]
+\end{proposition}
+
+\begin{proof}
+  Procediamo per induzione strutturale su \(t\).
+
+  I casi base sono \(t = x\in \VarSyms\) e \(t = c \in \ConstSyms\)
+  Per il primo caso, iniziamo considerando \(t = x\) con \(x \in \set{x_1,\ldots,x_n}\). Senza perdita di generalità sia \(x = x_1\). In questo caso, abbiamo che \(\subs{x}{x_1,\ldots,x_n}{r_1,\ldots,r_n} = \subs{x}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\equiv r_1 = s_1\), che è una delle assunzioni.
+
+  Se invece \(t = y\) con \(y\notin\set{x_1,\ldots, x_n}\)  o \(t = c \in \ConstSyms\) si ha che
+  \[\subs{y}{x_1,\ldots,x_n}{r_1,\ldots,r_n} = \subs{y}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\equiv y=y\]
+  e che
+  \[\subs{c}{x_1,\ldots,x_n}{r_1,\ldots,r_n} = \subs{c}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\equiv c=c\]
+  che sono entrambe dimostrabili con \(Refl\).
+
+  Venendo infine al caso induttivo, ovvero \(t=f(t_1,\ldots, t_k)\) con \(f \in \FuncSyms\) di \(\arty(f)=k\) e \(t_1, \ldots, t_k \in \Terms\).
+  Per ipotesi induttiva sappiamo che per ogni sottotermine \(t_i\) con \(i \in \set{1,\ldots,k}\) vale che \(\Gamma \vdash \subs{t_i}{x_1,\ldots,x_n}{s_1,\ldots,s_n} = \subs{t_i}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\).
+
+  Per definizione di applicazione di sostituzione a un termine funzionale, si ha che
+  \[\subs{f(t_1,\ldots,t_k)}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \eqdef f(\subs{t_1}{x_1,\ldots,x_n}{s_1,\ldots,s_n},\ldots,\subs{t_k}{x_1,\ldots,x_n}{s_1,\ldots,s_n}) \eqdef \subs{f(y_1,\ldots,y_k)}{y_1,\ldots,y_k}{\subs{t_1}{x_1,\ldots,x_n}{s_1,\ldots,s_n},\ldots,\subs{t_k}{x_1,\ldots,x_n}{s_1,\ldots,s_n}}\]
+
+  A questo punto è possibile applicare \(Sub_f\) come segue:
+
+  \begin{prooftree}
+    \AxiomC{\(\Gamma\)}
+    \UnaryInfC{\(\vdots\)}
+    \RuleLabel{IH}
+    \UnaryInfC{\(\subs{t_1}{x_1,\ldots,x_n}{s_1,\ldots,s_n} = \subs{t_1}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+
+    \AxiomC{\(\ldots\)}
+
+    \AxiomC{\(\Gamma\)}
+    \UnaryInfC{\(\vdots\)}
+    \RuleLabel{IH}
+    \UnaryInfC{\(\subs{t_k}{x_1,\ldots,x_n}{s_1,\ldots,s_n} = \subs{t_k}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+
+    \RuleLabel{\(Sub_f\)}
+    \TrinaryInfC{\(\subs{f(y_1,\ldots,y_k)}{y_1,\ldots,y_k}{\subs{t_1}{x_1,\ldots,x_n}{s_1,\ldots,s_n},\ldots,\subs{t_k}{x_1,\ldots,x_n}{s_1,\ldots,s_n}} = \subs{f(y_1,\ldots,y_k)}{y_1,\ldots,y_k}{\subs{t_1}{x_1,\ldots,x_n}{r_1,\ldots,r_n},\ldots,\subs{t_k}{x_1,\ldots,x_n}{r_1,\ldots,r_n}}\)}
+  \end{prooftree}
+\end{proof}
+
+\begin{proposition}{Validità di \(Sub_\phi\)}
+  Sia \(\Gamma = \set{r_1 = s_1, \ldots, r_n = s_n}\), con \(r_1, \ldots, r_n, s_1,\ldots s_n \in \Terms\). Dato \(\phi \in \FOL\) si ha che
+  \[\Gamma \vdash \subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\phi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\]
+\end{proposition}
+
+\begin{proof}
+  Procediamo per induzione strutturale su \(\phi\).
+
+  Per il caso base \(\phi = P(t_1,\ldots,t_k)\) con \(P \in \PredSyms\) di \(\arty(P) = k\) e \(t_1, \ldots, t_k \in \Terms\). In questo caso, analogamente al caso induttivo di \(Sub_P\) è sufficiente usare \(Sub_P\) per ogni \(t_i\) con \(i \in \set{1,\ldots,k}\) e infine applicare \(Sub_P\).
+
+  I casi induttivi saranno uno per ogni simbolo logico. La struttura di dimostrazione resta sempre bene o male la stessa, di conseguenza ci concentreremo solo su i più interessanti.
+
+  Sia \(\phi \eqdef \neg \psi\) con \(\psi \in \FOL\). Per ipotesi induttiva, si ha che \(\Gamma \vdash \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\). A questo punto, tramite \(\to E\) assumendo \(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\) è possibile ottenere \(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\).
+
+
+  \begin{prooftree}
+    \AxiomC{\(\Gamma\)}
+    \UnaryInfC{\(\vdots\)}
+    \RuleLabel{IH}
+    \UnaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+
+    \AxiomC{\(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\)}
+    \RuleLabel{\(\to E\)}
+    \BinaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+  \end{prooftree}
+  Ora possiamo notare, per definizione di sostituzione per formule negate che
+  \[\subs{\neg \psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} = \neg \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\]
+
+  Dunque assumendo \(\subs{\neg \psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\) riusciamo a ottenere una contraddizione, e quindi tramite \(\neg I\) otteniamo \(\neg \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\). Infine, scarichiamo l'ultima assunzione tramite \(\to I\), ottenendo il risultato sperato.
+
+  \begin{prooftree}
+    \AxiomC{\(\Gamma\)}
+    \UnaryInfC{\(\vdots\)}
+    \RuleLabel{IH}
+    \UnaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+
+    \AxiomC{\({[\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}]}_1\)}
+    \RuleLabel{\(\to E\)}
+    \BinaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+    \AxiomC{\({[\neg\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}]}_2\)}
+    \RuleLabel{\(\neg E\)}
+    \BinaryInfC{\(\bot\)}
+    \RuleLabel{\(\neg I_1\)}
+    \UnaryInfC{\(\neg \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+    \RuleLabel{\(\to I_2\)}
+    \UnaryInfC{\(\neg\subs{ \psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \neg\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+  \end{prooftree}
+
+  Ora possiamo notare, per definizione di sostituzione per formule negate, che
+  \[\subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \eqdef \subs{\neg \psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \eqdef \neg \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\]
+
+  Dunque l'ultima deduzione ottenuta è proprio \(\Gamma \vdash \subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\phi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\).
+
+  Tutti gli altri casi induttivi, ovvero quelli per \(\land\), \(\lor\), \(\to\), \(\forall\) e \(\exists\) sono analoghi, ovvero partono dall'ipotesi induttiva, applicando \(\to E\) ottengono la sottoformula sostituita con \(r_1,\ldots,r_n\) e poi, tramite regole di introduzione ed eliminazione specifiche per il simbolo logico in questione otteniamo la formula sostituita con \(r_1,\ldots,r_n\), scaricando infine l'assunzione tramite \(\to I\) per ottenere il risultato sperato.
+
+  Un facile esempio si ha con \(\phi = \psi_1 \land \psi_2\). Per questione di brevità andremo a indicare le sequenze di simboli in notazione vettoriale, ovvero \(\overline{x} = x_1,\ldots,x_n\), \(\overline{s} = s_1,\ldots,s_n\) e \(\overline{r} = r_1,\ldots,r_n\)
+
+  \begin{prooftree}
+    \small
+    \AxiomC{\(\Gamma\)}
+    \UnaryInfC{\(\vdots\)}
+    \RuleLabel{IH}
+    \UnaryInfC{\(\subs{\psi_1}{\overline{x}}{\overline{s}} \to \subs{\psi_1}{\overline{x}}{\overline{r}}\)}
+
+    \AxiomC{\({[\subs{\psi_1}{\overline{x}}{\overline{s}} \land \subs{\psi_2}{\overline{x}}{\overline{s}}]}_1\)}
+    \RuleLabel{\(\land E^l\)}
+    \UnaryInfC{\(\subs{\psi_1}{\overline{x}}{\overline{s}}\)}
+    \RuleLabel{\(\to E\)}
+    \BinaryInfC{\(\subs{\psi_1}{\overline{x}}{\overline{r}}\)}
+
+    \AxiomC{\({[\subs{\psi_1}{\overline{x}}{\overline{s}} \land \subs{\psi_2}{\overline{x}}{\overline{s}}]}_1\)}
+    \RuleLabel{\(\land E^r\)}
+    \UnaryInfC{\(\subs{\psi_2}{\overline{x}}{\overline{s}}\)}
+    \RuleLabel{\(\to E\)}
+
+    \AxiomC{\(\Gamma\)}
+    \UnaryInfC{\(\vdots\)}
+    \RuleLabel{IH}
+    \UnaryInfC{\(\subs{\psi_2}{\overline{x}}{\overline{s}} \to \subs{\psi_2}{\overline{x}}{\overline{r}}\)}
+
+    \BinaryInfC{\(\subs{\psi_2}{\overline{x}}{\overline{r}}\)}
+    \RuleLabel{\(\land I\)}
+    \BinaryInfC{\(\subs{\psi_1}{\overline{x}}{\overline{r}} \land \subs{\psi_2}{\overline{x}}{\overline{r}}\)}
+    \RuleLabel{\(\to I_1\)}
+    \UnaryInfC{\((\subs{\psi_1}{\overline{x}}{\overline{s}} \land \subs{\psi_2}{\overline{x}}{\overline{s}}) \to (\subs{\psi_1}{\overline{x}}{\overline{r}} \land \subs{\psi_2}{\overline{x}}{\overline{r}})\)}
+  \end{prooftree}
+  Notando che
+  \[\subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \eqdef \subs{\psi_1\land\psi_2}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \eqdef \subs{\psi_1}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \land \subs{\psi_2}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\]
+  \todo{Ma riguardo i quantificatori? Non bisogna stare attenti ai vincoli?}
+\end{proof}
+
+Infine, andiamo come anticipato a mostrare come i vincoli di applicabilità per le regole dei quantificatori oltre a essere necessari sono sufficienti. Come già accennato precedentemente, sarà sufficiente mostrare la correttezza del calcolo di deduzione naturale ovvero, come fatto nella logica proposizionale, mostrare che dati \(\phi \in \FOL\) e \(\Gamma \subseteq \FOL\) si ha \(\Gamma \vdash \phi \implies \Gamma \models \phi\).
+
+\begin{theorem}{Correttezza del calcolo di deduzione naturale nel prim'ordine}
+  Dati \(\phi \in \FOL\) e \(\Gamma \subseteq \FOL\) si ha che
+  \[\Gamma \vdash \phi \implies \Gamma \models \phi\]
+\end{theorem}
+
+\begin{proof}
+  Come visto per la logica proposizionale, per dimostrare la correttezza andremo a fare induzione strutturale sull'albero di deduzione.
+
+  Per alberi di altezza \(0\) si ha chiaramente che l'unico nodo è sia foglia che radice, ovvero è etichettato da \(\phi\) e appartiene a \(\Gamma\). Chiaramente se \(\phi \in \Gamma\) si ha che \(\Gamma \models \phi\) per definizione di soddisfacibilità.
+
+  Passando al caso induttivo, supponiamo di avere una deduzione con \(\phi\) in radice, foglie non scaricate tutte presenti in \(\Gamma\). Chiaramente, ogni sottalbero della radice è una deduzione di altezza minore per un certo \(\psi\) con assunzioni non scaricate in \(\Gamma\) per cui vale l'ipotesi induttiva che \(\Gamma \models \psi\) per ogni sottoalbero.
+
+  Per dimostrare la tesi sarà necessario quindi analizzare tutte le regole che possono aver prodotto \(\phi\) a partire dalle \(\psi\) dei sottoalberi, e mostrare che l'applicazione di tale regole mantiene correttezza semantica. Ovviamente, per le regole comuni alla logica proposizionale non c'è alcuna differenza con la dimostrazione già vista.
+
+  Iniziamo con \(\forall E\). In tal caso, l'albero di deduzione avrà la forma
+
+  \begin{prooftree}
+    \AxiomC{\(\Gamma\)}
+    \UnaryInfC{\(\vdots\)}
+    \UnaryInfC{\(\forall x, \psi\)}
+    \RuleLabel{\(\forall E\)}
+    \UnaryInfC{\(\subs{\psi}{x}{t}\)}
+  \end{prooftree}
+  
+  Ovviamente, per applicabilità di \(\forall E\), \(t\) è libero per \(x\) in \(\psi\). Da ipotesi induttiva si ha che \(\Gamma\models\forall x,\psi\) e quindi per ogni coppia \(M,\sigma\) si ha, per ogni \(d \in D\):
+  \[M,\sigma\models \Gamma \implies M,\sigma \models \forall x, \psi \models M,\sigma[x\mapsfrom d]\models \psi\]
+
+  Ovviamente \(\den{t}[M][\sigma] \in D\) e quindi, per \(d = \den{t}[M][\sigma]\), si ha che \(M,\sigma \models \Gamma \implies M,\sigma[x\mapsfrom \den{t}[M][\sigma]]\models \psi\). Ora, dal \Namedcref{thm:fol_substitution}, si ha che \(M,\sigma[x\mapsfrom \den{t}[M][\sigma]]\models \psi \iff M,\sigma\models \subs{\psi}{x}{t}\) se \(t\) è libero per \(x\) in \(\psi\). Essendo ciò vero per ipotesi, abbiamo che per ogni \(M,\sigma\):
+  \[M,\sigma\models \Gamma \implies M,\sigma\models \subs{\psi}{x}{t}\]
+  e quindi \(\Gamma \models \subs{\psi}{x}{t} \eqdef \phi\).
+\end{proof}

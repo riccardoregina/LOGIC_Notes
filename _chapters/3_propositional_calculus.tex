@@ -19,7 +19,7 @@ Ovviamente, come anticipato non tutte le regole di trasformazioni sono regole d'
 
 A prescindere da ciò però, a partire da un calcolo inferenziale \((\Axi, \Rules)\) possiamo definire una relazione di deducibilità.
 
-\begin{definition}{Deducibilità}
+\begin{definition}[namedlabel={def:deducibility}{Deducibilità}]{Deducibilità}
   Dati un calcolo inferenziale \((\Axi, \Rules)\) e un insieme di formule \(\Gamma\), diciamo che \(\Gamma\) deduce una formula \(\phi\) tramite \(\Rules\), e scriviamo \(\Gamma \vdash_{\Rules} \phi\), se è possibile dedurre come conclusione \(\phi\) a partire da un numero finito di formule in \(\Gamma\) e \(\Axi\), applicando un numero finito di regole in \(\Rules\).
 
   Per indicare l'uso di una specifica regola di inferenza \(\Rule \in \Rules\), scriveremo \(\Gamma \vdash_{\Rule} \phi\) per indicare che \(\Gamma\) deduce \(\phi\) tramite una singola applicazione di \(\Rule\).
@@ -375,7 +375,7 @@ Questo esempio ci mostra come un assunzione scaricabile possa essere usata più 
   Per quanto riguarda il calcolo di deduzione naturale però, come dimostreremo in seguito, è possibile dimostrare che esso è corretto e completo, e quindi possiamo usare questo tipo di ragionamento per guidarci nella scelta delle regole da applicare, avendo la certezza che se una formula è valida, allora sarà dimostrabile, e viceversa.
 \end{note}
 
-\subsubsection*{Dimostrazione di \(P \lor \neg P\).}
+\subsubsection*{Dimostrazione di \(P \lor \neg P\).}\label{subsubsec:excluded_middle_dem}
 
 In questo caso, il connettivo principale è \(\lor\), e quindi un idea ragionevole è quella di iniziare \(\lor I\) per ottenere \(P \lor \neg P\) a partire da \(P\) o \(\neg P\).
 Per ora iniziamo a ottenerlo assumendo \(P\) e usando \(\lor I^l\).
@@ -446,7 +446,7 @@ A questo punto abbiamo dimostrato \(\neg (P\lor \neg P)\vdash P \lor \neg P\). P
 
 Questo ci mostra che nonostante la regola di deduzione finale sia \(\RAA\) anche partendo da un altra regola di deduzione (\(\lor I\)) siamo riusciti a dimostrare lo stesso \(P \lor \neg P\).
 
-\subsubsection*{Dimostrazione di \((P \to Q) \leftrightarrow (\neg P \lor Q)\).}
+\subsubsection*{Dimostrazione di \((P \to Q) \leftrightarrow (\neg P \lor Q)\).}\label{subsubsec:material_implication_dem}
 
 Come abbiamo già visto nell'\Namedcref{ex:notable_tautologies}, \((P \to Q) \leftrightarrow (\neg P \lor Q)\) è una tautologia, quindi ci aspettiamo di poterla dimostrare. Come abbiamo già visto per dimostrare un equivalenza basta dimostrare entrambe le implicazioni che la compongono per poi concludere usando \(\land I\).
 
