@@ -933,7 +933,7 @@ Tale teorema è di particolare importanza, poiché ci garantisce che nella verif
 
 Arriviamo infine a un teorema che generalizza il \Namedcref{thm:substitution}, che riguarda la sostituzione nella conseguenza logica invece che nella validità
 
-\begin{theorem}{}
+\begin{theorem}{Invarianza della Conseguenza Logica rispetto alla Sostituzione}
   Sia \(\Gamma \subseteq \PL\), \(\phi \in \PL\) e \(\sigma:\AP \to \PL\) sostituzione. Allora,
   \[\Gamma\models\phi\implies\Gamma\sigma\models\phi\sigma\]
 \end{theorem}
@@ -948,7 +948,7 @@ Arriviamo infine a un teorema che generalizza il \Namedcref{thm:substitution}, c
   Quindi \(\Gamma_0\sigma\models\phi\sigma\) per il teorema di deduzione semantica e quindi \(\Gamma\sigma\models\phi\sigma\) per monotònicità.
 \end{proof}
 
-\begin{corollary}{}
+\begin{corollary}{Sostituzione per la Deducibilità}
   \(\Gamma\vdash\phi\implies\Gamma\sigma\vdash\phi\sigma\), con \(\sigma:\AP \to \PL\) sostituzione.
 \end{corollary}
 \begin{proof}
