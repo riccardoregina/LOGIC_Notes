@@ -1103,7 +1103,6 @@ Avendo ora un insieme di regole di inferenza, in questo caso composto da una reg
 \end{note}
 
 Essendo che la regola di risoluzione preserva la verità, e quindi la conseguenza logica, è facile vedere per induzione strutturale la correttezza del calcolo, ovvero che date \(S,C\) forme clausali, \(S\vdash_{\Rule} C \implies S\models C\).
-\todo{Perché c'è bisogno di induzione strutturale? La conseguenza logica da parte di un insieme di formule non è definita esattamente come abbiamo definito la preservazione della verità?}
 
 Sarà possibile dimostrare anche una forma più debole della completezza, legata alla soddisfacibilità, ovvero che \(S\not\vdash_R \square \implies \Sat[S]\), o equivalentemente \(\Unsat[S] \implies S\vdash_R \square\). Come già anticipato, non è possibile dimostrare la totale completezza, perché esistono conseguenze logiche di clausole che non sono in alcun modo generabili dal calcolo.
 
@@ -1249,7 +1248,7 @@ A questo punto, avendo dimostrato la correttezza e la terminazione dell'algoritm
 
   In particolare quindi esistono due alberi di derivazione del calcolo di risoluzione che hanno uno dei due insiemi come foglie e \(\square\) in radice. Chiamiamoli \(\pi_P\) e \(\pi_{\neg P}\) e valutiamo i diversi casi:
   \begin{itemize}
-    \item Se vale \(S_P\subseteq S\) o \(S_{\neg P}\subseteq S\), ovvero una tra \(P\) e \(\neg P\) non è presente in nessuna clausola di \(S\), allora \(S\vdash_R \square\) banalmente per monotònicità.\todo{Abbiamo dimostrato la monotònicità?}
+    \item Se vale \(S_P\subseteq S\) o \(S_{\neg P}\subseteq S\), ovvero una tra \(P\) e \(\neg P\) non è presente in nessuna clausola di \(S\), allora \(S\vdash_R \square\) banalmente per monotònicità.
     \item Alternativamente, esiste almeno una foglia in \(\pi_P\) etichettata con una clausola \(C_P\) e una in \(\pi_{\neg P}\) etichettata con una clausola \(C_{\neg P}\) tali che \(C_P\) e \(C_{\neg P}\) non sono in \(S\).
     In altre parole c'è almeno una foglia per albero deduzione che è stata ottenuta dalla sottrazione del letterale.
     Consideriamo quindi un'applicazione di risoluzione tra \(C_P\) e una qualsiasi clausola \(D \in S_P\) in clash con \(C_P\).
