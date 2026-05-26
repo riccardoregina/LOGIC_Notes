@@ -1056,7 +1056,7 @@ Per quanto riguarda il verso opposto invece, l'unica proprietà che è preservat
 
 Non è possibile richiedere di più poiché \(R\) contiene un numero di proposizioni atomiche strettamente inferiore sia di \(C_1\) che di \(C_2\), e di conseguenza gli assegnamenti che soddisfano \(R\) non sono assegnamenti validi per soddisfare \(C_1\) e \(C_2\). Andiamo però a mostrare che dato \(\alpha: \AP[R] \to \set{0,1}\) tale che \(\Val{\alpha}[R] = 1\), esiste un assegnamento \(\alpha':\AP[C_1]\cup\AP[C_2] \to \set{0,1}\) tale che \(\Val{\alpha'}[C_1] = 1\) e \(\Val{\alpha'}[C_2] = 1\).
 
-\begin{proposition}{}
+\begin{proposition}{Soddisfacibilità per la regola di risoluzione}
   Sia \(R\) risolvente di \(C_1\) e \(C_2\) in clash su \(l\). Allora, se \(R\) è soddisfacibile, allora anche \(C_1\) e \(C_2\) sono soddisfacibili.
 \end{proposition}
 
@@ -1095,7 +1095,7 @@ Non è possibile richiedere di più poiché \(R\) contiene un numero di proposiz
 Avendo ora un insieme di regole di inferenza, in questo caso composto da una regola sola, e un insieme di assunzioni, in questo caso la forma clausale, possiamo andare a definire il calcolo di deduzione di risoluzione attraverso la definizione di una deduzione.
 
 \begin{definition}{Deduzione di risoluzione}
-  Sia \(F\) una forma clausale. Una deduzione di risoluzione \(F\vdash_{\Rule }C\) da è un albero binario finito, la cui radice è etichettata con \(C\), tutte le foglie sono etichettate con clausole di \(F\) e ogni nodo interno è etichettato con il risolvente dei suoi figli.
+  Sia \(F\) una forma clausale. Una deduzione di risoluzione \(F\vdash_{\Rule }C\) è un albero binario finito, la cui radice è etichettata con \(C\), tutte le foglie sono etichettate con clausole di \(F\) e ogni nodo interno è etichettato con il risolvente dei suoi figli.
 \end{definition}
 
 \begin{note}{}
@@ -1109,7 +1109,7 @@ Sarà possibile dimostrare anche una forma più debole della completezza, legata
 Consideriamo infatti la forma clausale \(F = \set{\set{A},\set{B}}\). Dall'interpretazione semantica data, è ovvio che \(R=\set{A,B}\) sia conseguenza logica di \(F\). Essendo però che non esistono letterali in clash in \(F\), non è possibile applicare la regola di risoluzione, impedendo di derivare alcunché.
 
 È possibile però in parte aggirare questo problema utilizzando la definizione alternativa di conseguenza logica, notando che \(S\models C \iff S\cup\set{\neg C} \in \Unsat\).
-Applicando tale riformulazione all'esempio di prima, potremo dimostrare che \(F\models R\) cercando di mostrare che \(F' = \set{\set{A}}, \set{B}, \set{\neg A, \neg B}\) è insoddisfacibile. In questo caso, essendo che \(C_1 = \set{A}\) e \(C_2 = \set{\neg A, \neg B}\) sono in clash su \(A\), è possibile applicare la regola di risoluzione per dedurre \(C_3 = \set{\neg B}\), da cui è possibile dedurre \(C_4 = \square\) con \(C_2\), che è in clash con \(C_3\) su \(B\). Dunque, \(F'\) è insoddisfacibile per correttezza, e quindi \(F\models R\) per la definizione di conseguenza logica.
+Applicando tale riformulazione all'esempio di prima, potremo dimostrare che \(F\models R\) cercando di mostrare che \(F' = \set{\set{A}, \set{B}, \set{\neg A, \neg B}}\) è insoddisfacibile. In questo caso, essendo che \(C_1 = \set{A}\) e \(C_2 = \set{\neg A, \neg B}\) sono in clash su \(A\), è possibile applicare la regola di risoluzione per dedurre \(C_3 = \set{\neg B}\), da cui è possibile dedurre \(C_4 = \square\) con \(C_2\), che è in clash con \(C_3\) su \(B\). Dunque, \(F'\) è insoddisfacibile per correttezza, e quindi \(F\models R\) per la definizione di conseguenza logica.
 
 Utilizzando questo tipo di riformulazione, e questa completezza \qi{debole}, è possibile risolvere il problema di conseguenza logica usando risoluzione, passando per il problema di soddisfacibilità.
 
@@ -1193,14 +1193,14 @@ Non è possibile estendere banalmente la regola per permettere la risoluzione di
 
 Fatte queste precisazioni, possiamo ora dimostrare la terminazione dell'algoritmo di risoluzione, mostrando che esiste un limite superiore al numero di clausole che tale algoritmo può generare, limitando quindi la grandezza dell'insieme \(S_0\) su cui viene valutata la condizione di terminazione.
 
-\begin{theorem}{}
+\begin{theorem}{Terminazione dell'algoritmo di risoluzione}
   \(\textsc{Resolution}(S)\) termina sempre e l'insieme di saturazione \(S_0\) avrà al più \(3^{\abs{\AP[S]}}\) clausole.
 \end{theorem}
 
 \begin{proof}
   Sappiamo che l'insieme di clausole in ingresso \(S\) è finito. Sia dunque \(\AP[S] = \set{P \in \AP[\phi]}[\phi \in S]\) l'insieme di proposizioni atomiche che compaiono in \(S\). Chiaramente \(\AP[S]\) è finito, poiché \(S\) è finito e ogni formula contiene un numero finito di proposizioni atomiche.
 
-  Inoltre, avendo escluso le clausole banali, si ha che \(\forall C \in S, \abs{C}\leq\AP[S]\). Questo poiché ogni clausola è un insieme di letterali, che può essere presente o in forma positiva o in forma negativa, ma non entrambe, e quindi per ogni proposizione atomica in \(\AP[S]\) al più una delle due forme può essere presente in una clausola.
+  Inoltre, avendo escluso le clausole banali, si ha che \(\forall C \in S, \abs{C}\leq\abs{\AP[S]}\). Questo poiché ogni clausola è un insieme di letterali, che può essere presente o in forma positiva o in forma negativa, ma non entrambe, e quindi per ogni proposizione atomica in \(\AP[S]\) al più una delle due forme può essere presente in una clausola.
 
   Quindi, in ogni clausola, una data proposizione atomica \(P\) può essere presente in forma positiva, in forma negativa, o non essere presente affatto. Di conseguenza ogni clausola può essere vista come una funzione da \(\AP[S]\) a \(\set{-1,0,1}\), dove \(0\) rappresenta l'assenza di \(P\) nella clausola, \(1\) rappresenta la presenza di \(P\) in forma positiva, e \(-1\) rappresenta la presenza di \(P\) in forma negativa.
 
@@ -1223,12 +1223,12 @@ A questo punto, avendo dimostrato la correttezza e la terminazione dell'algoritm
   Per poter applicare tale ipotesi induttiva è quindi necessario in qualche modo rimuovere una proposizione atomica da \(S\), mostrare che il nuovo insieme di clausole è ancora insoddisfacibile, e da questa costruzione usando l'ipotesi induttiva mostrare che è possibile dedurre \(\square\) anche da \(S\).
 
   Iniziamo col fissare la proposizione atomica \(P\in\AP[S]\) che andremo a escludere. Costruiamo dunque gli insiemi \(S_P\) e \(S_{\neg P}\) come segue:
-  \[S_P = \set{C\setminus P}[C\in S \text{ e } \neg P \in C]\]
-  \[S_{\neg P} =  \set{C\setminus \neg P}[C\in S \text{ e }  P \in C]\]
+  \[S_P = \set{C\setminus P}[C\in S \text{ e } \neg P \not\in C]\]
+  \[S_{\neg P} =  \set{C\setminus \neg P}[C\in S \text{ e }  P \not\in C]\]
 
   In altre parole, \(S_P\) è l'insieme di clausole che non contengono il letterale negativo di \(P\), a cui se presente è stato rimosso il letterale positivo di \(P\) e viceversa per \(S_{\neg P}\). In questo modo è chiaro che \(P\) non è presente in \(S_P\) e \(\neg P\) non è presente in \(S_{\neg P}\), e che inoltre \(\AP[S_P] \subset \AP[S]\) e \(\AP[S_{\neg P}]\subset \AP[S]\) poiché non sono state aggiunte nuove proposizioni atomiche, ma solo eventualmente rimosse.
 
-  Di conseguenza \(\AP[S_P]<\AP[S]\) e \(\AP[S_{\neg P}]<\AP[S]\).
+  Di conseguenza \(\abs{\AP[S_P]}<\abs{\AP[S]}\) e \(\abs{\AP[S_{\neg P}]}<\abs{\AP[S]}\).
   Inoltre questi due insiemi non sono necessariamente disgiunti. In particolare infatti, ogni clausola in \(S\) che non conteneva ne \(P\) ne \(\neg P\) è presente sia in \(S_P\) che in \(S_{\neg P}\). In ogni caso, tutte le clausole dell'intersezione tra \(S_P\) e \(S_{\neg P}\) erano già presenti in \(S\), poiché se una clausola è stata ottenuta da \(S\) rimuovendo \(P\) o \(\neg P\), può essere ottenuta in tal modo solo in uno dei due insiemi, e quindi se è presente in entrambi, allora era già presente in \(S\) senza bisogno di rimuovere \(P\) o \(\neg P\).
 
   In aggiunta, tali insiemi sono anche certamente non vuoti. Supponiamo infatti per assurdo che \(S_P = \emptyset\). Allora, necessariamente, ogni clausola di \(S\) contiene \(\neg P\). Essendo però che per soddisfare una clausola è sufficiente soddisfare un suo letterale, allora ogni assegnamento che assegna \(0\) a \(P\) soddisfa tutte le clausole di \(S\), rendendo \(S\) soddisfacibile, in contraddizione con l'ipotesi che \(S\) sia insoddisfacibile. Vale ovviamente un ragionamento duale per \(S_{\neg P}\).
@@ -1241,7 +1241,7 @@ A questo punto, avendo dimostrato la correttezza e la terminazione dell'algoritm
   \end{cases}\]
   possiamo facilmente vedere che \(\Val{\alpha^P}[S] = 1\) portando all'assurdo. Questo si ha sempre perché per soddisfare una clausola è sufficiente soddisfare un suo letterale, e ogni clausola di \(S\) o è presente in \(S_P\) e quindi soddisfatta da \(\alpha\), o contiene \(\neg P\) e quindi è soddisfatta da \(\alpha^P\) assegnando \(0\) a \(P\).
   Formalmente, \(\forall C \in S\), \(\neg P \in C \implies \Val{\alpha^P}[C] = 1\) perché \(\Val{\alpha^P}[\neg P] = 1\) e 
-  \[\neg P \notin C \implies C\setminus\set{P} \in S_P \implies \exists l \in C\setminus\set{P} : \Val{\alpha^P}[l] = \Val{\alpha^P}[l] = 1\]
+  \[\neg P \notin C \implies C\setminus\set{P} \in S_P \implies \exists l \in C\setminus\set{P} : \Val{\alpha^P}[l] = \Val{\alpha}[l] = 1\]
 
   Per quanto riguarda \(S_{\neg P}\) il ragionamento è analogo costruendo un assegnamento che assegni \(1\) a \(P\).
   A questo punto possiamo finalmente applicare l'ipotesi induttiva a \(S_P\) e \(S_{\neg P}\), avendo che entrambi sono insoddisfacibili, e quindi \(S_P\vdash_R \square\) e \(S_{\neg P}\vdash_R \square\).
@@ -1250,7 +1250,7 @@ A questo punto, avendo dimostrato la correttezza e la terminazione dell'algoritm
   \begin{itemize}
     \item Se vale \(S_P\subseteq S\) o \(S_{\neg P}\subseteq S\), ovvero una tra \(P\) e \(\neg P\) non è presente in nessuna clausola di \(S\), allora \(S\vdash_R \square\) banalmente per monotònicità.
     \item Alternativamente, esiste almeno una foglia in \(\pi_P\) etichettata con una clausola \(C_P\) e una in \(\pi_{\neg P}\) etichettata con una clausola \(C_{\neg P}\) tali che \(C_P\) e \(C_{\neg P}\) non sono in \(S\).
-    In altre parole c'è almeno una foglia per albero deduzione che è stata ottenuta dalla sottrazione del letterale.
+    In altre parole c'è almeno una foglia per albero di deduzione che è stata ottenuta dalla sottrazione del letterale.
     Consideriamo quindi un'applicazione di risoluzione tra \(C_P\) e una qualsiasi clausola \(D \in S_P\) in clash con \(C_P\).
     Chiaramente \(P\notin C_P \land P \notin D \implies P \notin R\) risolvente di \(C_P\) e \(D\).
     A questo punto però aggiungendo \(P\) sia a \(C_P\), che ricordiamo per costruzione originariamente conteneva \(P\) in \(S\), e a \(R\), otterrei ancora un applicazione corretta di risoluzione, poiché applicata a un altro letterale in clash.
