@@ -1,12 +1,12 @@
-\chapter{Applicazioni della logica in Computer Science}
+\chapter{Applicazioni ed Espressività della logica}
 
-\todo{Questo capitolo è da intendere dopo la logica del primo ordine, quindi si faranno riferimenti anche ad essa.}
+\todo{Questo capitolo è da intendere dopo la logica del primo ordine, quindi si faranno riferimenti anche a essa.}
 
 Infine, andiamo ad analizzare come i linguaggi logici e i sistemi di deduzione possano essere applicati nell'informatica nella risoluzione di problemi. Una logica col suo calcolo di deduzione infatti fornisce un sistema formale di rappresentazione dei problemi oltre che una sistema di inferenza per risolverli. 
 In tal senso, non si è molto distanti da un modello di calcolo computazionale.
 Infatti, esistono linguaggi di programmazione logica, come Prolog, che si basano su questi principi per esprimere programmi e risolvere problemi.
 
-Tra le vaire applicazioni, quella su cui ci concentreremo è la specifica di problemi decisionali, ovvero problemi che possono essere risolti con una risposta sì o no.
+Tra le varie applicazioni, quella su cui ci concentreremo è la specifica di problemi decisionali, ovvero problemi che possono essere risolti con una risposta sì o no.
 
 In particolare, andremo a vedere come le sintassi e le semantiche dei linguaggi logici possano essere utilizzate per rappresentare gli input, gli output e una relazione tra di essi, in modo tale che la congiunzione delle formule risultanti sia soddisfacibile se e solo se esiste il problema da risolvere ha risposta affermativa.
 
@@ -29,7 +29,7 @@ Un ciclo in un grafo è ovviamente definito come un percorso che contiene più d
 
 Come già detto, per operare la riduzione, è necessario trovare una rappresentazione dell'istanza dell'input, ovvero del grafo \(G\), e dell'output, ovvero un potenziale ciclo, e dei vincoli che legano i due, in modo tale che la congiunzione di tutte le formule risultanti sia soddisfacibile se e solo se esiste un ciclo in \(G\).
 
-Per la rappresentazione del grafo è necessaio andare a rappresentare i vertici e gli archi. Essendo che \(E\subseteq V\times V\) possiamo rappresentare ogni elemento di \((u,v)\in V\times V\) con una variabile \(X_{u,v}\) e richiedere che \(X_{u,v}\) sia vera se e solo se \((u,v)\in E\).
+Per la rappresentazione del grafo è necessario andare a rappresentare i vertici e gli archi. Essendo che \(E\subseteq V\times V\) possiamo rappresentare ogni elemento di \((u,v)\in V\times V\) con una variabile \(X_{u,v}\) e richiedere che \(X_{u,v}\) sia vera se e solo se \((u,v)\in E\).
 
 \[\phi_E \eqdef \bigwedge_{(u,v)\in E} X_{u,v} \land \bigwedge_{(u,v)\notin E} \neg X_{u,v}\]
 
@@ -58,7 +58,7 @@ Il problema della \(k\)-colorazione è il seguente: dato un grafo \(G=(V,E)\) e 
 Più formalmente, \(\exists f:V\to C = \set{1,\dots,k} \st \forall (u,v)\in E, f(u)\neq f(v)\)?
 Questo problema è molto interessante perché rappresenta una generalizzazione di un problema di allocazione di risorse. Inoltre, questo problema è molto più complicato del precedente perché si dimostra essere NP-completo.
 
-Vediamo dunque una sua riduzione a \(\Sat\). Per rappresentare il grafo \(G\), possiao rifarci alla rappresentazione già vista per il problema della ciclicità. Questo porta ad avere un insieme di proposizioni atomiche \(\AP[\phi_E]\) con \(\abs{\AP} = \abs{V}^2\) per rappresentare il grafo \(G\).
+Vediamo dunque una sua riduzione a \(\Sat\). Per rappresentare il grafo \(G\), possiamo rifarci alla rappresentazione già vista per il problema della ciclicità. Questo porta ad avere un insieme di proposizioni atomiche \(\AP[\phi_E]\) con \(\abs{\AP} = \abs{V}^2\) per rappresentare il grafo \(G\).
 Per la funzione di colorazione \(f\) invece, possiamo vederla come una relazione \(f\subseteq V\times C\) con un vincolo funzionale. Dunque possiamo rappresentarla estensionalmente tramite le coppie del prodotto cartesiano.
 
 In particolare, possiamo avere \(Y_v^c\) con \(v\in V\) e \(c\in C\), in cui ogni assegnamento di tali variabili va interpretato come una colorazione del vertice \(v\) del colore \(c\) se \(Y_v^c\) vale \(1\). Dunque \(\AP' = \set{Y_v^c}[c\in C \land v \in V]\) e quindi \(\abs{\AP'} = \abs{V}k\).
@@ -73,9 +73,9 @@ Tale vincolo infatti impone che per ogni vertice \(v\) esista almeno un colore \
 Per il vincolo che impone che vertici adiacenti non abbiano lo stesso colore, possiamo imporre il seguente vincolo:
 \[\phi_{adj} \eqdef \bigwedge_{(u,v)\in E} \bigwedge_{c\in C} \neg (Y_u^c \land Y_v^c)\]
 
-Possiamo osservare che \(\abs{\phi_{f}} = \BigO(\abs{V}k^2)\) e \(\abs{\phi_{adj}} = \BigO(\abs{V}^2k)\), dunque la formula rusiltante dalla congiunzione di queste due formule sia \(\BigO(\abs{V}^3)\). Questa codifica del problema è però problematica se l'input dei colori è rappresentato usando solo \(k\) e non l'intero insieme \(C\), poiché per rappresentare \(C\) è necessario rappresentare ogni elemento di \(C\), il che richiede spazio lineare in \(k\), mentre per rappresentare \(k\) è sufficiente rappresentare il numero \(k\) in notazione posizionale, che richiede spazio logaritmico in \(k\). In tale scenario, una lunghezza lineare in \(k\) è esponenzialmente più grande di quella dell'input e dunque la codifica non è efficiente. 
+Possiamo osservare che \(\abs{\phi_{f}} = \BigO(\abs{V}k^2)\) e \(\abs{\phi_{adj}} = \BigO(\abs{V}^2k)\), dunque la formula risultante dalla congiunzione di queste due formule sia \(\BigO(\abs{V}^3)\). Questa codifica del problema è però problematica se l'input dei colori è rappresentato usando solo \(k\) e non l'intero insieme \(C\), poiché per rappresentare \(C\) è necessario rappresentare ogni elemento di \(C\), il che richiede spazio lineare in \(k\), mentre per rappresentare \(k\) è sufficiente rappresentare il numero \(k\) in notazione posizionale, che richiede spazio logaritmico in \(k\). In tale scenario, una lunghezza lineare in \(k\) è esponenzialmente più grande di quella dell'input e dunque la codifica non è efficiente. 
 
-Esiste fortunatamente modo di ovviare a tale problema sfruttando prorpio la rappresentazione in notazione posizionale di \(k\). In particolare, essendo che \(k\) si può rappresentare con \(\lceil \log_2(k) \rceil\) bit, è possibile rappresentare ogni colore \(c\) con una stringa di \(\lceil \log_2(k) \rceil\) bit, e dunque utilizzando \(\lceil \log_2(k) \rceil\) variabili. Dunque, invece di avere \(Y_v^c\) con \(v\in V\) e \(c\in C\), possiamo avere \(Y_v^i\) con \(v\in V\) e \(i=1,\dots,\lceil \log_2(k) \rceil\), in cui ogni assegnamento di tali variabili va interpretato come una colorazione del vertice \(v\) del colore rappresentato dalla stringa di bit formata da tali variabili. Dunque \(\AP' = \set{Y_v^i}[i=1,\dots,\lceil \log_2(k) \rceil \land v \in V]\) e quindi \(\abs{\AP'} = \BigO(\abs{V}\log k)\). È interessante notare che questa nuova rappresentazione non necessità di esprimere il vincolo di funzionalità e totalità, poiché per ogni vertice esiste un solo insieme di variabili \(Y_v^i\) con \(i=1,\dots,\lceil \log_2(k) \rceil\) che può essere vero, e dunque ogni vertice è colorato con uno e un solo colore. Dunque, l'unico vincolo da esprimere è quello che impone che vertici adiacenti non abbiano lo stesso colore, che è il seguente:
+Esiste fortunatamente modo di ovviare a tale problema sfruttando proprio la rappresentazione in notazione posizionale di \(k\). In particolare, essendo che \(k\) si può rappresentare con \(\lceil \log_2(k) \rceil\) bit, è possibile rappresentare ogni colore \(c\) con una stringa di \(\lceil \log_2(k) \rceil\) bit, e dunque utilizzando \(\lceil \log_2(k) \rceil\) variabili. Dunque, invece di avere \(Y_v^c\) con \(v\in V\) e \(c\in C\), possiamo avere \(Y_v^i\) con \(v\in V\) e \(i=1,\dots,\lceil \log_2(k) \rceil\), in cui ogni assegnamento di tali variabili va interpretato come una colorazione del vertice \(v\) del colore rappresentato dalla stringa di bit formata da tali variabili. Dunque \(\AP' = \set{Y_v^i}[i=1,\dots,\lceil \log_2(k) \rceil \land v \in V]\) e quindi \(\abs{\AP'} = \BigO(\abs{V}\log k)\). È interessante notare che questa nuova rappresentazione non necessità di esprimere il vincolo di funzionalità e totalità, poiché per ogni vertice esiste un solo insieme di variabili \(Y_v^i\) con \(i=1,\dots,\lceil \log_2(k) \rceil\) che può essere vero, e dunque ogni vertice è colorato con uno e un solo colore. Dunque, l'unico vincolo da esprimere è quello che impone che vertici adiacenti non abbiano lo stesso colore, che è il seguente:
 \[\phi_2' = \land_{(u,v)\in E}\left( \bigvee_{i=0}^{\log_2(k)-1} (X_i^u \land \neg X_i^v) \lor (\neg X_i^u \land X_i^v)\right)\] 
 
 In altre parole, quello che richiediamo adesso è che ogni coppia di vertici adiacenti abbia almeno un bit diverso nella rappresentazione del colore. Questo può essere espresso in maniera leggermente più compatta utilizzando l'operatore XOR, che è vero se e solo se i disgiunti sono diversi:
@@ -86,7 +86,7 @@ Dunque, concludendo, la formula che rappresenta l'istanza di \(\Sat\) a cui ridu
 \[\phi' \eqdef \phi_E \land \phi_2'\]
 
 Tale codifica chiaramente occupa spazio \(\abs{V}^2\log_2(k)\), che è lineare nell'input.
-Possiamo facilmente notare in oltre che in questa codifica, per \(k=2\) otteniemo tutte formule che contengono al più 2 variabili.
+Possiamo facilmente notare in oltre che in questa codifica, per \(k=2\) otteniamo tutte formule che contengono al più 2 variabili.
 Tale frammento ristretto della logica proposizionale è noto come \(2-\Sat\) e per esso il problema della soddisfacibilità è risolvibile in tempo polinomiale. Dunque, questa codifica ci dice anche che \(2-\)colorazione è risolvibile in tempo polinomiale.
 
 \subsection{Ciclo Hamiltoniano}
@@ -101,7 +101,7 @@ Quindi per \(\abs{V}=n\) bisogna avere una sequenza di vertici \(v_0, \ldots, v_
 
 È possibile vedere tale sequenza come una permutazione dell'insieme dei vertici \(V\), ovvero una funzione biettiva \(\pi:V\to \set{0,\ldots,n-1}\) che associa a ogni vertice la sua posizione nella sequenza. Dunque, per rappresentare l'output, ci basta rappresentare tale permutazione e poi imporre il vincolo che vertici adiacenti nella sequenza siano adiacenti nel grafo.
 
-Per semplicità ci restringeremo al caso in cui \(n\) è una potenza di \(2\). Chiaramente, è possibile estendere la codifica al caso generale, ma richide diversi accorgimenti tecnici che non sono particolarmente interessanti ai fini di questa trattazione.
+Per semplicità ci restringeremo al caso in cui \(n\) è una potenza di \(2\). Chiaramente, è possibile estendere la codifica al caso generale, ma richiede diversi accorgimenti tecnici che non sono particolarmente interessanti ai fini di questa trattazione.
 
 Chiaramente per la rappresentazione di \(\pi\) possiamo prendere spunto da quanto fatto per la \(k\)-colorazione, e utilizzare per ogni vertice \(v\) un insieme di variabili \(Y_v^i\) con \(i=1,\dots,\log_2(n)\), in cui ogni assegnamento di tali variabili va interpretato come la rappresentazione binaria della posizione del vertice \(v\) nella sequenza. Qui l'ipotesi che \(n\) sia una potenza di \(2\) è fondamentale, poiché in questo modo è garantito che non ci possano essere vertici assegnati a posizioni che non esistono. Questo infatti garantisce che l'insieme dei vertici e l'insieme dei numeri rappresentati dalle variabili \(Y_v^i\) siano della stessa cardinalità, e dunque che sia possibile avere una corrispondenza biunivoca tra i due insiemi, che è ciò che ci serve per rappresentare una permutazione. Inoltre, questo ci permette di poter esprimere la biettività della funzione \(\pi\) utilizzando solo l'iniettività, poiché l'iniettività garantisce anche la suriettività quando i due insiemi hanno la stessa cardinalità. Dunque, per esprimere la biettività di \(\pi\) è sufficiente esprimere il vincolo di iniettività, che è il seguente:
 
@@ -110,9 +110,9 @@ Chiaramente per la rappresentazione di \(\pi\) possiamo prendere spunto da quant
 In altre parole, quello che tale vincolo richiede è che \(\forall u,v \in V, u\neq v \implies \pi(u)\neq\pi(v)\).
 Quello che ci rimane da fare è imporre il vincolo che vertici adiacenti nella sequenza siano adiacenti nel grafo.
 
-Iniziamo assicurandoci che tale permutazione sia effettivamente un percorso. Per fare ciò è sufficiente che ogni coppia di vertici consequitivi nella sequenza sia effettivamente un arco. Per fare ciò è sufficiente imporre che:
+Iniziamo assicurandoci che tale permutazione sia effettivamente un percorso. Per fare ciò è sufficiente che ogni coppia di vertici consecutivi nella sequenza sia effettivamente un arco. Per fare ciò è sufficiente imporre che:
 \[\phi_{path} \eqdef \bigwedge_{u,v\in V} \phi_{succ(u,v)} \to X_{u,v}\]
-Dove \(\phi_{succ(u,v)}\) è una formula che è vera se e solo se \(\pi(v) = \pi(u)+1 \mod n\). Per definire tale formula, è necessario avere modo di codificare l'incremento di \(1\) modulo \(n\) nella rappresentazione binaria. Per fare ciò possiamo pensare ad un circuito logico che prende in input la rappresentazione binaria di un numero \(x\) e restituisce in output la rappresentazione binaria di \(x+1 \mod n\). Tale circuito è composto, per ogni bit, da una porta XOR che calcola il nuovo valore del bit, e da una porta AND che calcola se è necessario portare \(1\) al bit successivo come carry. Volendo generalizzare, è possibile vedere l'incremento di \(1\) come carry iniziale portando ad una struttura di questo tipo:
+Dove \(\phi_{succ(u,v)}\) è una formula che è vera se e solo se \(\pi(v) = \pi(u)+1 \mod n\). Per definire tale formula, è necessario avere modo di codificare l'incremento di \(1\) modulo \(n\) nella rappresentazione binaria. Per fare ciò possiamo pensare a un circuito logico che prende in input la rappresentazione binaria di un numero \(x\) e restituisce in output la rappresentazione binaria di \(x+1 \mod n\). Tale circuito è composto, per ogni bit, da una porta XOR che calcola il nuovo valore del bit, e da una porta AND che calcola se è necessario portare \(1\) al bit successivo come riporto. Volendo generalizzare, è possibile vedere l'incremento di \(1\) come riporto iniziale portando a una struttura di questo tipo:
 
 \begin{figure}[h!]
 	\centering
@@ -145,10 +145,10 @@ Dove \(\phi_{succ(u,v)}\) è una formula che è vera se e solo se \(\pi(v) = \pi
 		% Carry iniziale
 		\node[stage] at (-1.6,-2.4) {Incremento di 1: \(c_0 = 1\)};
 	\end{tikzpicture}
-	\caption{Schema a blocchi del binary incrementer con propagazione del carry.}\label{fig:binary-incrementer}
+	\caption{Schema a blocchi dell'incrementatore binario con propagazione del riporto.}\label{fig:binary-incrementer}
 \end{figure}
 
-Per implementare ciò sarà sufficiente introdurre le variabili per i carry \(C_i^{u,v}\), richiedere che \(C_0^{u,v}\) sia vero, e poi imporre i vincoli che definiscono il funzionamento del circuito, ovvero \(C_{i+1}^{u,v} \leftrightarrow (Y_i^v \land C_i^{u,v})\) e \(Y_v^i \leftrightarrow (Y_u^i \oplus C_i^{u,v})\). Dunque, la formula che impone che vertici adiacenti nella sequenza siano adiacenti nel grafo è la seguente:
+Per implementare ciò sarà sufficiente introdurre le variabili per i riporto \(C_i^{u,v}\), richiedere che \(C_0^{u,v}\) sia vero, e poi imporre i vincoli che definiscono il funzionamento del circuito, ovvero \(C_{i+1}^{u,v} \leftrightarrow (Y_i^v \land C_i^{u,v})\) e \(Y_v^i \leftrightarrow (Y_u^i \oplus C_i^{u,v})\). Dunque, la formula che impone che vertici adiacenti nella sequenza siano adiacenti nel grafo è la seguente:
 \[\phi_{succ(u,v)} \eqdef C_0^{u,v}\land \bigwedge_{i=0}^{\log_2(n)-1} (Y_i^u \leftrightarrow (Y_i^v \oplus C_i^{u,v}))\land (C_{i+1}^{u,v} \leftrightarrow (Y_{i}^v \land C_{i}^{u,v}))\]
 
 A questo punto sostituendo opportunamente le varie \(\phi_{succ(u,v)}\) in \(\phi_{path}\) al variare di \(u,v\) possiamo ottenere la riduzione completa con la formula:
@@ -174,4 +174,130 @@ Per fare ciò dovremmo innanzitutto usare le variabili predisposte per \(k\) per
 
 \[\phi_k = \bigwedge_{i \in P_k} K_i \land \bigwedge_{i \notin P_k} \neg K_i\]
 
-A questo punto per rappresentare \(\abs{S}\) abbiamo bisogno di un contatore che conti quanti elementi sono in \(S\). Per fare ciò però è sufficiente replicare la codifica dell'incrementatore visto per il ciclo hamiltoniano una volta per ogni vertice usando come carry iniziale la variabile che rappresenta la presenza del vertice nella soluzione \(S_v\), in modo da incrementare il contatore solo se il vertice è presente. A questo punto avendo lo stato del contatore fissato a zero, ottenibile richiedendo che le variabili del primo input siano tutte false usando la negazione, confrontando l'output di ogni incrementatore con l'input del successivo in modo che siano uguali e di confontare l'output dell'ultimo incrementatore con la rappresentazine di \(k\). Per questioni di brevità verrà omessa la rappresentazione in formule di questa costruzione, che è però facile da implementare.
+A questo punto per rappresentare \(\abs{S}\) abbiamo bisogno di un contatore che conti quanti elementi sono in \(S\). Per fare ciò però è sufficiente replicare la codifica dell'incrementatore visto per il ciclo hamiltoniano una volta per ogni vertice usando come riporto iniziale la variabile che rappresenta la presenza del vertice nella soluzione \(S_v\), in modo da incrementare il contatore solo se il vertice è presente. A questo punto avendo lo stato del contatore fissato a zero, ottenibile richiedendo che le variabili del primo input siano tutte false usando la negazione, confrontando l'output di ogni incrementatore con l'input del successivo in modo che siano uguali e di confrontare l'output dell'ultimo incrementatore con la rappresentazione di \(k\). Per questioni di brevità verrà omessa la rappresentazione in formule di questa costruzione, che è però facile da implementare.
+
+\section{Espressività e complessità del primo ordine}
+
+Passando al prim'ordine, per quanto sia possibile rappresentare problemi decisionali come nella logica proposizionale, andremo a vedere che i problemi decisionali della logica, ovvero VALIDITY e SATISFIABILITY, sono tutti indecidibili in principio.
+
+In particolare VALIDITY è RE (ricorsivamente enumerabile) e SATISFIABILITY è coRE (il suo complemento è ricorsivamente enumerabile), ma nessuno dei due è ricorsivo. Dunque, come vedremo successivamente, esistono algoritmi che terminano in tempo finito per l'accettazione di formule valide ma possono divergere per formule non valide, e algoritmi che terminano in tempo finito per l'accettazione di formule insoddisfacibili ma possono divergere per formule soddisfacibili.
+
+Piuttosto che approfondire quindi come ridurre problemi decisionali a VALIDITY o SATISFIABILITY, prima di mostrare come questi siano indecidibili riducendo il problema della fermata di una macchina di Turing a VALIDITY, ci concentreremo su un altro aspetto pratico interessante, ovvero la rappresentazione della conoscenza e di conseguenza l'espressività della logica del primo ordine come linguaggio.
+
+Abbiamo già visto per la logica proposizionale alcuni problemi che potevano essere espressi usando la logica proposizionale su un input finito. In particolare tutte le proprietà finitarie erano in qualche modo esprimibili. Al prim'ordine invece possiamo esprimere proprietà con una granularità molto fine avendo a che fare con domini potenzialmente infiniti. 
+
+Andiamo a vedere quindi alcuni esempi e tecniche molto rudimentali per dimostrare caratteristiche di espressività della logica del primo ordine. In particolare, saremo interessati a descrivere alcune proprietà di oggetti del discorso e capire se tali proprietà sono esprimibili o meno in logica del primo ordine, ovvero se è possibile trovare una formula del primo ordine che sia soddisfatta esclusivamente dai domini che soddisfano quella proprietà.
+
+Ovviamente quest'analisi dipenderà dal linguaggio che stiamo utilizzando, ovvero dalle costanti, funzioni e predicati di cui disponiamo. 
+
+Iniziamo definendo propriamente il concetto di proprietà e di espressibilità.
+
+\begin{definition}{Proprietà}
+  Sia \(L\) un linguaggio di \(\FOL\) e sia \(\mathcal{M}\) la classe delle strutture con \(m \in \mathcal{M}\) se \(m = (D,I)\) per \(L\). Una \textbf{proprietà} \(P\) è un qualsiasi un sott'insieme di \(\mathcal{M}\).
+\end{definition}
+
+Intuitivamente, in ottica descrittivista del linguaggio, una proprietà non è altro che l'insieme degli oggetti del discorso che la rispettano. Ad esempio, se stiamo parlando di persone, la proprietà di essere un uomo è l'insieme di tutte le persone che sono uomini.
+
+\begin{definition}{Espressibilità}
+  Sia \(L\) un linguaggio di \(\FOL\) e sia \(\mathcal{M}\) la classe delle strutture con \(m \in \mathcal{M}\) se \(m = (D,I)\) per \(L\). Una proprietà \(P\) è \textbf{esprimibile} in \(L\) se esiste una formula \(\phi \in \FOL\) tale che \(\set{m\in\mathcal{M}}[ m \models \phi] = P\)
+\end{definition}
+
+Questo problema è particolarmente interessante per l'informatica poiché ci permette di capire quanto potere espressivo sia necessario per esprimere determinate proprietà nella modellazione di basi di conoscenza. Intuitivamente l'espressività di un linguaggio è inversamente proporzionale alla complessità computazionale dei problemi di decisione di tale linguaggio, quindi è importante capire quali sono le proprietà che possiamo esprimere con un linguaggio e quali no per trovare un giusto equilibrio tra potere espressivo e complessità computazionale.
+
+Un modo molto semplice per capire se una proprietà è esprimibile o meno è quello di cercare di costruire una formula che la esprima. 
+
+Un esempio l'abbiamo già visto, ovvero la proprietà di essere un ordinamento lineare.
+\[\phi_{lin}\eqdef\forall x \neg (x=x) \land \forall x,y (x=y\lor x<y \lor y<x) \land \forall x,y,z ((x<y \land y<z) \to x<z)\]
+con chiaramente un linguaggio che abbia come minimo un simbolo di relazione binaria \(<\) e un simbolo di uguaglianza \(=\).
+
+Chiaramente quindi \(\den{\phi_{lin}}\) è proprio la proprietà di essere linearmente ordinato.
+
+Sempre sullo stesso linguaggio si può pensare anche di esprimere la proprietà \(DSC = \set{m\in\mathcal{M}}[ m \text{ è ordinamento lineare discreto}]\). Sicuramente \(\phi_{lin}\) sarà parte della formula che esprime \(DSC\) ma non è sufficiente. Dovremo congiungere a \(\phi_{lin}\) anche una proprietà che esprima la discretezza. Intuitivamente quello che differenzia insiemi discreti e non discreti è il concetto di successore. Bisogna però stare attenti al fatto che un insieme discreto può ammettere massimo, e che dunque non è richiesto che ogni elemento abbia un successore. Si dovranno dunque trattare come casi particolari anche gli elementi che non hanno successore. Intuitivamente quindi quello che dovremo esprimere è che ogni elemento che ha degli elementi successivi ha un minimo elemento successivo, che è proprio il successore. La formula che esprime tutto ciò è la seguente:
+\[\phi' \eqdef \forall x (\exists y x< y \to \exists z (x<z \land \forall w (x<w \to \neg(w<z))))\]
+E quindi avremo che \(\den{\phi_{lin} \land \phi'} = DSC\).
+
+Questa \(\phi_{lin} \land \phi'\) però chiaramente non caratterizza \((\N,<)\) poiché ha altri modelli che la soddisfano. Un esempio è l'unione disgiunta di \(\N\) con se stesso, ovvero \(\N + \N\), formato da coppie \((n,i)\) con \(n \in \N\) e \(i \in \set{0,1}\) e con l'ordinamento definito come segue:
+\[(n,i) < (m,i) \text{ se } n < m \in \N\]
+\[(n,0) < (m,1) \text{ per ogni } n,m \in \N\]
+
+Passiamo invece alla proprietà \(DNS = \set{m\in\mathcal{M}}[ m \text{ è ordinamento lineare denso}]\). Anche in questo caso \(\phi_{lin}\) è parte della formula che esprime \(DNS\) ma non è sufficiente. Dovremo congiungere a \(\phi_{lin}\) anche
+\[\phi''\eqdef \forall x,y (x<y \to \exists z (x<z \land z<y))\]
+
+Si ha quindi \(\den{\phi_{DNS} \eqdef\phi_{lin} \land \phi'} = DNS\). Chiaramente \((\Q,<)\models \phi_{DNS}\) e \((\R,<)\models \phi_{DNS}\).
+
+È interessante notare che \(\phi'\not\equiv\neg \phi''\). Possiamo considerare ad esempio \(([0,1]\cup \set{2},<)\). Questo chiaramente non è denso poiché per \(x = 1\) e \(y = 2\) non esiste un elemento \(z\) tale che \(1 < z < 2\). D'altra parte però non è discreto poiché per qualsiasi elemento in \([0,1]\) non esiste un successore. 
+
+Passando a qualche risultato negativo, abbiamo che \((\Q,<)\) è indistinguibile da \((\R,<)\), ovvero non esiste una formula \(\phi\) tale che \((\Q,<)\models \phi\) e \((\R,<)\not\models \phi\). Questa è conseguenza diretta del teorema di Löwenhaim-Skolem che recita quanto segue:
+\begin{theorem}{Löwenhaim-Skolem}
+  Se \(\Gamma\) è un insieme di formule chiuse al più numerabile e soddisfacibile, allora \(\phi\) ha un modello al più numerabile.
+\end{theorem}
+
+Se una formula \(\phi\) è una formula che soddisfa \((\R,<)\) chiaramente sarà soddisfatto anche \(\set{\phi, \phi_{DNS}}\) che è un insieme di formule chiuse al più numerabile e soddisfacibile, quindi per il teorema di Löwenhaim-Skolem esiste un modello al più numerabile che soddisfa \(\set{\phi}\). Tale modello non può essere \((\R,<)\) poiché non è al più numerabile, quindi deve essere \((\Q,<)\).
+
+Intuitivamente il teorema di Löwenhaim-Skolem vale per la costruzione vista per il teorema di completezza, poiché la costruzione del modello dell'insieme soddisfacibile \(\Gamma\) portava ad avere un dominio al più numerabile, poiché abbiamo aggiunto un numero enumerabile di insiemi enumerabile di costanti che è ancora un insieme enumerabile se lo era quello di partenza.
+
+Questo quindi ci dice che ci sono limiti in ciò che il prim'ordine può esprimere.
+
+\begin{theorem}{Compattezza}
+  Per ogni \(\Gamma\subseteq\FOL\) (formule chiuse) e per ogni formula \(\phi\) (chiusa), vale che
+  
+  \(\Gamma \models \phi \iff \) esiste \(\Gamma_0 \subseteq \Gamma\) finito tale che \(\Gamma_0 \models \phi\)
+\end{theorem}
+
+\begin{proof}
+  Si ha per completezza che \(\Gamma \models \phi \implies \Gamma \vdash \phi\). Se \(\Gamma \vdash \phi\) allora esiste una dimostrazione di \(\phi\) a partire da \(\Gamma\) che è finita, quindi coinvolge solo un numero finito di formule di \(\Gamma\), ovvero esiste un sottoinsieme finito \(\Gamma_0\) di \(\Gamma\) tale che \(\Gamma_0 \vdash \phi\). Per correttezza, se \(\Gamma_0 \vdash \phi\) allora \(\Gamma_0 \models \phi\).
+
+  L'altra direzione è banale per monotònicità
+\end{proof}
+
+Una formulazione alternativa della compattezza è la seguente:
+\begin{theorem}{Compattezza Alternativa}
+  Per ogni \(\Gamma\subseteq\FOL\) (formule chiuse),
+
+  \(\Gamma \in\Unsat \iff\) esiste \(\Gamma_0 \subseteq \Gamma\) finito tale che \(\Gamma_0 \in\Unsat\)
+  o equivalentemente se
+  \(\Gamma \in\Sat \iff\) per ogni \(\Gamma_0 \subseteq \Gamma\) finito, \(\Gamma_0 \in\Sat\)
+\end{theorem}
+
+Il teorema di compattezza è uno strumento particolarmente usato, soprattutto in logica matematica, per dimostrare risultati di espressività. Ad esempio \(FIN = \set{m \in \mathcal{M}}[\abs{m} < \infty]\) non è esprimibile in \(\FOL\) semplice, ovvero su linguaggio \(L = (\emptyset, \emptyset, \set{=})\). Supponiamo per assurdo che esista una formula \(\phi_{FIN}\) tale che \(\den{\phi_{FIN}} = FIN\). Consideriamo ora l'insieme parametrico di formule al variare di \(n\) definite come
+\[\exists x_1, \ldots, x_n \bigwedge_{\substack{1 \leq i \leq n \\ 1 \leq j \leq n \\ i \neq j}} \neg(x_i = x_j)\]
+Intuitivamente ognuna di queste formule esprime che esistono almeno \(n\) elementi distinti.
+
+Consideriamo quindi \(\Gamma = \set{\phi_n}[n\in\N^*]\). Chiaramente questo insieme è numerabile. Sia ora \(\Sigma = \Gamma \cup \set{\phi_{FIN}}\). Ora se esiste un \(m\) che soddisfa \(\Gamma\) necessariamente deve essere infinito, poiché deve avere almeno \(n\) elementi distinti per ogni \(n\in \N\). Dunque \(\Sigma\) è insoddisfacibile perché qualsiasi modello di \(\Sigma\) dovrebbe essere sia finito che infinito. Ma ora considerando qualsiasi sott'insieme finito \(\Sigma_0\) di \(\Sigma\) allora \(\Sigma_0\) è soddisfacibile, poiché basta un dominio finito di cardinalità maggiore o uguale al massimo indice \(n\) che compare in \(\Sigma_0\) per soddisfare tutte le formule di \(\Sigma_0\). Quindi abbiamo un insieme insoddisfacibile che però non ha nessun sottoinsieme finito insoddisfacibile, il che è assurdo per il teorema di compattezza.
+
+Un altro esempio di particolare interesse per gli informatici è quello della non esistenza di una formula che caratterizza esattamente la classe dei grafi connessi. Chiaramente ciò non vuol dire che dato uno specifico grafo connesso non esista una formula che lo caratterizza o che esprima se quello specifico sia connesso, ma semplicemente che non esiste una formula che caratterizza tutti i grafi connessi e solo quelli.
+
+Sia \(CONN = \set{m\in\mathcal{M}}[ m \text{ è un grafo connesso}]\). Supponiamo per assurdo che esista una formula \(\phi_{CONN}\) tale che \(\den{\phi_{CONN}} = CONN\). Per essere un grafo mi è sufficiente avere un linguaggio con un simbolo di relazione binaria \(E\) che rappresenta l'adiacenza tra i nodi con \(D\) che rappresenta i nodi. Per comodità aggiungiamo al linguaggio due costanti \(s\) e \(t\). Costruiamo quindi l'insieme di formule \(\Gamma = \set{\phi_n}[n\in\N^*]\) con
+\[\phi_n \eqdef \neq\exists x_1, \ldots, x_n ( x_1 = s \land x_n = t \land \bigwedge_{1 \leq i < n} E(x_i, x_{i+1}))\]
+Costruiamo quindi \(\Gamma' \eqdef \Gamma \cup \set{\forall x \neg E(x,x)}\). Ogni formula \(\phi_n\) ci dice che non esiste un cammino di lunghezza \(n-1\) tra \(s\) e \(t\). Chiaramente preso \(m\) tale che \(m\models\Gamma'\) si ha che \(t^m\) non sarà raggiungibile da \(s^m\) e quindi \(m\) non sarà connesso. Dunque \(\Sigma \eqdef \Gamma' \cup \set{\phi_{CONN}}\) è insoddisfacibile. Ma ora se prendo un qualsiasi sottoinsieme finito \(\Sigma_0\) di \(\Sigma\) se questo non contiene \(\phi_{CONN}\) allora è banalmente soddisfacibile da qualsiasi grafo non connesso. Se invece \(\Sigma_0\) contiene \(\phi_{CONN}\) allora dalla finitezza esiste un indice massimo di formule di \(\Gamma\) che compare in \(\Sigma_0\), ovvero esiste \(n\) tale che \(\phi_n \in \Sigma_0\) e per ogni \(m > n\) si ha che \(\phi_m \not\in \Sigma_0\). A questo punto basta prendere un qualsiasi grafo in cui \(s\) e \(t\) sono connessi da un cammino di lunghezza strettamente maggiore di \(n\) per soddisfare tutte le formule di \(\Sigma_0\). Quindi anche in questo caso abbiamo un insieme insoddisfacibile che però non ha nessun sottoinsieme finito insoddisfacibile, il che è assurdo per il teorema di compattezza.
+
+\subsection{Indecidibilità del prim'ordine}
+
+Come anticipato precedentemente la logica del prim'ordine è indecidibile, e per mostrare ciò è necessario prima formalizzare precisamente tale idea. Riprendendo nozioni di teoria della complessità, nel dire che la logica del prim'ordine è indecidibile si intende che i problemi di decisione a essa associati, ovvero VALIDITY, SATISFIABILITY e LOGICAL CONSEQUENCE, sono indecidibili ovvero, riformulando tali problemi come linguaggi, e quindi la decisione come appartenenza a tali linguaggi, non esistono algoritmi che, in tempo finito, possano decidere l'appartenenza di un'arbitraria formula a tali linguaggi. Dunque, in altre parole, esistono formule per cui qualsiasi algoritmo che tenti di rispondere \qi{yes} o \qi{no} a seconda che la formula sia valida\footnote{Ovviamente riformulando il problema in un problema di appartenenza questo equivale a \q{la formula appartiene o meno al linguaggio delle formule valide}}, soddisfacibile o che sia conseguenza logica di un insieme di formule, non termina in tempo finito.
+
+Come precedentemente accennato però è dimostrabile che questi problemi non sono \q{simmetrici} nel divergere. In particolare, esistono algoritmi che terminano in tempo finito per l'accettazione\footnote{Ovvero che rispondono \qi{yes} in tempo finito} di formule valide ma possono divergere per formule non valide, e algoritmi che terminano in tempo finito per il rifiuto\footnote{Ovvero che rispondono \qi{no} in tempo finito} di formule insoddisfacibili ma possono divergere per formule soddisfacibili. 
+
+Per caratterizzare tali problemi è necessario introdurre alcune classi di complessità più fini, che non richiedono la totale decidibilità ma che si accontentino di uno dei due lati. Tali problemi sono detti semi-decidibili e appartengono alle classi RE (ricorsivamente enumerabili) e coRE (il complemento di RE).
+
+Un insieme è ricorsivamente enumerabile se esiste una procedura che può enumerare tutti gli elementi dell'insieme. Invece coRE se il complemento dell'insieme può essere enumerato. 
+
+Chiaramente avendo queste due procedure è semplice capire se il linguaggio è decidibile, poiché basta fare un passo alla volta alle enumerazioni di entrambe le procedure e vedere quale mi genera l'istanza.
+
+In termini algoritmici, un linguaggio \(L\) è in RE se esiste un algoritmo che, dato un input \(x\), risponde \qi{yes} se \(x \in L\) e diverge altrimenti. Un linguaggio \(L\) è in coRE se esiste un algoritmo che, dato un input \(x\), risponde \qi{no} se \(x \not\in L\) e diverge altrimenti. Chiaramente, per essere decidibile, o ricorsivo, un linguaggio deve essere sia in RE che in coRE, ovvero deve esistere un algoritmo che risponde \qi{yes} se \(x \in L\) e \qi{no} se \(x \not\in L\) in tempo finito. Quello che andremo a mostrare in questa ultima sezione è che VALIDITY è in RE ma non è ricorsivo, e dunque per dualità e analogia si potrà concludere che SATISFIABILITY è in coRE ma non è ricorsivo, e che LOGICAL CONSEQUENCE è in RE ma non è ricorsivo.
+
+Per mostrare ciò dovremo innanzitutto mostrare che VALIDITY è in RE, ovvero mostrare un algoritmo che almeno per le istanze positive del problema termini sempre con risposta \qi{yes}, e poi mostrare che ogni algoritmo che tenta di decidere completamente VALIDITY, e dunque anche di rispondere \qi{no} per le istanze negative porti a una contraddizione, ovvero che esistono formule per cui tale algoritmo diverge.
+
+Iniziando con la prima parte, ovvero mostrare che VALIDITY è in RE, è sufficiente sfruttare i teoremi di completezza e correttezza. In particolare, vale \(\models \phi \iff \vdash \phi\). Riformulando quindi il problema in termini di appartenenza a linguaggi, si ha che \(\phi \in \set{\phi \in \FOL}[ \models \phi] \iff \phi \in \set{\phi \in \FOL}[\vdash \phi]\). Dunque, per mostrare che VALIDITY è in RE, è sufficiente mostrare che l'insieme \(\set{\phi \in \FOL}[\vdash \phi]\) è in RE, ovvero che esiste una procedura per enumerarne tutti gli elementi. Per definizione di dimostrazione, una formula \(\phi\) è dimostrabile se esiste una derivazione di \(\phi\) a partire da \(\emptyset\). Essendo le derivazioni alberi finiti hanno tutti un altezza finita, e dunque è possibile iniziare a enumerare tutte le derivazioni di altezza \(0\), seguite da tutte le derivazioni di altezza \(1\), e così via. Tale enumerazione è ottenibile tramite una procedura poiché è sufficiente enumerare l'insieme finito di regole di inferenza e costruire tutte le possibili combinazioni di tali regole che portano a una derivazione di altezza \(n\) per ogni \(n\). Dunque, per ogni formula \(\phi\), se \(\phi\) è dimostrabile, allora esiste una derivazione di \(\phi\) a partire da \(\emptyset\) che sarà enumerata in un tempo finito, e dunque la procedura terminerà con risposta \qi{yes}.
+
+Se si volesse mostrare adesso che VALIDITY è ricorsivo, si potrebbe pensare di mostrare che anche il complemento di VALIDITY, ovvero l'insieme delle formule non valide, è in RE, e dunque che esiste una procedura che termina con risposta \qi{yes} per ogni formula non valida. Un approccio intuitivo potrebbe essere quello di utilizzare lo stesso procedimento con le formule negate. Il problema sorge dal fatto che se \(\phi\) è valida, sicuramente \(\neg \phi\) è non valida, ma se \(\phi\) è non valida, non è detto che \(\neg \phi\) sia valida. In altre parole non tutte le formule non valide sono negazioni di formule valide, poiché è sufficiente che una formula sia soddisfacibile ma non valida per far si che la sua negata non sia valida. In altre parole l'insieme delle formule non valide è più grande dell'insieme delle negazioni di formule valide, e dunque non è sufficiente enumerare le negazioni di formule valide per enumerare tutte le formule non valide. 
+
+A questo punto quindi si può provare a dimostrare che \(\overline{\text{VALIDITY}}\), ovvero il complemento di VALIDITY, non è in RE\@.
+
+La teoria della complessità descrive diverse gerarchie di complessità per caratterizzare e confrontare problemi a seconda della loro difficoltà computazionale. Una nota gerarchia è la gerarchia polinomiale, che mette in relazione problemi di decisione risolvibili in tempo polinomiale con diversi modelli di computazione, come macchine di Turing deterministiche e non deterministiche. Una gerarchia che ci potrà essere utile è invece una delle tante che classifica i problemi indecidibili, ovvero la gerarchia aritmetica, in cui le proprietà sono classificate rispetto alle proprietà in teoria dei numeri. In particolare abbiamo \(\Sigma_1^0\) insieme delle formule per cui esiste una prova, \(\Pi_1^0\) insieme delle formule per cui non esiste una prova.
+
+Un noto problema indecidibile è il problema della fermata di una macchina di Turing, ovvero data una qualsiasi macchina di Turing stabilire se essa termini in tempo finito o diverga. Come spesso accade in teoria della complessità, per mostrare che un problema è almeno difficile quanto un altro, e dunque in questo caso indecidibile, è sufficiente mostrare una riduzione, ovvero una procedura che, data un'istanza di un problema indecidibile, costruisca un'istanza del problema che vogliamo dimostrare essere indecidibile, in modo tale che la risposta alla nuova istanza sia \qi{yes} se e solo se la risposta alla vecchia istanza era \qi{yes}. Se ora il nuovo problema in esame fosse decidibile, allora sarebbe possibile decidere anche il problema indecidibile applicando a ogni sua istanza la riduzione seguita dalla procedura di decisione, portando a una contraddizione con l'indecidibilità nota del problema originale. 
+
+Tali procedure di riduzione non possono essere arbitrarie, ma devono loro stesse appartenere a classi di complessità che siano più deboli della classe di complessità a cui il problema oggetto della dimostrazione dovrebbe appartenere. Se si vuole mostrare che un problema sia NP-completo, allora la procedura di riduzione non può essere a sua volta NP-completa, poiché altrimenti la complessità della procedura potrebbe risiedere nella procedura di riduzione stessa e non nel problema oggetto della dimostrazione. In questo caso, trattando di semi-decidibilità, è sufficiente che la procedura sia decidibile, ovvero che termini in tempo finito per ogni istanza, non potendo così \q{imputare} a essa un eventuale divergenza.
+
+Andiamo dunque a mostrare tale riduzione, per poi dimostrare come essa verifichi la condizione di correttezza, ovvero che la formula costruita sia valida se e solo se la macchina di Turing termina. 
+

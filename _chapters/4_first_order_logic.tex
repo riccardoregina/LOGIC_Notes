@@ -190,8 +190,8 @@ A questo punto, possiamo finalmente definire il concetto di soddisfazione \(M,\s
     \item Se \(\phi = \neg \psi\), allora \(M,\sigma\models \phi\) se e solo se \(M,\sigma\not\models \psi\)
     \item Se \(\phi = \psi\land\theta\), allora \(M,\sigma\models \phi\) se e solo se \(M,\sigma\models \psi\) e \(M,\sigma\models \theta\)
     \item Se \(\phi = \psi\lor\theta\), allora \(M,\sigma\models \phi\) se e solo se \(M,\sigma\models \psi\) o \(M,\sigma\models \theta\)
-    \item Se \(\phi = \forall x, \psi\), allora \(M,\sigma\models \phi\) se e solo se\footnote{Con \(\sigma[x\mapsfrom d]\) si intende l'assegnamento che associa a \(x\) l'oggetto \(d\) e a ogni altra variabile \(x'\) associa \(\sigma(x')\). Tale operazione può essere vista come una \q{sovrascrittura} dell'assegnamento originale in un punto.} \(M,\sigma[x \mapsfrom d]\models \phi\), per ogni \(d\in D\)
-    \item Se \(\phi = \exists x\st \psi\), allora \(M,\sigma\models \phi\) se e solo se \(M,\sigma[x \mapsfrom d]\models \phi\), per qualche \(d\in D\)
+    \item Se \(\phi = \forall x, \psi\), allora \(M,\sigma\models \phi\) se e solo se\footnote{Con \(\sigma[x\mapsfrom d]\) si intende l'assegnamento che associa a \(x\) l'oggetto \(d\) e a ogni altra variabile \(x'\) associa \(\sigma(x')\). Tale operazione può essere vista come una \q{sovrascrittura} dell'assegnamento originale in un punto.} \(M,\sigma[x \mapsfrom d]\models \psi\), per ogni \(d\in D\)
+    \item Se \(\phi = \exists x\st \psi\), allora \(M,\sigma\models \phi\) se e solo se \(M,\sigma[x \mapsfrom d]\models \psi\), per qualche \(d\in D\)
   \end{itemize}
 \end{definition}
 

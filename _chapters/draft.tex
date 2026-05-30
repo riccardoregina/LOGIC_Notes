@@ -1,0 +1,94 @@
+
+
+Decidibilità della logica del primo ordine.
+
+RECAP SU DECIDIBILITÀ, CHIEDI A FABRIZIO
+(Essenzialmente problema decisionale come appartenenza di un istanza, decidibile se ricorsivo, ovvero RE e coRE)
+
+Un insieme è ricorsivamente enumerabile se esiste una procedura che può enumerare tutti gli elementi dell'insieme. Invece coRE se il complemento dell'insieme può essere enumerato. 
+
+Chiaramente avendo queste due procedure è semplice capire se il linguaggio è decidibile, poiché basta fare un passo alla volta alle enumerazioni di entrambe le procedure e vedere quale mi genera l'istanza.
+
+Il linguaggio che vogliamo decidere è quello delle formule valide. Chiaramente decidere questo è sufficiente per decidere anche soddisfacibilità e conseguenza logica.
+
+Formalmente quindi abbiamo \(\Valid = \set{\phi \in \FOL}[\models_{\FOL}\phi]\). Da come abbiamo definito la decidibilità dobbiamo verificare se \(\Valid\) è RE e coRE, ovvero \(\overline{\Valid}\) è RE\@.
+
+Da completezza e correttezza è facile vedere che \(\Valid\) è RE\@. Infatti da \(\models \phi \iff \vdash \phi\) si ha che \(\phi \in \Valid \iff \phi \in \set{\phi \in \FOL}[\vdash \phi]\). Ovviamente essendo per definizione che \(\vdash \phi \iff \exists \pi\) derivazione di \(\phi\) da \(\emptyset\) ed essendo che le derivazioni sono alberi finiti. L'insieme delle possibili derivazioni per un linguaggio numerabile è chiaramente numerabile, perché è possibile enumerare tutte le possibili derivazioni di lunghezza \(0\), seguite da tutte le possibili derivazioni di lunghezza \(1\) e così via. Più in generale ogni derivazione è una sequenza finita di simboli in un certo \(\Sigma\), quindi tutte le derivazioni sono un sottoinsieme di \(\Sigma^*\) che è chiaramente numerabile. 
+
+Dunque quello che manca è \(\overline{\Valid}\) RE\@. Si potrebbe pensare di usare lo stesso ragionamento con le formule negate. Il problema è che se \(\phi\) è valida è insoddisfacibile, ma le formule che sono soddisfacibili ma non valide non sarebbero generate e quindi non avremmo una procedura che genera tutte le formule non valide.
+
+Possiamo pensare di provare a mostrare allora che \(\overline{\Valid}\) non sia RE\@. 
+
+Similmente alla gerarchia polinomiale per la decidibilità ci sono diverse gerarchia. Consideriamo la gerarchia aritmetica, in cui le proprietà sono classificate rispetto alle proprietà in teoria dei numeri. In particolare abbiamo \(\Sigma_1^0\) insieme delle formule per cui esiste una prova, \(\Pi_1^0\) insieme delle formule per cui non esiste una prova.
+
+Come fatto in teoria della complessità quindi per mostrare che \(\Valid\) è semi-decidibile possiamo provare a formulare una riduzione da un problema noto essere semi-decidibile ma non decidibile, ad esempio il problema della fermata. Noto infatti un problema \(P'\) che è HARD per una classe \(C\), è possibile mostrare che un altro problema \(P\) è HARD per \(C\) mostrando una riduzione da \(P'\) a \(P\), poiché chiaramente se ogni problema in \(C\) è riducibile a \(P'\) e \(P'\) è riducibile a \(P\) allora ogni problema in \(C\) è riducibile a \(P\).
+
+Chiaramente le riduzioni devono appartenere a classi meno potenti. Per la verifica della NP-HARDNESS ad esempio servono riduzioni polinomiali, mentre per la verifica della RE-HARDNESS servono riduzioni ricorsive, ovvero riduzioni che sono calcolabili da una macchina di Turing.
+
+Come esempio di problema semi-decidibile è sufficiente quindi ridurre ogni istanza del problema della fermata a una formula del primo ordine che è valida se e solo se la macchina di Turing si ferma su quell'istanza.
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Una macchina di Turing \(M\) deterministica è definita da una tupla \((Q, \Sigma, \delta, q_0, F)\) con:
+\begin{itemize}
+  \item \(Q\) insieme finito di stati di controllo
+  \item \(\Sigma = \set{\sigma_0, \sigma_1, \ldots, \sigma_n}\) insieme finito di simboli di nastro con \(\sigma_0 = \sqcup\) simbolo \q{blank}.
+  \item \(\delta: Q \times \Sigma \to Q \times \Sigma \times \set{\rightarrow, \leftarrow}\) funzione di transizione
+  \item \(q_0\) stato iniziale
+  \item \(q_h\) stato di terminazione.
+\end{itemize}
+
+La semantica di tali macchine sono chiaramente le esecuzioni, ovvero sequenze di configurazioni, ovvero istantanee dello stato della macchina, che sono definite come segue triple \((k,i,t)\) con \(k\) indice di stato tale che \(q_k\in Q\), \(i\) è la posizione del nastro che la macchina osserva e \(t\) è la configurazione del nastro, ovvero una funzione \(t:\N \to \Sigma\) che a ogni posizione del nastro associa il simbolo che è presente in quella posizione. Chiamando \(\mathcal{C}_M\) l'insieme di tutte le configurazioni di \(M\), una esecuzione non è altro che una funzione \(\pi: \N \to \mathcal{C}_M\) che associa a ogni passo di esecuzione una configurazione, con la condizione che \(\pi(0) = (0,0,t_0:\N\to\set{\sqcup})\) e che per ogni \(n\) si ha che \(\pi(n+1)\) è la configurazione che si ottiene da \(\pi(n)\) applicando la funzione di transizione \(\delta\). Più precisamente si avrà \(\pi(n) = (k,i,t_n)\) e \(\pi(n+1) = (k',i',t_{n+1}')\) se \(\delta(q_k,t_n(i)) = (q_r,\sigma_l,m)\) allora \(k = l\), \(t_{n+1}(i) = \sigma_l\) e \(t_{n+1}(j) = t_n(j)\) per ogni \(j \neq i\) e \(i' = i+1\) se \(m = \rightarrow\) e \(i' = i-1\) se \(m = \leftarrow\).
+
+Ovviamente un esecuzione è terminante se esiste \(n\) tale che \(\pi(n) = (h,i,t)\) per qualche \(i\) e \(t\).
+
+Dunque data una \(M\) qualsiasi (che determina univocamente \(\pi\))  dovremo costruire una formula \(\phi_M\) tale che
+\[\models \phi_M \iff M \text{ è terminante}\]
+
+Innanzitutto dobbiamo definire il linguaggio \(L\) che useremo per costruire \(\phi_M\). Intuitivamente il dominio dei modelli di questa formula saranno numeri naturali che rappresentano i passi di esecuzione e le posizioni del nastro, quindi avremo bisogno di un unica costante \(0\), due funzioni binarie per muoverci tra i numeri naturali, ovvero \(s\) e \(p\) che rappresentano rispettivamente il successore e il predecessore. Infine ci servono due insiemi finiti di predicati binari \(q_k\) con \(k \in \set{0, \ldots, h}\) tali che \(q_k(x,y)\) è vera se e solo se al passo \(x\) di esecuzione la macchina è nello stato \(q_k\) e nella posizione \(y\) del nastro, e \(\sigma_l\) con \(l \in \set{0, \ldots, n}\) tali che \(\sigma_l(x,y)\) è vera se e solo se al passo \(x\) di esecuzione nella posizione \(y\) del nastro è presente il simbolo \(\sigma_l\).
+
+Chiaramente ora su questo linguaggio dovremo scrivere un insieme di formule che rappresentino l'esecuzione della macchina. Iniziamo con
+\[\phi_1 \eqdef \forall x s(p(x)) = x \land p(s(x)) = x\]
+
+Insieme a questa formula potremmo aggiungere tutta la teoria dei numeri di Peano, ma per quello che ci interessa non sarà necessario. Vediamo ora le formule che rappresentano le caratteristiche della macchina. Per comodità di notazione, la variabile \(x\) verrà utilizzata per rappresentare i passi di esecuzione, mentre le variabili \(y\) e \(z\) verranno utilizzate per rappresentare le posizioni del nastro.
+
+\[\phi_2 \eqdef \forall x \forall y (\bigwedge_{i=0}^{n} \bigwedge_{\substack{j=0\\j \neq i}}^{n} \neg(\sigma_i(x,y) \land \sigma_j(x,y)))\]
+
+Questa formula semplicemente dice che in ogni passo di esecuzione non possono essere presenti due simboli diversi nella stessa posizione del nastro.
+
+\[\phi_3 \eqdef \forall x \forall y \forall z (\bigwedge_{i=0}^{h} \bigwedge_{\substack{j=0\\j \neq i}}^{h} \neg(q_i(x,y) \land q_j(x,z)))\]
+
+Qui abbiamo usato una variabile in più perché è necessario che la macchina sia in un solo stato in ogni passo di esecuzione a prescindere dalla posizione del nastro, quindi è necessario quantificare universalmente sulla posizione. Per concludere le proprietà di consistenza abbiamo infine
+
+\[\phi_4 \eqdef \forall x \forall y \forall z (\neg(y = z)\to \bigwedge_{i=0}^{n} \neg(q_i(x,y) \land q_i(x,z)))\]
+
+Quest'ultima ci dice che in ogni passo di esecuzione anche trovandosi nello stesso stato la macchina non può osservare più posizioni del nastro contemporaneamente.
+
+Queste formule ci parlano solo di proprietà locale alle configurazioni, che intuitivamente ci descrivono appunto una configurazione ben formata.
+
+Passiamo ora alla riduzione vera e propria. Iniziamo col descrivere la configurazione iniziale, ovvero quella in cui la macchina si trova nello stato iniziale \(q_0\) e nella posizione \(0\) del nastro, con il nastro completamente vuoto. La formula che descrive questa configurazione è la seguente:
+\[\phi_5 \eqdef q_0(0,0) \land \forall y \sigma_0(0,y) \]
+
+Ci mancano a questo punto due formule. La prima ci dice che l'unica possibilità che una cella cambi simbolo è che la macchina si trovi in quella cella.
+
+\[\phi_6 \eqdef \forall x \forall y (\bigwedge_{i=0}^{n} (\sigma_i(x,y) \land \neg \sigma_i(s(x),y))) \to (\bigvee_{j=0}^{h} q_j(x,y))\]
+
+Questa ci dice che solo le celle osservate dalla macchina possono cambiare simbolo.
+
+Veniamo quindi all'ultima formula, la più complessa, che descrive di fatto la dinamica di esecuzione della macchina. Questa formula è di fatto una congiunzione di formule più semplici, ognuna delle quali descrive una possibile transizione della macchina. Avremo in particolare una formula per ogni possibile input di \(\delta\), quindi per ogni \(\delta(q_i,\sigma_j) = (q_k, \sigma_l, m)\) avremo una formula del tipo
+\[\phi^{\delta}_{i,j} (x,y)\eqdef ((q_i(x,y) \land \sigma_j(x,y)) \to q_k(s(x),m(y)) \land \sigma_l(s(x),y))\]
+con \(m(y) = s(y)\) se \(m = \rightarrow\) e \(m(y) = p(y)\) se \(m = \leftarrow\). Ovviamente andrà aggiunta solo la formula che rappresenta la transizione effettiva, quindi solo una tra \(m = \rightarrow\) e \(m = \leftarrow\) per ogni possibile input di \(\delta\).
+
+A questo punto ci basta quantificare universalmente su \(x\) e \(y\) per ottenere la formula che descrive la dinamica di esecuzione della macchina, ovvero
+\[\phi_7 \eqdef \forall x \forall y \bigwedge_{i=0}^{h} \bigwedge_{j=0}^{n} \phi^{\delta}_{i,j}(x,y)\]
+
+Dunque, per descrivere la terminazione di \(M\) sarà sufficiente la formula
+\[\phi_M \eqdef \bigwedge_{i=1}^7 \phi_i \to \exists x \exists y q_h(x,y)\]
+
+Mostriamo ora che \(\models \phi_M\) se e solo se \(M\) è terminante. Dimostriamo le due implicazioni separatamente.
+
+Per mostrare \(\models \phi_M \implies M\) termina possiamo per contrapposizione mostrare che \(M\) non termina \(\implies \not\models \phi_M\). Per mostrare che \(\not\models \phi_M\), essendo \(\phi_M\) una formula del tipo \(\psi \to \chi\) è sufficiente mostrare che esiste un modello \(m\) tale che \(m \models \psi\) e \(m \not\models \chi\). Ora però \(\psi\) è la descrizione della macchina \(M\), quindi affinché \(m \models \psi\) è necessario che \(m\) sia coerente con un esecuzione di \(M\). Scegliamo l'esecuzione non terminante, esistente per ipotesi. Dunque avremo \(m = (\N, I)\) con \(I(0) = 0\), \(I(s) = \text{succ}\), \(I(p) = \text{pred}\) e, per ogni \(k\), \(I(q_k) = \set{(x,y)\in\N^2}[\pi(x) = (k,y,t_x)]\) e, per ogni \(l\), \(I(\sigma_l) = \set{(x,y)\in\N^2}[\pi(x) = (k,y,t_x) \land t_x(y) = \sigma_l]\). Ora questo modello sta codificando esattamente l'esecuzione non terminante \(\pi\) di \(M\), quindi è chiaro che \(m \models \psi\). D'altra parte però \(m \not\models \chi\) per ipotesi.
+
+Il viceversa è un po' più complicato, e iniziamo a vederne un intuizione. Vogliamo mostrare che se \(M\) è terminante allora \(\models \phi_M\). Se \(M\) è terminante, allora esiste un prefisso finito di lunghezza \(k\) di \(\pi_M\) tale che \(\pi_M(k) = (h,i,t)\) per qualche \(i\) e \(t\). Allora possiamo pensare di fare induzione sui passi di esecuzione per mostrare che se al passo \(p\) si ha \(\pi_M() = (j, i, t_p)\) allora \(\bigwedge_{z = 1}^{7} \phi_{z} \models q_j(s^p(0),s^i(0))\) e inoltre per ogni \(l\), se \(t_i(l) = \sigma_l\) allora \(\bigwedge_{z = 1}^{7} \phi_{z} \models \sigma_l(s^p(0),s^l(0))\). Questo vale sicuramente per \(i = 0\) poiché \(\pi_M(0) = (0,0,t_0)\) e chiaramente le due proprietà derivano direttamente da \(\phi_5\). Nel caso induttivo la cosa è più delicata, ma l'idea è che supponendo che \(\pi(i) = (k, j, t_i)\) e che \(\pi(i+1) = (k', j', t_{i+1})\) allora per ipotesi induttiva avremo che \(\bigwedge_{z = 1}^{7} \phi_{z} \models q_k(s^i(0),s^j(0))\) e inoltre per ogni \(l\), se \(t_i(l) = \sigma_l\) allora \(\bigwedge_{z = 1}^{7} \phi_{z} \models \sigma_l(s^i(0),s^l(0))\). Ora però passare da \(\pi(i)\) a \(\pi(i+1)\) farò esattamente il passo che è descritto dalla \(\delta\), ovvero \(\delta(q_k, \sigma_l) = (q_{k'}, \sigma_{l'}, m)\) per \(m\in\set{\rightarrow, \leftarrow}\).
+
+VEDI BENE NEI DETTAGLI, l'idea è che serve \(\phi_1\).
