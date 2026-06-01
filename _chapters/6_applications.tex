@@ -14,7 +14,7 @@ In tal senso questo tipo di computazione si discosta molto dai paradigmi più no
 
 \section{Applicazione della logica proposizionale}
 
-Avendo trovato un algoritmo corretto, completo e terminante per risolvere la soddisfacibilità di formule proposizionali, se è possibile riuscire a trovare una riduzione di un qualsiasi problema a \(\Sat\) possiamo avere un algoritmo per risolvere quel problema.
+Avendo trovato un algoritmo corretto, completo e terminante per risolvere la soddisfacibilità di formule proposizionali, se è possibile riuscire a trovare una \keyword{riduzione} di un qualsiasi problema a \(\Sat\) possiamo avere un algoritmo per risolvere quel problema.
 
 Per riduzione si intende una codifica di un'istanza qualsiasi del problema in un'istanza di \(\Sat\), ovvero una formula proposizionale, tale che la soluzione dell'istanza di \(\Sat\) ci fornisca la soluzione dell'istanza del problema originale.
 
@@ -207,13 +207,13 @@ Questo problema è particolarmente interessante per l'informatica poiché ci per
 Un modo molto semplice per capire se una proprietà è esprimibile o meno è quello di cercare di costruire una formula che la esprima. 
 
 Un esempio l'abbiamo già visto, ovvero la proprietà di essere un ordinamento lineare.
-\[\phi_{lin}\eqdef\forall x \neg (x=x) \land \forall x,y (x=y\lor x<y \lor y<x) \land \forall x,y,z ((x<y \land y<z) \to x<z)\]
+\[\phi_{lin}\eqdef\forall x, \neg (x=x) \land \forall x,y (x=y\lor x<y \lor y<x) \land \forall x,y,z ((x<y \land y<z) \to x<z)\]
 con chiaramente un linguaggio che abbia come minimo un simbolo di relazione binaria \(<\) e un simbolo di uguaglianza \(=\).
 
 Chiaramente quindi \(\den{\phi_{lin}}\) è proprio la proprietà di essere linearmente ordinato.
 
 Sempre sullo stesso linguaggio si può pensare anche di esprimere la proprietà \(DSC = \set{m\in\mathcal{M}}[ m \text{ è ordinamento lineare discreto}]\). Sicuramente \(\phi_{lin}\) sarà parte della formula che esprime \(DSC\) ma non è sufficiente. Dovremo congiungere a \(\phi_{lin}\) anche una proprietà che esprima la discretezza. Intuitivamente quello che differenzia insiemi discreti e non discreti è il concetto di successore. Bisogna però stare attenti al fatto che un insieme discreto può ammettere massimo, e che dunque non è richiesto che ogni elemento abbia un successore. Si dovranno dunque trattare come casi particolari anche gli elementi che non hanno successore. Intuitivamente quindi quello che dovremo esprimere è che ogni elemento che ha degli elementi successivi ha un minimo elemento successivo, che è proprio il successore. La formula che esprime tutto ciò è la seguente:
-\[\phi' \eqdef \forall x (\exists y x< y \to \exists z (x<z \land \forall w (x<w \to \neg(w<z))))\]
+\[\phi' \eqdef \forall x, (\exists y x< y \to \exists z (x<z \land \forall w, (x<w \to \neg(w<z))))\]
 E quindi avremo che \(\den{\phi_{lin} \land \phi'} = DSC\).
 
 Questa \(\phi_{lin} \land \phi'\) però chiaramente non caratterizza \((\N,<)\) poiché ha altri modelli che la soddisfano. Un esempio è l'unione disgiunta di \(\N\) con se stesso, ovvero \(\N + \N\), formato da coppie \((n,i)\) con \(n \in \N\) e \(i \in \set{0,1}\) e con l'ordinamento definito come segue:
@@ -269,7 +269,7 @@ Un altro esempio di particolare interesse per gli informatici è quello della no
 
 Sia \(CONN = \set{m\in\mathcal{M}}[ m \text{ è un grafo connesso}]\). Supponiamo per assurdo che esista una formula \(\phi_{CONN}\) tale che \(\den{\phi_{CONN}} = CONN\). Per essere un grafo mi è sufficiente avere un linguaggio con un simbolo di relazione binaria \(E\) che rappresenta l'adiacenza tra i nodi con \(D\) che rappresenta i nodi. Per comodità aggiungiamo al linguaggio due costanti \(s\) e \(t\). Costruiamo quindi l'insieme di formule \(\Gamma = \set{\phi_n}[n\in\N^*]\) con
 \[\phi_n \eqdef \neq\exists x_1, \ldots, x_n ( x_1 = s \land x_n = t \land \bigwedge_{1 \leq i < n} E(x_i, x_{i+1}))\]
-Costruiamo quindi \(\Gamma' \eqdef \Gamma \cup \set{\forall x \neg E(x,x)}\). Ogni formula \(\phi_n\) ci dice che non esiste un cammino di lunghezza \(n-1\) tra \(s\) e \(t\). Chiaramente preso \(m\) tale che \(m\models\Gamma'\) si ha che \(t^m\) non sarà raggiungibile da \(s^m\) e quindi \(m\) non sarà connesso. Dunque \(\Sigma \eqdef \Gamma' \cup \set{\phi_{CONN}}\) è insoddisfacibile. Ma ora se prendo un qualsiasi sottoinsieme finito \(\Sigma_0\) di \(\Sigma\) se questo non contiene \(\phi_{CONN}\) allora è banalmente soddisfacibile da qualsiasi grafo non connesso. Se invece \(\Sigma_0\) contiene \(\phi_{CONN}\) allora dalla finitezza esiste un indice massimo di formule di \(\Gamma\) che compare in \(\Sigma_0\), ovvero esiste \(n\) tale che \(\phi_n \in \Sigma_0\) e per ogni \(m > n\) si ha che \(\phi_m \not\in \Sigma_0\). A questo punto basta prendere un qualsiasi grafo in cui \(s\) e \(t\) sono connessi da un cammino di lunghezza strettamente maggiore di \(n\) per soddisfare tutte le formule di \(\Sigma_0\). Quindi anche in questo caso abbiamo un insieme insoddisfacibile che però non ha nessun sottoinsieme finito insoddisfacibile, il che è assurdo per il teorema di compattezza.
+Costruiamo quindi \(\Gamma' \eqdef \Gamma \cup \set{\forall x, \neg E(x,x)}\). Ogni formula \(\phi_n\) ci dice che non esiste un cammino di lunghezza \(n-1\) tra \(s\) e \(t\). Chiaramente preso \(m\) tale che \(m\models\Gamma'\) si ha che \(t^m\) non sarà raggiungibile da \(s^m\) e quindi \(m\) non sarà connesso. Dunque \(\Sigma \eqdef \Gamma' \cup \set{\phi_{CONN}}\) è insoddisfacibile. Ma ora se prendo un qualsiasi sottoinsieme finito \(\Sigma_0\) di \(\Sigma\) se questo non contiene \(\phi_{CONN}\) allora è banalmente soddisfacibile da qualsiasi grafo non connesso. Se invece \(\Sigma_0\) contiene \(\phi_{CONN}\) allora dalla finitezza esiste un indice massimo di formule di \(\Gamma\) che compare in \(\Sigma_0\), ovvero esiste \(n\) tale che \(\phi_n \in \Sigma_0\) e per ogni \(m > n\) si ha che \(\phi_m \not\in \Sigma_0\). A questo punto basta prendere un qualsiasi grafo in cui \(s\) e \(t\) sono connessi da un cammino di lunghezza strettamente maggiore di \(n\) per soddisfare tutte le formule di \(\Sigma_0\). Quindi anche in questo caso abbiamo un insieme insoddisfacibile che però non ha nessun sottoinsieme finito insoddisfacibile, il che è assurdo per il teorema di compattezza.
 
 \subsection{Indecidibilità del prim'ordine}
 
@@ -301,3 +301,183 @@ Tali procedure di riduzione non possono essere arbitrarie, ma devono loro stesse
 
 Andiamo dunque a mostrare tale riduzione, per poi dimostrare come essa verifichi la condizione di correttezza, ovvero che la formula costruita sia valida se e solo se la macchina di Turing termina. 
 
+Iniziamo quindi a rivedere la definizione di macchina di Turing per poi mostrare come codificarla in una formula del prim'ordine.
+
+\begin{definition}{Macchia di Turing}
+  Una macchina di Turing è una tupla \(M = (Q, \Sigma, \delta, q_0, q_{n})\) dove:
+  \begin{itemize}
+    \item \(Q = \set{q_0, q_1, \ldots, q_t}\) è un insieme finito di stati;
+    \item \(\Sigma = \set{\sigma_0, \sigma_1, \ldots, \sigma_m}\) insieme finito di simboli di nastro con \(\sigma_0 = \sqcup\) simbolo \q{blank};
+    \item \(\delta: Q \times \Sigma \to Q \times \Sigma \times \{\leftarrow, \rightarrow\}\) funzione di transizione che, dato uno stato e un simbolo letto sul nastro, restituisce un nuovo stato, un simbolo da scrivere e una direzione in cui muovere la testina;
+    \item \(q_0 \in Q\) è lo stato iniziale;
+    \item \(q_{n} \in Q\) è lo stato di terminazione;
+  \end{itemize}
+\end{definition}
+
+La semantica di questi modelli è data dalle \keyword{esecuzioni}, sequenze di \keyword{configurazioni} della macchina, ovvero istantanee dello stato complessivo della macchina in un dato momento. Formalmente:
+
+\begin{definition}{Configurazione}
+  Una configurazione \(C\) di una macchina di Turing \(M\) è una tripla \((k, i,t)\) con:
+  \begin{itemize}
+    \item \(k \in \set{0,\ldots,n}\) indice di stato, con \(q_k\in Q\);
+    \item \(i \in \N\) indice di posizione della testina sul nastro;
+    \item \(t: \N \to \Sigma\) funzione che associa a ogni cella del nastro il simbolo presente in quella cella.
+  \end{itemize}
+
+  L'insieme di tutte le possibili configurazioni di \(M\) è denotato con \(\mathcal{C}_M\).
+
+  Indichiamo con \(C_0\) la configurazione iniziale di \(M\), ovvero la tripla \((0,0,t_0)\) con \(t_0 : \N \to \set{\sqcup}\).
+\end{definition}
+
+\begin{definition}{Esecuzione}
+  Un esecuzione di una macchina di Turing \(M\) è una funzione \(\pi: \N \to \mathcal{C}_M\) che associa a ogni passo di esecuzione la configurazione della macchina \(M\) in quel passo.
+  
+  Si ha che \(\pi(0) = C_0\) e che, per ogni \(n\in\N\), se \(\pi(n) = (k, i, t_n)\) e \(\delta(q_k, t(i)) = (q_{k'}, \sigma_l, d)\) allora \(\pi(n +1) = (k', i', t_{n+1})\) con
+  \begin{itemize}
+    \item \(i' = i + 1\) se \(d = \rightarrow\) e \(i' = i - 1\) se \(d = \leftarrow\);
+    \item \(t_{n+1}(j) = t_n(j)\) per ogni \(j \neq i\) e \(t_{n+1}(i) = \sigma_l\).
+  \end{itemize}
+
+  Un esecuzione è terminante se esiste \(j\in\N\) tale che \(\pi(j) = (n, i, t_j)\), ovvero se in qualche passo di esecuzione la macchina raggiunge lo stato di terminazione \(q_n\).
+\end{definition}
+
+Trattando macchine deterministiche, per ogni macchina di Turing \(M\) esiste una e una sola esecuzione \(\pi\) di \(M\). 
+Quello che dobbiamo definire quindi è una formula \(\phi_M\) tale che\footnote{Data una tupla \(v\) e un indice \(1 \leq i \leq \abs{v}\), con \({(v)}_i\) indichiamo l'elemento di indice \(i\) della tupla \(v\). Ad esempio, se \(v = (k,i,t)\), allora \({(v)}_1 = k\), \({(v)}_2 = i\) e \({(v)}_3 = t\). Essendo nel nostro caso la terza componente una funzione, con \({(v)}_3(y)\) indichiamo l'applicazione della funzione alla variabile \(y\).}:
+\[\models \phi_M \iff \exists i\st {(\pi_M(i))}_1 = n\]
+
+Per lavorare in logica del prim'ordine, è necessario definire un linguaggio che ci permetta di rappresentare le configurazioni e le esecuzioni di \(M\). Intuitivamente, avendo descritto sia il nastro che l'esecuzione come funzioni con dominio \(\N\), possiamo costruire il linguaggio assumendo di avere tale dominio e definendo un interpretazione dei simboli coerente con la macchina di Turing. In particolare, sarà necessaria una costante \(0\) che rappresenterà l'inizio dei conteggi, sia di posizioni del nastro che di passi di esecuzione, due funzioni unarie \(s\) e \(p\) che intuitivamente verranno interpretate nelle funzioni di successore e predecessore, per permettere di esprimere lo spostamento della testina sul nastro e l'evoluzione dell'esecuzione nel tempo, e infine due insiemi di predicati binari, una per gli stati e un'altra per il nastro.
+
+Per il resto della trattazione, per semplicità di notazione, fisseremo l'utilizzo della variabile \(x\) per descrivere i passi di esecuzione, e le variabili \(y\) e \(z\) per descrivere le posizioni sul nastro.
+
+I predicati \(q_k\), con \(k \in \set{0,\ldots,n}\), che si occuperanno di descrivere le prime due componenti di una configurazione, saranno interpretati come segue:
+\[q_k^I = \set{(x,y)\in\N^2}[{(\pi(x))}_1 = k \land {(\pi(x))}_2 = y ]\]
+ovvero \(q_k^I\) è l'insieme di tutte le coppie \((x,y)\) tali che alla \(i\)-esima configurazione dell'esecuzione, la macchina si trovi nello stato \(q_k\) e la testina sia posizionata sulla cella \(j\).
+
+I predicati \(\sigma_l\), con \(l \in \set{0,\ldots,m}\), che si occuperanno di descrivere il contenuto del nastro, saranno interpretati come segue:
+\[\sigma_l^I = \set{(x,y)\in\N^2}[{(\pi(x))}_3(y) = \sigma_l] \]
+ovvero \(\sigma_l^I\) è l'insieme di tutte le coppie \((x,y)\) tali che alla \(i\)-esima configurazione dell'esecuzione, il nastro contenga in posizione \(y\) il simbolo \(\sigma_l\).
+
+A questo punto, avendo definito il linguaggio, non ci resta che definire un insieme di formule che descrivano il comportamento della macchina di Turing \(M\) in modo da poter mostrare la tesi.
+
+Le prime formule che dobbiamo definire servono a imporre i vincoli necessari in modo che gli unici comportamenti descritti saranno coerenti con un esecuzione valida di \(M\). Iniziamo con l'assiomatizzare la proprietà di \(s\) e \(p\) di essere inverse.
+
+\begin{equation}
+  \phi_1 \eqdef \forall x, (s(p(x)) = x \land (\neg(x = 0) \to p(s(x)) = x))
+\end{equation}
+
+In aggiunta a questa formula sarebbe possibile aggiungere tutte le formule che assiomatizzano la teoria dei numeri naturali, ma non sarà necessario, poiché le formule che andremo a definire in seguito, che descrivono il comportamento di \(M\), implicheranno già tutte le proprietà necessarie per \(s\) e \(p\) per essere interpretati come funzioni di successore e predecessore su \(\N\).
+
+Un altro vincolo che la macchina di Turing deve rispettare è che le celle di memoria sono atomiche, nel senso che, a ogni passo di esecuzione, ogni posizione del nastro può contenere solo e soltanto un simbolo. Per esprimere questo vincolo, è sufficiente la formula:
+
+\begin{equation}
+  \phi_2 \eqdef \forall x, \forall y, \left(\bigwedge_{i=0}^{m} \bigwedge_{\substack{j=0\\j \neq i}}^{m} \neg\left(\sigma_i\left(x,y\right) \land \sigma_j\left(x,y\right)\right)\right)
+\end{equation}
+
+Inoltre, a ogni passo di esecuzione, la macchina può trovarsi in un solo stato.
+
+\begin{equation}
+  \phi_3 \eqdef \forall x, \forall y, \forall z, \left(\bigwedge_{i=0}^{n} \bigwedge_{\substack{j=0\\j \neq i}}^{n} \neg\left(q_i\left(x,y\right) \land q_j\left(x,z\right)\right)\right)
+\end{equation}
+
+In questo caso è necessaria una doppia quantificazione per la posizione della testina sul nastro, poiché l'unico vincolo che si vuole imporre è l'unicità dello stato in cui si trova la macchina, e non l'unicità della posizione della testina.
+
+Infine, per completare le proprietà di consistenza della macchina, ovvero quelle che escludono comportamenti anomali, dobbiamo garantire che, a ogni passo di esecuzione, anche essendo nello stesso stato, la macchina non possa avere la testina in due posizioni diverse, ovvero non possa leggere più celle contemporaneamente:
+
+\begin{equation}
+  \phi_4 \eqdef \forall x, \forall y, \forall z, \left(\neg(y = z)\to \bigwedge_{i=0}^{n} \neg\left(q_i\left(x,y\right) \land q_i\left(x,z\right)\right)\right)
+\end{equation}
+
+Per soddisfare queste formule è quindi necessario che, fissato un \(x\), esista un unico \(q_i\) che contiene coppie con \(x\) come primo elemento, e che tutte le coppie con \(x\) come primo elemento in tale \(q_i\) abbiano lo stesso secondo elemento, ovvero la posizione della testina. Inoltre, per ogni coppia \((x,y)\), questa può essere contenuta da un unico \(\sigma_l\), ovvero quello del simbolo presente in posizione \(y\) del nastro alla \(x\)-esimo passo di esecuzione.
+
+In un certo senso, queste prima quattro formule impongono vincoli \q{statici} della macchina, nel senso che ne descrivono invarianti necessarie per mantenerne la coerenza, e di conseguenza escludere tutti i modelli che non rappresentano esecuzioni valide di \(M\). Le formule che andremo a definire adesso invece descrivono invece il comportamento dinamico di \(M\), ovvero come evolve l'esecuzione nel tempo, e dunque come evolvono le configurazioni della macchina da un passo di esecuzione al successivo. Intuitivamente, in queste formule sarà codificata la funzione di transizione \(\delta\). Iniziamo però dal codificare la configurazione iniziale. Come già detto la configurazione iniziale è \(C_0 = (0,0,t_0)\) con \(t_0 : \N \to \set{\sqcup}\). Tale configurazione dev'essere quella presente per prima nell'esecuzione, e quindi dev'essere quella associata a \(x = 0\). Per esprimere ciò, è sufficiente la formula:
+
+\begin{equation}
+  \phi_5 \eqdef q_0(0,0) \land \forall y, \sigma_0(0,y)
+\end{equation}
+
+Grazie ai vincoli di coerenza espressi prima, per assicurarci che all'inizio dell'esecuzione la macchina si trovi nella configurazione \(C_0\) è sufficiente descrivere come dev'essere fatta tale configurazione, poiché, grazie ai vincoli precedenti, sarà l'unica configurazione che soddisfa tali descrizioni.
+
+A questo punto, prima di codificare propriamente la funzione di transizione, è necessario definire un ultimo vincolo di coerenza, che questa volta invece che essere locale assicura la coerenza tra due configurazioni consecutive. In particolare, coi vincoli precedenti abbiamo garantito che il nastro in ogni configurazione non abbia più di un simbolo nella stessa posizione e che la testina si trovi esattamente su una sola di esse, ma è necessario garantire anche che la posizione letta dalla testina sia l'unica che può essere modificata da un passo di esecuzione al successivo, e che tutte le altre posizioni del nastro rimangano inalterate. Per esprimere ciò, è sufficiente la formula:
+
+\begin{equation}
+  \phi_6 \eqdef \forall x, \forall y, \left(\bigwedge_{i=0}^{m} \left(\left(\sigma_i\left(x,y\right) \land \neg \sigma_i\left(s\left(x\right),y\right)\right) \to \left(\bigvee_{j=0}^{n} q_j\left(x,y\right)\right)\right)\right)
+\end{equation}
+
+Questa formula può sembrare complessa, ma in definitiva quello che richiede è che se in due istanti successivi (\(x\) e \(s(x)\)) il simbolo presente in una posizione \(y\) del nastro è diverso, allora la testina deve essere posizionata in \(y\) in uno qualsiasi degli stati. Questo vincolo, unito a quello che garantisce che in un istante di tempo la testina si trovi in una sola posizione, garantisce che l'unica posizione del nastro che può essere modificata da un passo di esecuzione al successivo è quella su cui è posizionata la testina. Se infatti da un passo al successivo più celle venissero modificate avremmo gli antecedenti di due di queste implicazioni in congiunzione verificati, ma al più uno dei conseguenti potrebbe essere verificato.
+
+Infine, possiamo passare alla formula più complessa, che codifica la funzione di transizione \(\delta\). Per semplificarne la scrittura formeremo una formula aperta per ogni applicazione di \(\delta\), che poi andremo a congiungere e quantificare. Dunque presa un applicazione di \(\delta\) del tipo \(\delta(q_k, \sigma_l) = (q_{k'}, \sigma_{l'}, d)\), con \(d\) che può essere \(\rightarrow\) o \(\leftarrow\), definiamo le formule:
+\begin{equation}
+  \begin{aligned}
+     \phi^{\delta^{\rightarrow}}_{k,l} (x,y) &\eqdef ((q_k(x,y) \land \sigma_l(x,y)) \to q_{k'}(s(x),s(y)) \land \sigma_{l'}(s(x),y))\\
+     \phi^{\delta^{\leftarrow}}_{k,l} (x,y) &\eqdef ((q_k(x,y) \land \sigma_l(x,y)) \to q_{k'}(s(x),p(y)) \land \sigma_{l'}(s(x),y))
+  \end{aligned}
+\end{equation}
+Dove \(k\) e \(l\) variano rispettivamente tra \(0\) e \(n\) e tra \(0\) e \(m\). Di queste chiaramente, per ogni coppia \((k,l)\) considereremo solo quella con direzione coerente a \(d\).
+
+Possiamo dunque definire
+\begin{equation}
+  \phi^{\delta}_{k,l} (x,y) \eqdef \begin{cases}
+    \phi^{\delta^{\rightarrow}}_{k,l} (x,y) & {(\delta(q_k, \sigma_l))}_3 = \rightarrow\\
+    \phi^{\delta^{\leftarrow}}_{k,l} (x,y) & {(\delta(q_k, \sigma_l))}_3 = \leftarrow
+  \end{cases}
+\end{equation}
+
+Per codificare quindi l'intera funzione di transizione sarà sufficiente utilizzare la formula:
+\begin{equation}
+  \phi_7 \eqdef \forall x, \forall y, \left(\bigwedge_{k=0}^{n} \bigwedge_{l=0}^{m} \phi^{\delta}_{k,l} (x,y)\right)
+\end{equation}
+
+Queste sette formule quindi descrivono precisamente la macchina di Turing \(M\) e il suo comportamento, nel senso che ogni modello di queste formule rappresenta un'esecuzione valida di \(M\), e ogni esecuzione valida di \(M\) è rappresentata da un modello di queste formule. A questo punto, per esprimere la proprietà di terminazione della macchina non ci serve altro che richiedere che se la congiunzione di queste condizioni è verificata esista un passo di esecuzione in cui lo stato di terminazione è raggiunto, ovvero che esista \(x\) e \(y\) tali che \(q_n(x,y)\) sia verificato. Dunque, la formula che codifica la terminazione macchina di Turing \(M\) è la seguente:
+\begin{equation}
+  \phi_M \eqdef \left(\bigwedge_{i=1}^{7} \phi_i\right) \to \exists x, \exists y, q_n(x,y)
+\end{equation}
+
+Per completare la dimostrazione, è necessario mostrare che \(\models \phi_M\) se e solo se \(M\) termina, ovvero se esiste un \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\).
+
+Per mostrare la doppia implicazione possiamo verificare separatamente il caso in cui \(M\) non termina e quello in cui termina.
+
+Iniziamo supponendo che \(M\) non termini, ovvero che non esista \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\).
+Per mostrare che \(\not\models \phi_M\) è sufficiente mostrare che esiste un modello di \(\bigwedge_{i=1}^{7} \phi_i\) in cui \(\neg\exists x, \exists y, q_n(x,y)\) è verificato. Essendo \(M\) non terminante, esiste un'esecuzione \(\pi_M\) di \(M\) in cui non esiste \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\). Dunque, prendendo come modello \(M = (\N,I)\) con \(I\) che interpreta i simboli del linguaggio come descritto precedentemente, si ha che \(M\) è un modello di \(\bigwedge_{i=1}^{7} \phi_i\) in cui \(\neg\exists x, \exists y, q_n(x,y)\) è verificato, e dunque \(M\) è un modello di \(\bigwedge_{i=1}^{7} \phi_i \land \neg\exists x, \exists y, q_n(x,y)\), e dunque \(\not\models \phi_M\).
+
+L'altro verso è invece più complesso. Si vuole mostrare che se \(M\) termina, ovvero se esiste \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\), allora \(\models \phi_M\). Essendo che la proprietà di terminazione è finitaria per definizione, se \(M\) termina deve esistere un prefisso finito di \(\pi_M\) di lunghezza \(i\) tale che \({(\pi_M(i-1))}_1 = n\). Possiamo quindi analizzare per induzione questa sequenza finita, mostrando che la codifica della configurazione di ogni passo è conseguenza logica della codifica della macchina di Turing e che può inoltre essere espressa a partire dalla configurazione iniziale iterando la funzione di successore. Formalmente, se a passo \(k\) si ha \(\pi_M(k) = (j, i, t_k)\) allora vale:
+
+\begin{equation}
+  \bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0)) 
+\end{equation}
+
+E per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), vale anche
+\begin{equation}
+  \bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))
+\end{equation}
+
+Chiaramente, dimostrato questo si ha la tesi, poiché valendo questa conseguenza logica per ogni passo di esecuzione, varrà in particolare per il primo passo in cui lo stato di terminazione è raggiunto. Di conseguenza si avrà che
+\begin{equation}
+  \models \bigwedge_{h=1}^{7} \phi_h \models q_n(s^x(0), s^y(0))
+\end{equation}
+per qualche \(x\) e \(y\), e dunque \(\models \phi_M\) per introduzione di \(\exists\).
+
+Per dimostrare questa invariante verifichiamo innanzitutto il caso base, ovvero \(\pi_M(0) = C_0\). Questo caso è banalmente vero grazie a \(\phi_5\), interpretando chiaramente \(s^0\) come l'identità. Per il passo induttivo, supponiamo che valga per un passo \(k\), ovvero che \(\bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0))\) e che per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), valga anche \(\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))\). Dobbiamo mostrare che allora vale anche per il passo \(k+1\).
+
+Per definizione induttiva di \(\pi_M\) si ha che se \(\pi_M(k) = (j, i, t_k)\) e \(\delta(q_j, t_k(i)) = (q_{j'}, \sigma_{l'}, d)\) allora \(\pi_M(k +1) = (j', i', t_{k+1})\) con
+\begin{itemize}
+  \item \(i' = i + 1\) se \(d = \rightarrow\) e \(i' = i - 1\) se \(d = \leftarrow\);
+  \item \(t_{k+1}(r) = t_k(r)\) per ogni \(r \neq i\) e \(t_{k+1}(i) = \sigma_{l'}\).
+\end{itemize}
+
+Per ipotesi induttiva si ha che
+\[\bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0))\]
+e che per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), vale anche
+\[\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))\]
+
+Rispetto alla direzione, l'unica differenza tra le configurazioni d'arrivo è che in una la posizione della testina, codificata con l'esponente \(i\), è incrementata di \(1\) e nell'altra è decrementata di \(1\). Iniziamo assumendo che \(d = \rightarrow\).
+
+Grazie a \(\phi_7\) e alla definizione di \(\phi^{\delta}_{j,l}\), si ha che
+\[\bigwedge_{h=1}^{7} \phi_h \models (q_j(s^k(0),s^i(0)) \land \sigma_l(s^k(0),s^i(0))) \to q_{j'}((s(s^{k}(0)),s(s^{i})(0)) \land \sigma_{l'}(s(s^{k}(0)),s^{i}(0)))\]
+
+Chiaramente \(s(s^{k}(0)) = s^{k+1}(0)\) e \(s(s^{i}(0)) = s^{i+1}(0)\). Dunque essendo per ipotesi veri entrambi i congiunti di questa implicazione sarà anche vero
+\[\bigwedge_{h=1}^{7} \phi_h \models q_{j'}(s^{k+1}(0),s^{i+1}(0)) \land \sigma_{l'}(s^{k+1}(0),s^{i+1}(0))\]
+
+Inoltre, grazie a \(\phi_6\) si ha che tutte le posizioni diverse da \(i\) del nastro al passo \(k+1\) contengono lo stesso simbolo che avevano al passo \(k\), e dunque per ipotesi induttiva si ha che per ogni posizione \(r\) del nastro al passo \(k+1\), con \(t_{k+1}(r) = \sigma_l\), vale anche
+\[\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^{k+1}(0), s^r(0))\]
+
+Venendo al caso di \(d = \leftarrow\), l'unica differenza si trova della definizione di \(\phi^{\delta}_{j,l}\), che in questo caso presenta la funzione \(p\). Possiamo notare però che grazie a \(\phi_1\) si ha che \(p(s^i(0)) = s^{i-1}(0)\) ottenendo esattamente la posizione della testina corretta al passo \(k+1\). 
