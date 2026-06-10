@@ -28,8 +28,8 @@ A prescindere da ciò però, a partire da un calcolo inferenziale \((\Axi, \Rule
 
 Intuitivamente, l'obiettivo che vorremmo ottenere con un calcolo inferenziale, e quindi con la relazione di deducibilità, sarebbe quello di catturare, in maniera puramente sintattica, la conseguenza logica, ovvero vorremmo che:
 \[\Gamma \models \phi \iff \Gamma \vdash \phi\]
-Per quanto riguarda gli assiomi, sono un insieme minimale di tautologie che potranno essere istanziate in diversi modi tramite il teorema di sostituzione.\footnote{In un certo senso la regola di sostituzione fa parte di (R).}
-Ad esempio, definendo (P \lor \neg P) come assioma, è immediato ottenere (\lnot P \lor \lnot \lnot P) come istanziazione in cui (P) è mappato in (\lnot P).
+Per quanto riguarda gli assiomi, è possibile usare un insieme minimale di tautologie che potranno essere istanziate in diversi modi tramite il teorema di sostituzione.\footnote{In un certo senso la regola di sostituzione fa parte di (R).}
+Ad esempio, definendo \(P \lor \neg P\) come assioma, è immediato ottenere \(\lnot P \lor \lnot \lnot P\) come istanziazione in cui \(P\) è mappato in \(\lnot P\).
 
 Il primo calcolo che vedremo però non ha assiomi, ma solo regole di inferenza, e si chiama \keyword{calcolo di deduzione naturale}.
 
@@ -616,6 +616,8 @@ Ora rimane da dimostrare \(Q\) assumendo \(\neg P\). Per farlo, possiamo utilizz
 
 In questo esempio, abbiamo potuto osservare come anche le regole di inferenza più controintuitive e complesse, come \(\bot E\) e \(\lor E\) possano trovare applicazione.
 
+Ulteriori esempi ed esercizi di deduzioni naturali sono state riportate nell' appendice \nameref{app_sec:natural_deduction_exercises} per evitare di appesantire troppo questa sezione, ma è consigliabile provarle per prendere confidenza con questo sistema di deduzione.
+
 \subsection{Proprietà del calcolo deduttivo}
 
 Abbiamo visto come il calcolo di deduzione naturale sia un sistema formale che ci permette sintatticamente di ottenere nuove formule a partire da un insieme di premesse, ma per poterlo usare in modo efficace è necessario assicurarsi che esso sia in grado di catturare la conseguenza logica.
@@ -632,7 +634,7 @@ Iniziamo con una proprietà strettamente relativa al calcolo che ci permette di 
 È importante notare che questa proprietà risulta solo rafforzata nel caso vengano aggiunte formule che rendono \(\Gamma\) inconsistente, poiché in questo caso sarà possibile dedurre qualsiasi formula a partire da \(\Gamma\) mediante \(\bot E\). Questa è una caratteristica tipica della logica classica, e non è condivisa da tutte le logiche, come ad esempio le logiche paraconsistenti, in cui l'inconsistenza non porta alla trivialità, ma viene in qualche modo contenuta permettendo di parlare del resto dell'insieme di formule anche in presenza di contraddizioni.
 
 \begin{note}{}
-  Questa proprietà di generalizza in \(\Gamma \vdash \phi \implies \Gamma \cup \Gamma' \vdash \phi\), applicandola più volte. La dimostrazione di questa versione più generale però segue direttamente da quella della versione più semplice, e quindi non è necessario farla esplicitamente.
+  Questa proprietà si generalizza in \(\Gamma \vdash \phi \implies \Gamma \cup \Gamma' \vdash \phi\), applicandola più volte. La dimostrazione di questa versione più generale però segue direttamente da quella della versione più semplice, e quindi non è necessario farla esplicitamente.
 \end{note}
 
 \begin{proof}
@@ -661,9 +663,9 @@ Andiamo quindi a vedere una proprietà analoga a quella vista per la conseguenza
 Già da questi primi due teoremi è possibile notare un forte parallelismo tra la conseguenza logica e la deduzione, la quale verrà ulteriormente rafforzata dai prossimi teoremi, per poi essere dimostrata in modo definitivo con i teoremi di correttezza e completezza.
 
 \begin{theorem}{Regola del taglio}
-  Dato un insieme di formule \(\Gamma\) e due formule \(\phi\) e \(\psi\), si ha che:
+  Dati due insiemi di formule \(\Gamma\) e \(\Gamma'\) e due formule \(\phi\) e \(\psi\), tali che \(\Gamma, \psi \vdash \phi\) e \(\Gamma' \vdash \psi\) allora
   
-  Se \(\Gamma, \psi \vdash \phi\) e \(\Gamma' \vdash \psi\) allora \(\Gamma \cup \Gamma' \vdash \phi\)
+  \[\Gamma \cup \Gamma' \vdash \phi\]
 \end{theorem}
 
 Intuitivamente, questa regola ci dice se abbiamo un albero di derivazione che dimostra un'assunzione, possiamo sostituire a ogni foglia etichettata con quell'assunzione l'albero di derivazione che dimostra quell'assunzione, mantenendo una derivazione valida.
@@ -671,7 +673,7 @@ Intuitivamente, questa regola ci dice se abbiamo un albero di derivazione che di
 
 \begin{proof}
   Possiamo formalmente dimostrare questa regola tramite il teorema di deduzione e la monotònicità di \(\vdash\).
-  Infatti per monotònicità valgono sia \(\Gamma, \Gamma', \psi \vdash \phi\), che \(\Gamma \cup \Gamma'\vdash \psi\).
+  Infatti per monotònicità valgono sia \(\Gamma \cup \Gamma', \psi \vdash \phi\), che \(\Gamma \cup \Gamma'\vdash \psi\).
   A questo punto, usando il teorema di deduzione, otteniamo \(\Gamma\cup \Gamma' \vdash \psi \to \phi\).
 
   A questo punto, possiamo costruire un albero di derivazione con \(\phi\) in radice dedotta tramite \(\to E\), i cui due sottoalberi sono l'albero relativo a \(\Gamma \cup \Gamma' \vdash \psi\) e l'albero relativo a \(\Gamma\cup \Gamma' \vdash \psi \to \phi\).
@@ -761,7 +763,7 @@ Possiamo dunque procedere alla dimostrazione della correttezza del calcolo di de
     \[\den{\Gamma} \cap (\den{\psi_1}\cup\den{\psi_2})\subseteq\den{\phi}\]
     Avendo già mostrato però che \(\den{\Gamma} \subseteq \den{\psi_1}\cup\den{\psi_2}\) la loro intersezione è proprio \(\den{\Gamma}\),
     dunque \(\den{\Gamma}\subseteq \den{\phi}\), ovvero ogni modello che soddisfa \(\Gamma\) soddisfa anche \(\phi\), e dunque \(\Gamma\models\phi\).
-    \item[] Per questioni di brevità non verranno trattate tutte le regole, ma solo quelle più interessanti. Gli altri casi sono analoghi a quelli già trattati, e possono essere dimostrati con un ragionamento simile a quello fatto per le regole già trattate.
+    \item[] Per questioni di brevità non verranno trattate le regole rimanenti. Gli altri casi sono analoghi a quelli già trattati, e possono essere dimostrati con un ragionamento simile a quello fatto per le regole già trattate.
   \end{description}
 \end{proof}
 
@@ -806,7 +808,7 @@ Per dimostrare il teorema di correttezza infatti faremo uso di un paio di risult
   Sia quindi \(\phi=\psi_j\) e \(\neg\phi=\psi_k\) con \(j<k\).
   Ma allora si ha che
   \[\phi\notin\Sigma^* \implies \psi_j \notin \Sigma_j \iff \Sigma_{j-1}\cup\set{\phi} \vdash \bot\]
-  Essendo però che \(j<k\) abbiamo che \(\Sigma_{j-1}\subseteq\Sigma_{k-1}\) e quindi \(\Sigma_{k-1}\cup\set{\phi} \vdash \bot\).
+  Essendo però che \(j<k\) abbiamo che \(\Sigma_{j-1}\subseteq\Sigma_{k-1}\) e quindi \(\Sigma_{k-1}\cup\set{\phi} \vdash \bot\) per monotònicità.
   Si ha anche però che \(\psi_k\notin\Sigma^*\). Dunque
   \[\psi_k \notin \Sigma_k \iff \Sigma_{k-1}\cup\set{\neg\phi}\vdash \bot\]
 
@@ -842,44 +844,58 @@ Andiamo dunque a vedere qualche proprietà delle teorie di modelli, che ci perme
 \end{proposition}
 
 \begin{proof}
-  Dato \(\Sigma^*\) massimalmente consistente, dobbiamo costruire un modello \(m\) tale che \(\Sigma^* = \Th{m}\).
-  Per fare ciò, basta definire \(m = \Sigma^*\cap\AP\), poiché essendo \(\Sigma^*\) massimalmente consistente, contiene tutte e sole le proposizioni atomiche che non portano a inconsistenza.
+  Dato \(\Sigma^*\) massimalmente consistente, dobbiamo costruire un modello \(m^*\) tale che \(\Sigma^* = \Th{m^*}\).
+  Per fare ciò, basta definire \(m^* = \Sigma^*\cap\AP\), poiché essendo \(\Sigma^*\) massimalmente consistente, contiene tutte e sole le proposizioni atomiche che non portano a inconsistenza.
   Infatti le uniche proposizioni atomiche che non possono essere contenute in \(\Sigma^*\) sono quelle che, se aggiunte a \(\Sigma^*\), rendono \(\Sigma^*\) inconsistente, ovvero appaiono in qualche formula che è già presente in \(\Sigma^*\) e che le richiede con assegnamento falso per essere soddisfatte.
 
-  A questo punto, dobbiamo mostrare che \(\Sigma^* = \Th{m}\), ovvero che per ogni formula \(\phi\), \(\phi \in \Sigma^* \iff m \models \phi\).
+  A questo punto, dobbiamo mostrare che \(\Sigma^* = \Th{m^*}\), ovvero che per ogni formula \(\phi\), \(\phi \in \Sigma^* \iff m^* \models \phi\).
 
   Per fare ciò possiamo mostrare che \(\Sigma^*\) è chiuso per deduzione, ovvero che se \(\Sigma^*\vdash\phi\) allora \(\phi\in\Sigma^*\).
   Sia infatti per assurdo \(\phi\not\in\Sigma^*\) tale che \(\Sigma^*\vdash\phi\). Dalla massimalità di \(\Sigma^*\) si ha che \(\neg\phi\in\Sigma^*\). Dunque \(\Sigma^*\vdash\neg\phi\) banalmente, e quindi \(\Sigma^*\vdash\bot\) usando \(\neg E\), assurdo.
 
-  A questo punto, possiamo procedere per induzione sulla struttura di \(\phi\) per mostrare che \(\phi \in \Sigma^*\) se e solo se \(m\models\phi\).
+  A questo punto, possiamo procedere per induzione sulla struttura di \(\phi\) per mostrare che \(\phi \in \Sigma^*\) se e solo se \(m^*\models\phi\).
 
-  Il caso base è una formula atomica \(p\). Se \(p\in\Sigma^*\), allora \(p\in m\) per costruzione, e quindi \(m\models p\) e viceversa.
-  A questo punto, sia \(\phi\) una formula non atomica. In questo caso, \(\phi\) è costruita a partire da formule di lunghezza minore tramite l'applicazione di una regola di formazione. L'ipotesi induttiva è dunque che per ogni \(\psi\) di lunghezza minore di \(\phi\),\(\psi \in \Sigma^*\) se e solo se \(m\models\psi\).
+  Il caso base è una formula atomica \(p\). Se \(p\in\Sigma^*\), allora \(p\in m^*\) per costruzione, e quindi \(m^*\models p\) e viceversa.
+  A questo punto, sia \(\phi\) una formula non atomica. In questo caso, \(\phi\) è costruita a partire da formule di lunghezza minore tramite l'applicazione di una regola di formazione. L'ipotesi induttiva è dunque che per ogni \(\psi\) di lunghezza minore di \(\phi\),\(\psi \in \Sigma^*\) se e solo se \(m^*\models\psi\).
   \begin{description}
-    \item[\(\phi = \neg\psi_1\)] Dalla semantica della negazione, \(m\models \phi \iff m \not\models \psi\), e per ipotesi induttiva \(m\not\models \psi\iff \psi \notin\Sigma^*\). Dalla definizione di massimalità di \(\Sigma^*\) si ha che \(\psi\notin\Sigma^*\) se e solo se \(\neg\psi\in\Sigma^*\), ovvero \(\phi\in\Sigma^*\).
-    \item[\(\phi = \psi_1 Op \psi_2\)] Tutte le dimostrazioni per operatori binari sono analoghe e si basano sull'uso della chiusura per deduzione e sulle regole di deduzione naturale specifiche dell'operatore. Vediamo come esempio il caso di \(Op=\land\).
-        Dalla semantica della congiunzione, \(m\models \phi\) se e solo se \(m\models \psi_1\) e \(m\models \psi_2\). Per ipotesi induttiva, \(m\models \psi_1\) se e solo se \(\psi_1\in\Sigma^*\), e \(m\models \psi_2\) se e solo se \(\psi_2\in\Sigma^*\). Ci basta quindi mostrare che \(\psi_1,\psi_2 \in \Sigma^*\iff \psi_1\land\psi_2\in\Sigma^*\).
-        Ma essendo che \(\psi_1,\psi_2 \vdash_{\land I} \psi_1\land\psi_2\) e \(\psi_1\land\psi_2\vdash_{\land E} \psi_1\) e \(\psi_1\land\psi_2\vdash_{\land E} \psi_2\), dalla chiusura di \(\Sigma^*\) per deduzione si ha la tesi.
+    \item[\(\phi = \neg\psi_1\):] Dalla semantica della negazione, \(m^*\models \phi \iff m^* \not\models \psi\), e per ipotesi induttiva \(m^*\not\models \psi\iff \psi \notin\Sigma^*\). Dalla definizione di massimalità di \(\Sigma^*\) si ha che \(\psi\notin\Sigma^*\) se e solo se \(\neg\psi\in\Sigma^*\), ovvero \(\phi\in\Sigma^*\).
+    \item[\(\phi = \psi_1 \land \psi_2\):]
+        Dalla semantica della congiunzione, \(m^*\models \phi\) se e solo se \(m^*\models \psi_1\) e \(m^*\models \psi_2\). Per ipotesi induttiva, \(m^*\models \psi_1\) se e solo se \(\psi_1\in\Sigma^*\), e \(m^*\models \psi_2\) se e solo se \(\psi_2\in\Sigma^*\). Ci basta quindi mostrare che \(\psi_1,\psi_2 \in \Sigma^*\iff \psi_1\land\psi_2\in\Sigma^*\).
+        Ma essendo che 
+        \[\psi_1,\psi_2 \vdash_{\land I} \psi_1\land\psi_2\]
+        e che 
+        \[\psi_1\land\psi_2\vdash_{\land E} \psi_1 \text{ e } \psi_1\land\psi_2\vdash_{\land E} \psi_2\]
+        dalla chiusura di \(\Sigma^*\) per deduzione si ha la tesi.
+    \item[\(\phi = \psi_1 \lor \psi_2\):]
+        Dalla semantica della disgiunzione, \(m^*\models \phi\) se e solo se \(m^*\models \psi_1\) o \(m^*\models \psi_2\). Per ipotesi induttiva, \(m^*\models \psi_1\) se e solo se \(\psi_1\in\Sigma^*\), e \(m^*\models \psi_2\) se e solo se \(\psi_2\in\Sigma^*\). Ci basta quindi mostrare che \(\psi_1\in\Sigma^*\) o \(\psi_2\in\Sigma^*\iff \psi_1\lor\psi_2\in\Sigma^*\).
+        Per la direzione \(\implies\) si ha facilmente che 
+        \[\psi_1 \vdash_{\lor I} \psi_1\lor\psi_2 \text{ e } \psi_2 \vdash_{\lor I} \psi_1\lor\psi_2\]
+        e dunque dalla chiusura di \(\Sigma^*\) per deduzione si \(\psi_1\lor\psi_2\in\Sigma^*\).
+        Per la direzione \(\impliedby\) è sufficiente che una tra \(\psi_1\) e \(\psi_2\) sia in \(\Sigma^*\). Se per assurdo nessuna delle due fosse in \(\Sigma^*\) però, per massimalità di \(\Sigma^*\) si avrebbe che sia \(\neg\psi_1\) che \(\neg\psi_2\) sono in \(\Sigma^*\). Ma allora 
+        \[\psi_1\lor\psi_2,\neg\psi_1,\neg\psi_2 \vdash_{\lor E} \bot \implies \Sigma^*\implies \bot\]
+        assurdo per consistenza di \(\Sigma^*\).
+      \item[\(\phi = \psi_1 \to \psi_2\):]
+        Questo caso può essere facilmente ricostruito a partire dai casi già trattati, utilizzando la semantica di \(\to\) e le regole di deduzione a esso associate.
   \end{description}
 \end{proof}
 
-\begin{lemma}[namedlabel={lem:model-existence}{Esistenza del modello}]{Esistenza del modello}
+\begin{theorem}[namedlabel={thm:coherence_and_model-existence}{Coerenza e Esistenza del modello}]{Esistenza del modello}
   Dato \(\Sigma\subseteq\PL\), si ha che:
   
   \(\Sigma\) è consistente \(\iff\Sigma\) è soddisfacibile.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
-  Per definizione di consistenza \(\Sigma \not\vdash \bot\), ovvero non esiste alcun albero di deduzione con radice \(\bot\) con foglie che sono o assunzioni scaricate o appartengono a \(\Sigma\).
-  Essere soddisfacibile significa che esiste un modello \(m\) tale che \(m\models\Sigma\).
+  Per definizione di consistenza si ha che \(\Sigma \not\vdash \bot\), ovvero non esiste alcun albero di deduzione con radice \(\bot\) con foglie che sono o assunzioni scaricate o appartengono a \(\Sigma\).
+  Essere soddisfacibile significa che esiste un modello \(m^*\) tale che \(m^*\models\Sigma\).
 
-  Dunque dobbiamo andare a costruire un modello \(m\) che soddisfa \(\Sigma\) sapendo che le formule di \(\Sigma\) sono consistenti.
+  Dunque per mostrare che \(\Sigma\) consistente implica che \(\Sigma\) è soddisfacibile, dobbiamo andare a costruire un modello \(m^*\) che soddisfa \(\Sigma\) sapendo che le formule di \(\Sigma\) sono consistenti.
 
   Ma a questo punto, se \(\Sigma\) è consistente, allora per il \Namedcref{lem:lindenbaum} è possibile costruire un insieme di formule \(\Sigma^*\) tale che \(\Sigma\subseteq\Sigma^*\) e \(\Sigma^*\) è massimalmente consistente.
-  Dunque, per la \Cref{prop:max-consistent-set-are-theory}, esiste un modello \(m\) tale che \(\Sigma^* = \Th{m}\). Dunque, essendo \(\Sigma\subseteq\Sigma^*\), allora \(\Sigma\subseteq\Th{m}\), e quindi \(m\models\Sigma\), ovvero \(m\) soddisfa tutte le formule di \(\Sigma\), e quindi \(\Sigma\) è soddisfacibile.
+  Dunque, per la \Cref{prop:max-consistent-set-are-theory}, esiste un modello \(m^*\) tale che \(\Sigma^* = \Th{m^*}\). Dunque, essendo \(\Sigma\subseteq\Sigma^*\), allora \(\Sigma\subseteq\Th{m^*}\), e quindi \(m^*\models\Sigma\), ovvero \(m^*\) soddisfa tutte le formule di \(\Sigma\), e quindi \(\Sigma\) è soddisfacibile.
 
-  Viceversa, se \(\Sigma\) è soddisfacibile, allora esiste un modello \(m\) tale che \(m\models\Sigma\). Per definizione di teoria, \(\Sigma\subseteq\Th{m}\).
-  Essendo che \(\Th{m}\) è consistente, allora anche \(\Sigma\) è consistente, poiché se \(\Sigma\vdash\bot\) allora \(\Th{m}\vdash\bot\) per monotònicità, assurdo.
+  Viceversa, se \(\Sigma\) è soddisfacibile, allora esiste un modello \(m^*\) tale che \(m^*\models\Sigma\). Per definizione di teoria, \(\Sigma\subseteq\Th{m^*}\).
+  Essendo che \(\Th{m^*}\) è consistente, allora anche \(\Sigma\) è consistente, poiché se \(\Sigma\vdash\bot\) allora \(\Th{m^*}\vdash\bot\) per monotònicità, assurdo.
 \end{proof}
 
 A questo punto, siamo finalmente in grado di dimostrare la completezza del calcolo di deduzione naturale, che ci dice che tutto ciò che è conseguenza logica è anche deducibile, e quindi che il calcolo di deduzione naturale è in grado di catturare tutta la conseguenza logica.
@@ -902,7 +918,7 @@ A questo punto, siamo finalmente in grado di dimostrare la completezza del calco
 
   A questo punto, possiamo dimostrare la proprietà di completezza per contrapposizione, ovvero che, preso un qualsiasi insieme \(\Gamma\), \(\Gamma\) consistente \(\implies\) \(\Gamma\)soddisfacibile.
 
-  Ma per fare ciò è sufficiente il Lemma \Namedonlyhref{lem:model-existence}, che ci dice che un insieme di formule consistente è soddisfacibile. Di conseguenza, se \(\Gamma\cup\set{\neg\phi}\) è insoddisfacibile, allora è inconsistente, ovvero se \(\Gamma\models\phi\) allora \(\Gamma\vdash\phi\).
+  Ma per fare ciò è sufficiente il Teorema di \Namedonlyhref{thm:coherence_and_model-existence}, che ci dice che un insieme di formule consistente è soddisfacibile. Di conseguenza, se \(\Gamma\cup\set{\neg\phi}\) è insoddisfacibile, allora è inconsistente, ovvero se \(\Gamma\models\phi\) allora \(\Gamma\vdash\phi\).
 \end{proof}
 
 Esistono infine un ultimo paio di risultati importanti riguardo il calcolo di deduzione naturale della logica proposizionale, entrambi che in un certo qual senso semplificano la trattazione di questo calcolo, uno dal fronte semantico, riducendo la grandezza dello spazio dei modelli da considerare, e uno dal fronte sintattico, permettendo di \qi{modularizzare} le dimostrazioni, e quindi di semplificarle.
@@ -912,23 +928,20 @@ Esistono infine un ultimo paio di risultati importanti riguardo il calcolo di de
 \end{theorem}
 
 Una formulazione alternativa della proprietà di correttezza in termini di soddisfacibilità è
-\[\Unsat[\Gamma] \iff \exists \Gamma_0 \subseteq \Gamma, \Gamma_0 \text{ finito }: \Unsat[\Gamma_0]\]
-per dualità
-\[\Sat[\Gamma] \iff \forall \Gamma_0 \subseteq \Gamma, \Gamma_0 \text{ finito }: \Sat[\Gamma_0]\]
+\[\Unsat[\Gamma] \iff \exists \Gamma_0 \subseteq \Gamma, \abs{\Gamma_0} < \infty\st \Unsat[\Gamma_0]\]
+e per dualità
+\[\Sat[\Gamma] \iff \forall \Gamma_0 \subseteq \Gamma, \abs{\Gamma_0} < \infty \st \Sat[\Gamma_0]\]
 Tale teorema è di particolare importanza, poiché ci garantisce che nella verifica dell'insoddisfacibilità di un insieme di formule, è sufficiente considerare solo modelli finiti.
 
 \begin{proof}
-  Abbiamo che 
-  \[\Gamma \models \phi \iff \Gamma \vdash \phi\]
-  Ciò è equivalente all'esistenza di una deduzione \(\pi\) di \(\phi\) da \(\Gamma\).
+  Per dimostrare la prima direzione, ovvero che \(\Gamma\models\phi\) implica l'esistenza di un sottoinsieme finito \(\Gamma_0\subseteq\Gamma\) tale che \(\Gamma_0\models\phi\), iniziamo notando che dal teorema di correttezza si ha
+  \[\Gamma \models \phi \implies \Gamma \vdash \phi\]
+  Ovvero esiste una deduzione \(\pi\) di \(\phi\) da \(\Gamma\).
   Sia allora \(\Gamma_0 = leaf(\pi)\cap \Gamma\). Ovviamente \(\Gamma_0\subseteq\Gamma\) e \(\abs{\Gamma_0}<\infty\).
   Inoltre, per costruzione di \(\Gamma_0\), \(\Gamma_0\vdash\phi\), e quindi \(\Gamma_0\models\phi\) per correttezza.
-  Sia allora \(\Gamma' = \set{\psi \in \pi}[\psi \text{ foglia non scaricata di }\pi]\).
-  Ma essendo \(\pi\) finito, \(\Gamma'\) è finito, e banalmente \(\Gamma' \subseteq \Gamma\) per definizione di deduzione.
-  Si ha ovviamente che \(\Gamma' \vdash \phi\) per costruzione di \(\Gamma'\), e quindi \(\Gamma' \models \phi\) per correttezza.
 
-  Nell'altro verso è ovvio per monotònicità.
-  \[\Gamma'\models\phi\iff\Gamma'\vdash\phi\implies\Gamma\vdash\phi\iff\Gamma\models\phi\]
+  Nell'altro verso è ovvio per monotònicità che
+  \[\Gamma_0\models\phi\overset{\text{corr}}{\implies}\Gamma_0\vdash\phi\overset{\text{mon}}{\implies}\Gamma\vdash\phi\overset{\text{comp}}{\implies}\Gamma\models\phi\]
 \end{proof}
 
 Arriviamo infine a un teorema che generalizza il \Namedcref{thm:substitution}, che riguarda la sostituzione nella conseguenza logica invece che nella validità
@@ -936,6 +949,7 @@ Arriviamo infine a un teorema che generalizza il \Namedcref{thm:substitution}, c
 \begin{theorem}{Invarianza della Conseguenza Logica rispetto alla Sostituzione}
   Sia \(\Gamma \subseteq \PL\), \(\phi \in \PL\) e \(\sigma:\AP \to \PL\) sostituzione. Allora,
   \[\Gamma\models\phi\implies\Gamma\sigma\models\phi\sigma\]
+  con \(\Gamma\sigma = \set{\psi\sigma}[\psi\in\Gamma]\).
 \end{theorem}
 
 \begin{proof}
@@ -968,7 +982,7 @@ Andiamo quindi a introdurre un calcolo di deduzione alternativo, che risulta pi�
 Una prima versione fu proposta da J. A. Robinson nel 1965, e da allora è stata oggetto di numerose estensioni e miglioramenti.
 
 Tale calcolo non si concentra sulla conseguenza logica, ma sull'inconsistenza. 
-Nonostante ciò, per decidere \(\Gamma\models\phi\) è possibile farlo decidendo se \(\Gamma\cup\set{\neg\phi}\) è insoddisfacibile.
+Nonostante ciò, e possibile decidere \(\Gamma\models\phi\) decidendo se \(\Gamma\cup\set{\neg\phi}\) è insoddisfacibile.
 In questo senso la risoluzione non è un calcolo \qi{generativo}, come lo era la deduzione naturale, in cui dato un insieme di formule veniva generata la conseguenza logica.
 
 Inoltre, tale calcolo non si applica direttamente a formule proposizionali, ma solo a formule in \keyword{forma clausale}.
@@ -995,7 +1009,7 @@ Questo poiché, intuitivamente, \(m\models F\) se e soltanto se \(\forall C \in 
 Quindi \(m\models F \iff \forall C \in F ,\exists l \in C\st m\models l\). Ovviamente se \(F =\emptyset\) qualsiasi \(m\) soddisfa \(F\) poiché non c'è nessuna clausola da poter non soddisfare.
 
 
-È importante notare che la forma clausale vuota \(F=\emptyset\) non coincide con la clausola vuota \(C=\emptyset\), tipicamente indicata con \(\square\). Per la definizione di soddisfacibilità, \(m\not\models \square\) per ogni \(m\), e quindi \(\square\) è insoddisfacibile, mentre \(F=\emptyset\) è soddisfatta da ogni \(m\).
+È importante notare che la forma clausale vuota \(F=\emptyset\) non coincide con la clausola vuota \(C=\emptyset\), tipicamente indicata con \(\square\). Per la definizione di soddisfacibilità, \(m\not\models \square\) per ogni \(m\), e quindi \(\square\) è insoddisfacibile, con conseguente insoddisfacibilità di qualsiasi \(F\) che contenga \(\square\), mentre \(F=\emptyset\) è soddisfatta da ogni \(m\).
 
 Essendo \(\square\) insoddisfacibile, per valutare l'insoddisfacibilità di un insieme di formule in forma clausale, è sufficiente verificare se è possibile dedurre \(\square\) da quell'insieme di formule.
 
@@ -1048,13 +1062,13 @@ Andiamo dunque a formalizzare la fondatezza semantica di tale regola.
   Sia \(m\) un modello che soddisfa \(C_1\) e \(C_2\) che sono in clash su \(l\).
   Per definizione di \(l\) e \(\tilde{l}\), \(m\) soddisfa esattamente uno tra \(l\) e \(\tilde{l}\). Senza perdita di generalità, supponiamo che \(l\in C_1\) e \(\tilde{l}\in C_2\).
 
-  Consideriamo il caso \(m\models l\). Essendo che \(m\models C_2\), allora \(\exists l' \in C_2\setminus{\tilde{l}}\) tale che \(m\models l'\). Dunque \(l' \in R\), ovvero \(m\models R\).
-  Nel caso in cui \(m \models \tilde{l}\), essendo che \(m\models C_1\), allora \(\exists l' \in C_1\setminus{l}\) tale che \(m\models l'\). Dunque \(l' \in R\), ovvero \(m\models R\).
+  Consideriamo il caso \(m\models l\). Essendo che \(m\models C_2\), allora \(\exists l' \in C_2\setminus\set{\tilde{l}}\) tale che \(m\models l'\). Dunque \(l' \in R\), ovvero \(m\models R\).
+  Nel caso in cui \(m \models \tilde{l}\), essendo che \(m\models C_1\), allora \(\exists l' \in C_1\setminus\set{l}\) tale che \(m\models l'\). Dunque \(l' \in R\), ovvero \(m\models R\).
 \end{proof}
 
 Per quanto riguarda il verso opposto invece, l'unica proprietà che è preservata è la soddisfacibilità, ovvero se \(R\) risolvente di \(C_1\) e \(C_2\) su \(l\) è soddisfacibile, allora anche \(C_1\) e \(C_2\) sono soddisfacibili. Tale proprietà è ovviamente più debole della preservazione della verità, poiché l'unica garanzia che fornisce è che se esiste un modello in cui \(R\) è soddisfatto ne esiste uno, potenzialmente diverso, in cui \(C_1\) e \(C_2\) sono congiuntamente soddisfatte.
 
-Non è possibile richiedere di più poiché \(R\) contiene un numero di proposizioni atomiche strettamente inferiore sia di \(C_1\) che di \(C_2\), e di conseguenza gli assegnamenti che soddisfano \(R\) non sono assegnamenti validi per soddisfare \(C_1\) e \(C_2\). Andiamo però a mostrare che dato \(\alpha: \AP[R] \to \set{0,1}\) tale che \(\Val{\alpha}[R] = 1\), esiste un assegnamento \(\alpha':\AP[C_1]\cup\AP[C_2] \to \set{0,1}\) tale che \(\Val{\alpha'}[C_1] = 1\) e \(\Val{\alpha'}[C_2] = 1\).
+Non è possibile richiedere di più poiché \(R\) contiene un numero di proposizioni atomiche potenzialmente strettamente inferiore sia di \(C_1\) che di \(C_2\), e di conseguenza gli assegnamenti che soddisfano \(R\) non sono assegnamenti validi per soddisfare \(C_1\) e \(C_2\). Andiamo però a mostrare che dato \(\alpha\in \set{0,1}^{\AP[R]}\) tale che \(\Val{\alpha}[R] = 1\), esiste un assegnamento \(\alpha'\in\set{0,1}^{\AP[C_1]\cup\AP[C_2]}\) tale che \(\Val{\alpha'}[C_1] = 1\) e \(\Val{\alpha'}[C_2] = 1\).
 
 \begin{proposition}{Soddisfacibilità per la regola di risoluzione}
   Sia \(R\) risolvente di \(C_1\) e \(C_2\) in clash su \(l\). Allora, se \(R\) è soddisfacibile, allora anche \(C_1\) e \(C_2\) sono soddisfacibili.
@@ -1095,14 +1109,14 @@ Non è possibile richiedere di più poiché \(R\) contiene un numero di proposiz
 Avendo ora un insieme di regole di inferenza, in questo caso composto da una regola sola, e un insieme di assunzioni, in questo caso la forma clausale, possiamo andare a definire il calcolo di deduzione di risoluzione attraverso la definizione di una deduzione.
 
 \begin{definition}{Deduzione di risoluzione}
-  Sia \(F\) una forma clausale. Una deduzione di risoluzione \(F\vdash_{\Rule }C\) è un albero binario finito, la cui radice è etichettata con \(C\), tutte le foglie sono etichettate con clausole di \(F\) e ogni nodo interno è etichettato con il risolvente dei suoi figli.
+  Sia \(F\) una forma clausale e \(C\) una clausola. Una deduzione di risoluzione \(F\vdash_{\Rule }C\) è un albero binario finito, la cui radice è etichettata con \(C\), tutte le foglie sono etichettate con clausole di \(F\) e ogni nodo interno è etichettato con il risolvente dei suoi figli.
 \end{definition}
 
 \begin{note}{}
   Essendo che in risoluzione \(\Rules = \set{\Rule}\), con \(\Rule\) la regola di risoluzione, per distinguere tale calcolo da quello di deduzione naturale indicheremo le deduzioni di risoluzione con \(\vdash_{\Rule}\) invece che con \(\vdash\). Quando sarà necessario esplicitare l'utilizzo del calcolo di deduzione naturale invece, per dissipare ogni ambiguità, verrà utilizzato \(\vdash_{ND}\).
 \end{note}
 
-Essendo che la regola di risoluzione preserva la verità, e quindi la conseguenza logica, è facile vedere per induzione strutturale la correttezza del calcolo, ovvero che date \(S,C\) forme clausali, \(S\vdash_{\Rule} C \implies S\models C\).
+Essendo che la regola di risoluzione preserva la verità, e quindi la conseguenza logica, è facile vedere per induzione strutturale la correttezza del calcolo, ovvero che dato \(S\) forma clausale e \(C\) clausola, \(S\vdash_{\Rule} C \implies S\models C\).
 
 Sarà possibile dimostrare anche una forma più debole della completezza, legata alla soddisfacibilità, ovvero che \(S\not\vdash_R \square \implies \Sat[S]\), o equivalentemente \(\Unsat[S] \implies S\vdash_R \square\). Come già anticipato, non è possibile dimostrare la totale completezza, perché esistono conseguenze logiche di clausole che non sono in alcun modo generabili dal calcolo.
 
@@ -1139,7 +1153,7 @@ Prima della dimostrazione formale di questa forma di completezza debole però, a
     \end{algorithmic}
 \end{algorithmdesc}
 
-Per quanto riguarda la correttezza dell'algoritmo, questa risulta quasi scontata dal fatto che è l'esatta trasposizione di una deduzione di risoluzione. Riguardo alla terminazione invece, la cosa è meno scontata. Questo poiché la condizione di terminazione è e dev'essere valutata sull'insieme \(S_0\), il quale non è statico, ma cresce dinamicamente durante l'esecuzione. In linea di principio quindi, senza mostrare che esista un limite superiore al numero di clausole che è possibile generare mediante risoluzione, non è possibile garantire la terminazione di questo algoritmo.
+Per quanto riguarda la correttezza dell'algoritmo, questa risulta quasi scontata dal fatto che è l'esatta trasposizione di una deduzione di risoluzione. Riguardo alla terminazione invece, la cosa è meno scontata. Questo poiché la condizione di terminazione è e dev'essere valutata sull'insieme \(S_0\), il quale non è statico, ma cresce dinamicamente durante l'esecuzione. In linea di principio quindi, senza mostrare che esista un limite superiore al numero di clausole che è possibile generare mediante risoluzione, non è possibile garantire la terminazione di questo algoritmo. Chiaramente il numero di iterazioni massimo sarà pari a \(\abs{S_0}^2\), ma è necessario mostrare che \(\abs{S_0}\) è limitato, e quindi che esiste un limite superiore al numero di iterazioni.
 
 Fortunatamente, tale limite superiore esiste, e ne vedremo dimostrazione formale dopo un esempio di applicazione di tale algoritmo.
 
@@ -1189,7 +1203,7 @@ Fortunatamente, tale limite superiore esiste, e ne vedremo dimostrazione formale
 
 È fondamentale notare che l'applicazione della regola di risoluzione richiede la selezione di due clausole in clash su uno specifico letterale, e che quindi una singola applicazione della regola porti all'eliminazione di un solo letterale alla volta.
 
-Non è possibile estendere banalmente la regola per permettere la risoluzione di più letterali contemporaneamente, poiché in tal caso è facile costruire controesempi in cui non è preservata la verità. Prendiamo infatti le clausole \(C_1 = \set{A, B}\) e \(C_2 = \set{\neg A, \neg B}\). Se fosse possibile risolvere entrambe le coppie di letterali in clash contemporaneamente, allora sarebbe possibile dedurre la clausola vuota \(\square\) da \(C_1\) e \(C_2\), che è insoddisfacibile, mentre invece \(C_1\) e \(C_2\) sono congiuntamente soddisfacibili da un assegnamento che assegna \(1\) ad \(A\) e \(0\) a \(B\), o viceversa. Andando ad applicare la regola di risoluzione in modo corretto, è possibile dedurre \(\set{A,\neg A}\) da \(C_1\) e \(C_2\) risolvendo su \(B\), ottenendo la clausola banale \(\set{A, \neg A}\), che è tautologica.
+Non è possibile estendere banalmente la regola per permettere la risoluzione di più letterali contemporaneamente, poiché in tal caso è facile costruire controesempi in cui non è preservata la verità. Prendiamo infatti le clausole \(C_1 = \set{A, B}\) e \(C_2 = \set{\neg A, \neg B}\). Se fosse possibile risolvere entrambe le coppie di letterali in clash contemporaneamente, allora sarebbe possibile dedurre la clausola vuota \(\square\) da \(C_1\) e \(C_2\), che è insoddisfacibile, mentre invece \(C_1\) e \(C_2\) sono congiuntamente soddisfacibili da un assegnamento che assegna \(1\) ad \(A\) e \(0\) a \(B\), o viceversa. Andando ad applicare la regola di risoluzione in modo corretto, è possibile dedurre \(\set{A,\neg A}\) da \(C_1\) e \(C_2\) risolvendo su \(B\), ottenendo una clausola banalmente soddisfacibile \(\set{A, \neg A}\), essendo tautologica.
 
 Fatte queste precisazioni, possiamo ora dimostrare la terminazione dell'algoritmo di risoluzione, mostrando che esiste un limite superiore al numero di clausole che tale algoritmo può generare, limitando quindi la grandezza dell'insieme \(S_0\) su cui viene valutata la condizione di terminazione.
 
@@ -1198,7 +1212,8 @@ Fatte queste precisazioni, possiamo ora dimostrare la terminazione dell'algoritm
 \end{theorem}
 
 \begin{proof}
-  Sappiamo che l'insieme di clausole in ingresso \(S\) è finito. Sia dunque \(\AP[S] = \set{P \in \AP[\phi]}[\phi \in S]\) l'insieme di proposizioni atomiche che compaiono in \(S\). Chiaramente \(\AP[S]\) è finito, poiché \(S\) è finito e ogni formula contiene un numero finito di proposizioni atomiche.
+  Sappiamo che l'insieme di clausole in ingresso \(S\) è finito. Sia dunque \(\AP[S] = \set{P \in \AP[\phi]}[\phi \in S]\) l'insieme di proposizioni atomiche che compaiono in \(S\). Chiaramente \(\AP[S]\) è finito, poiché \(S\) è finito e ogni formula contiene un numero finito di proposizioni atomiche. Infatti, essendo \(\AP[\phi] = \AP \cap Sub(\phi)\) e, come mostrato precedentemente \(\abs{Sub(\phi)} \leq \abs{\phi}\) si avrà che
+  \[\forall \phi \in S, \abs{\AP[\phi]} \leq \abs{\phi} \implies \abs{\bigcup_{\phi \in S} \AP[\phi]} \leq \sum_{\phi \in S} \abs{\phi}\]
 
   Inoltre, avendo escluso le clausole banali, si ha che \(\forall C \in S, \abs{C}\leq\abs{\AP[S]}\). Questo poiché ogni clausola è un insieme di letterali, che può essere presente o in forma positiva o in forma negativa, ma non entrambe, e quindi per ogni proposizione atomica in \(\AP[S]\) al più una delle due forme può essere presente in una clausola.
 
