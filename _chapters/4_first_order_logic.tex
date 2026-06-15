@@ -367,12 +367,13 @@ Tale lemma intuitivamente ci dice che applicare una sostituzione ai termini a li
   \[\den{t}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]] = \den{x}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]] = \sigma[x\mapsfrom \den{t'}[M][\sigma]](x) = \den{t'}[M][\sigma]\]
   che abbiamo visto essere uguale a \(\den{\subs{t}{x}{t'} }[M][\sigma]\), e quindi anche in questo caso la tesi è verificata.
 
-  Per il caso induttivo si avrà che \(t = f(t_1,\ldots,t_n)\) con \(f\in\FuncSyms\), \(\arty(f)=n\) e \(t_1,\ldots,t_n\in T\). Dunque si ha
-  \[\den{\subs{t}{x}{t'} }[M][\sigma] = \den{f(t_1,\ldots,t_n)}[M][\sigma] = f^M(\den{t_1}[M][\sigma],\ldots,\den{t_n}[M][\sigma])\]
+  Per il caso induttivo si avrà che \(t = f(t_1,\ldots,t_n)\) con \(f\in\FuncSyms\), \(\arty(f)=n\) e \(t_1,\ldots,t_n\in T\).
+  Dunque, appliando la definizione di sostituzione nei termini al caso induttivo e successivamente la definizione di interpretazione per i simboli funzionali, si ha
+  \[\den{\subs{t}{x}{t'} }[M][\sigma] = \den{f(\subs{t_1}{x}{t'},\ldots,\subs{t_n}{x}{t'})}[M][\sigma] = f^M(\den{\subs{t_1}{x}{t'} }[M][\sigma],\ldots,\den{\subs{t_n}{x}{t'} }[M][\sigma])\]
   Inoltre si ha che 
   \[\den{t}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]] = \den{f(t_1,\ldots,t_n)}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]] = f^M(\den{t_1}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]],\ldots,\den{t_n}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]])\]
   Essendo che per ipotesi induttiva si ha che \(\den{\subs{t_i}{x}{t'} }[M][\sigma] = \den{t_i}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]]\) per ogni \(i\in\{1,\ldots,n\}\), si ha che 
-  \[\den{t}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]]  =  f^M(\den{t_1}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]],\ldots,\den{t_n}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]]) = f^M(\den{t_1}[M][\sigma],\ldots,\den{t_n}[M][\sigma]) = \den{\subs{t}{x}{t'} }[M][\sigma]\]
+  \[\den{t}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]]  =  f^M(\den{t_1}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]],\ldots,\den{t_n}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]]) = f^M(\den{\subs{t_1}{x}{t'} }[M][\sigma],\ldots,\den{\subs{t_n}{x}{t'} }[M][\sigma]) = \den{\subs{t}{x}{t'} }[M][\sigma]\]
 \end{proof}
 
 Per passare alla sostituzione nelle formule si potrebbe pensare di poter estendere banalmente il lemma al teorema seguente:
@@ -421,9 +422,9 @@ A questo punto, possiamo riformulare il teorema nella sua versione corretta.
 
   Vorremmo arrivare a mostrare che tale oggetto è equivalente a \(M,\sigma[x\mapsfrom \den{t}[M][\sigma]]\models \forall y,\psi\) che per semantica equivale a \(M,\sigma[x\mapsfrom \den{t}[M][\sigma]][y\mapsfrom d]\models \psi\) per ogni \(d \in D\).
   
-  Questo nuovo scrittura è molto simile alla precedente, ma varia nell'ordine di applicazione dei cambiamenti di assegnamento, oltre che nell'assegnamento applicato nell'interpretazione di \(t\). Di conseguenza non è banale mostrare che siano uguali. Tuttavia, se \(y\) non è in \(t\) allora l'ordine diventa irrilevante\footnote{Ciò accade poiché sostituendo prima \(x\) non verranno aggiunte istanze di \(y\) da sostituire, e sostituire prima \(y\) introduce solo termini ground, su cui non è possibile applicare alcuna sostituzione}, e risulta che \(\llbracket t\rrbracket^M_{\sigma[y\mapsfrom d]} = \llbracket t\rrbracket^M_{\sigma}\) grazie alla \Cref{prop:term_interpretation_independence}.
+  Questa nuova scrittura è molto simile alla precedente, ma varia nell'ordine di applicazione dei cambiamenti di assegnamento, oltre che nell'assegnamento applicato nell'interpretazione di \(t\). Di conseguenza non è banale mostrare che siano uguali. Tuttavia, se \(y\) non è in \(t\) allora l'ordine diventa irrilevante\footnote{Ciò accade poiché sostituendo prima \(x\) non verranno aggiunte istanze di \(y\) da sostituire, e sostituire prima \(y\) introduce solo termini ground, su cui non è possibile applicare alcuna sostituzione}, e risulta che \(\llbracket t\rrbracket^M_{\sigma[y\mapsfrom d]} = \llbracket t\rrbracket^M_{\sigma}\) grazie alla \Cref{prop:term_interpretation_independence}.
 
-  Per ipotesi sappiamo che \(t\) è libero per \(x\) in \(\phi\). Ma essendo che \(y\) è legata in \(\phi\), si ha necessariamente che\(t\) non può contenere \(y\) come variabile, altrimenti \(t\) conterrebbe una variabile legata in \(\phi\) in uno scope in cui \(x\) non lo è. Di conseguenza l'ordine dei cambi di assegnamento diventa irrilevante e gli assegnamenti usati per l'interpretazione di \(t\) sono equivalenti, e quindi si ha la tesi.
+  Per ipotesi sappiamo che \(t\) è libero per \(x\) in \(\phi\). Ma essendo che \(y\) è legata in \(\phi\), si ha necessariamente che \(t\) non può contenere \(y\) come variabile, altrimenti \(t\) conterrebbe una variabile legata in \(\phi\) in uno scope in cui \(x\) non lo è. Di conseguenza l'ordine dei cambi di assegnamento diventa irrilevante e gli assegnamenti usati per l'interpretazione di \(t\) sono equivalenti, e quindi si ha la tesi.
 
   Il caso \(\phi = \exists y\st \psi\) è analogo al caso \(\phi = \forall y, \psi\) a meno della locuzione \q{per ogni \(d\in D\)} che diventa \q{per qualche \(d\in D\)}, avendo la tesi anche in questo caso.
 \end{proof}
@@ -443,7 +444,7 @@ Chiaramente \(\forall x, (\phi_1 \lor \phi_2) \not\equiv \forall x, \phi_1 \lor 
 
 Senza perdita di generalità, supponiamo che \(M,\sigma\models\forall x,\phi_1\). Allora per semantica, per ogni \(d\in D\), \(M,\sigma[x\mapsfrom d]\models \phi_1\), e quindi \(M,\sigma[x\mapsfrom d]\models \phi_1 \lor \phi_2\) per ogni \(d\in D\), e quindi \(M,\sigma\models \forall x, (\phi_1 \lor \phi_2)\). 
 
-Per mostrare che l'altra implicazione non vale, dobbiamo passare per la semantica di \(\implies\), che in particolare è \(\phi \implies\psi\) se e solo se, per ogni coppia \(M, \sigma\), \(M,\sigma\models \phi \implies M,\sigma\models \psi\). 
+Per mostrare che l'altra implicazione non vale, dobbiamo passare per la semantica di \(\implies\), che in particolare è \(\phi \implies\psi\) se e solo se, per ogni coppia \(M, \sigma\), si ha che \(M,\sigma\models \phi \implies M,\sigma\models \psi\). 
 
 Ovviamente la sua negazione sarà equivalente a, per qualche coppia \(M, \sigma\), \(M,\sigma\models \phi\) e \(M,\sigma\not\models \psi\). Di conseguenza, ci basta trovare il cosiddetto \keyword{contromodello}, ovvero un modello che soddisfa un controesempio alla tesi. 
 
@@ -460,7 +461,7 @@ con \(x \notin FV(\phi_2)\).
 
 Ciò è vero perché quantificare su una variabile non presente in una formula non influenza la verità della formula stessa.
 
-Infatti \(\exists x\st\phi\iff M,\sigma \models \exists x\st\phi \iff M,\sigma[x\mapsfrom d] \models \phi \) per qualche \(d\in D\). Se \(x \notin FV(\phi)\) allora \(\sigma(y)=\sigma[x\mapsfrom d](y)\) per ogni \(y \in FV(\phi)\), dunque dalla \Cref{prop:satisfaction_independence} si ha\(M,\sigma \models \phi\) se e solo se \(M,\sigma[x\mapsfrom d] \models \phi\). Di conseguenza, \(M,\sigma \models \exists x\st\phi\) se e solo se \(M,\sigma \models \phi\).
+Infatti \(\exists x\st\phi\iff M,\sigma \models \exists x\st\phi \iff M,\sigma[x\mapsfrom d] \models \phi \) per qualche \(d\in D\). Se \(x \notin FV(\phi)\) allora \(\sigma(y)=\sigma[x\mapsfrom d](y)\) per ogni \(y \in FV(\phi)\), dunque dalla \Cref{prop:satisfaction_independence} si ha \(M,\sigma \models \phi\) se e solo se \(M,\sigma[x\mapsfrom d] \models \phi\). Di conseguenza, \(M,\sigma \models \exists x\st\phi\) se e solo se \(M,\sigma \models \phi\).
 
 La stessa cosa accade col quantificatore universale e \(\lor\), ovvero
 \[\forall x, (\phi_1 \lor \phi_2) \equiv \forall x, \phi_1 \lor \phi_2\]
@@ -509,7 +510,7 @@ Il primo caso è rimasto identico, ma nel secondo i modelli che soddisfano \(\fo
 Consideriamo ora un caso in cui la struttura principale non è booleana.
 Con \(Hat\) predicato vero per individui che indossano un cappello consideriamo le due formule
 \[\exists x\st (Hat(x) \to \forall y, Hat(y))\]
-\[(\exists x\st, Hat(x))\to(\forall y, Hat(y))\]
+\[(\exists x\st Hat(x))\to(\forall y, Hat(y))\]
 
 La prima formula potrebbe essere la traduzione di \qi{C'è un individuo tale che se egli ha il cappello allora tutti hanno il cappello}. L'altra invece potrebbe essere la traduzione di \qi{Se c'è un individuo che ha il cappello, allora tutti hanno il cappello}. In linguaggio naturale, possono essere percepite come con lo stesso significato, ma non è così. In oltre, la seconda è chiaramente non valida, perché per soddisfare la premessa si deve avere una struttura \(M\) con \(Hat^M\subset D\), ma è chiaro che trovare un \(M\) con questa struttura che non soddisfa la conclusione, basta avere un elemento che soddisfa \(\neg Hat\).
 
@@ -527,7 +528,7 @@ Cominciamo con un primo semplice esempio di traduzione. Consideriamo la frase:
 
 In primo luogo, va stabilita la segnatura del linguaggio, ovvero i simboli utilizzabili. In questo saranno necessari un simbolo di predicato unario \(C\) interpretato vero per gli oggetti del dominio che sono cani, un simbolo di predicato unario \(A\) interpretato vero per gli oggetti che abbaiano e infine il concetto di proprietario, che può essere rappresentato sia come proprietà del singolo oggetto, ma in maniera più completa anche come una relazione binaria \(P\) che lega un cane al suo proprietario.
 A questo punto possiamo facilmente esprimere la frase in logica del prim'ordine con la formula
-\[\forall x, ((C(x) \land A(x)) \to \not\exists y\st P(y,x))\]
+\[\forall x, ((C(x) \land A(x)) \to \neg\exists y\st P(y,x))\]
 
 È importante notare che in questa frase è presente un artificio tipico del linguaggio naturale, ovvero la presenza di una quantificazione universale implicita. Quando si parla di una proprietà di una categoria, come in questo caso i cani che abbaiano, si sott'intende che ogni individuo della categoria soddisfa quella proprietà, e quindi si ha una quantificazione universale implicita, che tendenzialmente quantifica un'implicazione, la cui premessa denota la categoria, e la conseguenza la proprietà vorremmo essere vera. In questo caso, la frase \q{I cani che abbaiano non hanno un proprietario} è equivalente a \q{Tutti i cani che abbaiano non hanno un proprietario}. I questo caso inoltre, anche la quantificazione esistenziale è implicita, poiché introdotta dalla locuzione \q{un}, che comunica il riferimento a un individuo.
 
@@ -540,7 +541,7 @@ Consideriamo ora la frase
 \end{quote}
 
 La locuzione \q{C'è} comunica la presenza di una quantificazione esistenziale. In questo caso per indicare che ci sono due individui distinti è necessario utilizzare la negazione del simbolo di identità, ottenendo la formula
-\[\exists x\st C(x) \land \exists y \exists z\st P(x,y) \land P(x,z) \land \not(y = z)\]
+\[\exists x\st\left( C(x) \land \exists y \exists z\st P(x,y) \land P(x,z) \land \neg(y = z)\right)\]
 
 Tecnicamente, la frase è ambigua e potrebbe essere interpretata anche con l'avere esattamente due proprietari, e quindi andrebbe specificata differentemente la formula.
 
@@ -556,7 +557,7 @@ Consideriamo ora la frase
 \end{quote}
 
 Questa frase è molto simile alla frase già vista \q{I cani che abbaiano non hanno un proprietario}, che abbiamo tradotto come
-\[\forall x, ((C(x) \land A(x)) \to \not\exists y\st P(y,x))\]
+\[\forall x, ((C(x) \land A(x)) \to \neg\exists y\st P(y,x))\]
 
 Un modo naturale per tradurre la nuova frase potrebbe essere
 \[\forall x, ((C(x) \land \exists y\st( P(y,x) )) \to \not A(x))\]
@@ -593,7 +594,7 @@ Questa frase ci mostra come generalizzare il concetto di \q{esattamente \(n\)} a
 
 Consideriamo ora la frase \q{Ci sono infiniti numeri primi}. Normalmente, il concetto di infinitezza non è esprimibile in logica del prim'ordine, ma avendo a disposizione un predicato binario \(<\) con l'interpretazione usuale, è possibile esprimere questa frase con la formula
 \[\forall x,( (P(x) \land N(x)) \to \exists y, (P(y) \land N(y) \land x<y))\]
-Per poter esprimere questa infinitezza ci siamo dovuti affidare alla presenza di un predicato che fosse antiriflessivo, transitivo e totale, come abbiamo già visto in precedenza. Si può quindi assiomatizzare il comportamento di \(<\), e quindi esprimere l'infinità. In generale possiamo parlare di infinitezza solo su strutture ordinabili, ovvero per le quali esiste un predicato binario che soddisfa le proprietà di antiriflessività, transitività e totalità.
+Per poter esprimere questa infinitezza ci siamo dovuti affidare alla presenza di un predicato che fosse antiriflessivo, transitivo e totale, come abbiamo già visto in precedenza. Potendo come visto assiomatizzare il comportamento di \(<\), è possibiòe esprimere in questo caso l'infinità. In generale possiamo parlare di infinitezza solo su strutture ordinabili, ovvero per le quali esiste un predicato binario che soddisfa le proprietà di antiriflessività, transitività e totalità.
 
 Consideriamo ora la frase \q{Ci sono infiniti numeri primi}. Normalmente, il concetto di infinitezza non è esprimibile in logica del prim'ordine, ma avendo a disposizione un predicato binario \(<\) con l'interpretazione usuale, è possibile esprimere questa frase con la formula
 \[\forall x,( (P(x) \land N(x)) \to \exists y, (P(y) \land N(y) \land x<y))\]

@@ -83,7 +83,7 @@ Quindi applicando \(\forall E\) avremmo
   \UnaryInfC{\(\exists y\st y < y\)}
 \end{prooftree}
 
-Tale conclusione è chiaramente non valida, perché già solo considerando come struttura \(\N\) con interpretazione usuale la premessa è soddisfatta, mentre la conclusione è falsificata, essendo \(y\) un elemento di \(\N\) e quindi non è vero che \(y < y\).
+Tale conclusione è chiaramente non valida, perché già solo considerando come struttura \(\N\) con interpretazione usuale la premessa è soddisfatta, mentre la conclusione è falsificata.
 
 Questo si ha perché \(y\) non è libero per \(x\) in \(\exists y\st x < y\), poiché \(y\) è legato da un quantificatore esistenziale, e quindi non essendo soddisfatte le condizioni per l'applicazione di \(\forall E\), ovvero le premesse del \Namedcref{thm:fol_substitution}, non è garantito che la sostituzione sintattica di \(y\) per \(x\) in \(\exists y\st x < y\) sia semanticamente equivalente alla formula originale, e quindi non è garantito che la deduzione sia corretta.
 
@@ -120,7 +120,7 @@ Se ora applicassimo \(\forall I\) erratamente, violando il secondo vincolo, ovve
 \end{prooftree}
 che chiaramente, sempre considerando come struttura \(\N\) con interpretazione usuale, è falsificata.
 
-Questo esempio mostra chiaramente l'analogia tra questa regola e il processo usuale di dimostrazione di una proprietà universale. Una versione informale di questa dimostrazione infatti sarebbe.
+Questo esempio mostra chiaramente l'analogia tra questa regola e il processo usuale di dimostrazione di una proprietà universale. Una versione informale di questa dimostrazione infatti sarebbe:
 \begin{quote}
   \q{
     Sappiamo che per ogni \(x\in\N\), se \(x=0\) allora \(x+1=1\). Dunque, qualsiasi sia \(y\in\N\), se \(y=0\) allora \(y+1=1\). Consideriamo dunque \(y=0\). Dato che \(y=0\), allora \(y+1=1\).
@@ -198,11 +198,11 @@ A questo punto, applicando correttamente \(\forall I\) otterremmo:
 \end{prooftree}
 che è chiaramente falso in \(\N\) con interpretazione usuale, e quindi la deduzione è errata. Il vincolo che si è violato in questo caso è che \(y\) occorre libera nella conclusione \(\psi \eqdef y < 5\).
 
-Infine, assumiamo \(z=5\) e \(\neq (z = 5)\). Chiaramente si ha:
+Infine, assumiamo \(z=5\) e \(\neg (z = 5)\). Chiaramente si ha:
 
 \begin{prooftree}
   \AxiomC{\(z=5\)}
-  \AxiomC{\(\neq (z=5)\)}
+  \AxiomC{\(\neg (z=5)\)}
   \RuleLabel{\(\neg E\)}
   \BinaryInfC{\(\bot\)}
 \end{prooftree}
@@ -211,7 +211,7 @@ A questo punto, considerando \(\phi \eqdef x = 5\), si ha che \(\subs{\phi}{x}{z
 
 \begin{prooftree}\label{prooft:wrong_fol_exists_e}
   \AxiomC{\({[z=5]}_1\)}
-  \AxiomC{\(\neq (z=5)\)}
+  \AxiomC{\(\neg (z=5)\)}
   \RuleLabel{\(\neg E\)}
   \BinaryInfC{\(\bot\)}
   \AxiomC{\(\exists x\st x = 5\)}
@@ -1138,7 +1138,7 @@ Una volta dimostrata la simmetria, è immediato dimostrare la transitività, ovv
   \UnaryInfC{\(\forall x, \forall y, \forall z, (x=y \land y=z) \to x=z\)}
 \end{prooftree}
 
-Infine, possiamo mostrare l'altra direzione dell'implicazione nel terzo schema di assioma, ovvero \(\forall x_1,\ldots, \forall x_n, \forall y_1, \ldots, \forall y_n, (P(x_1, \ldots, x_n) \to P(y_1, \ldots, y_n))\to (\bigwedge_{i=1}^n x_i = y_i)\).
+Infine, possiamo mostrare l'altra direzione dell'implicazione nel terzo schema di assioma, ovvero \(\forall x_1,\ldots, \forall x_n, \forall y_1, \ldots, \forall y_n, (\bigwedge_{i=1}^n x_i = y_i) \to (P(y_1, \ldots, y_n) \to P(x_1, \ldots, x_n)) \).
 
 Ancora una volta mostreremo il caso più semplice, ovvero con \(n=1\), che risulta essere
 \[\forall x,\forall y, (x = y) \to (P(y) \to P(x))\]
@@ -1156,9 +1156,9 @@ Ancora una volta mostreremo il caso più semplice, ovvero con \(n=1\), che risul
   \RuleLabel{\(\to I_1\)}
   \UnaryInfC{\(t=s \to (P(s) \to P(t))\)}
   \RuleLabel{\(\forall I\)}
-  \UnaryInfC{\(\forall y, t=y \to (P(s) \to P(y))\)}
+  \UnaryInfC{\(\forall y, t=y \to (P(y) \to P(t))\)}
   \RuleLabel{\(\forall I\)}
-  \UnaryInfC{\(\forall x, \forall y, x=y \to (P(x) \to P(y))\)}
+  \UnaryInfC{\(\forall x, \forall y, x=y \to (P(y) \to P(x))\)}
 \end{prooftree}
 
 \subsubsection{Regole di deduzione per \(=\) come simbolo logico}
@@ -1224,7 +1224,8 @@ Infine per \(\forall x, \forall y, (x=y) \to (P(y) \to P(x))\):
 Inoltre, le regole di sostituzione \(Sub_f\) e \(Sub_P\) possono essere generalizzate rispettivamente a termini e formule arbitrari, ottenendo così le seguenti regole:
 
 \[\infer[Sub_t]{\subs{t}{x_1,\ldots,x_n}{t_1,\ldots,t_n} = \subs{t}{x_1,\ldots,x_n}{s_1,\ldots,s_n}}{t_1 = s_1 & \ldots & t_n = s_n}\]
-\[\infer[Sub_\phi]{\subs{\phi}{x_1,\ldots,x_n}{t_1,\ldots,t_n}\to\subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots, s_n}}{t_1 = s_1 & \ldots & t_n = s_n}\]
+\[\infer[Sub_\phi, \text{ se } \substack{t_1,\ldots,t_n,s_1,\ldots,s_n \text{ sono liberi per} \\ x_1,\ldots,x_n \text{ in } \phi}]
+{\subs{\phi}{x_1,\ldots,x_n}{t_1,\ldots,t_n}\to\subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots, s_n}}{t_1 = s_1 & \ldots & t_n = s_n}\]
 
 È possibile dimostrare che queste regole equivalgono all'applicazione iterata di \(Sub_f\) e \(Sub_P\) rispettivamente, e che quindi la loro validità deriva direttamente da quella di \(Sub_f\) e \(Sub_P\). In particolare possiamo dimostrare la validità di tali regole mediante induzione strutturale.
 
@@ -1283,18 +1284,18 @@ Inoltre, le regole di sostituzione \(Sub_f\) e \(Sub_P\) possono essere generali
 
   I casi induttivi saranno uno per ogni simbolo logico. La struttura di dimostrazione resta sempre bene o male la stessa, di conseguenza ci concentreremo solo su i più interessanti.
 
-  Sia \(\phi \eqdef \neg \psi\) con \(\psi \in \FOL\). Per ipotesi induttiva, si ha che \(\Gamma \vdash \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\). A questo punto, tramite \(\to E\) assumendo \(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\) è possibile ottenere \(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\).
+  Sia \(\phi \eqdef \neg \psi\) con \(\psi \in \FOL\). Per ipotesi induttiva, si ha che \(\Gamma \vdash \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\). Ma ovviamente, sfruttando \(Refl\) è possibile anche mostrare \(\Gamma \vdash \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n} = \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\).  A questo punto, tramite \(\to E\) assumendo \(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\) è possibile ottenere \(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\).
 
 
   \begin{prooftree}
     \AxiomC{\(\Gamma\)}
     \UnaryInfC{\(\vdots\)}
     \RuleLabel{IH}
-    \UnaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+    \UnaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n} \to \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\)}
 
-    \AxiomC{\(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\)}
+    \AxiomC{\(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
     \RuleLabel{\(\to E\)}
-    \BinaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+    \BinaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\)}
   \end{prooftree}
   Ora possiamo notare, per definizione di sostituzione per formule negate che
   \[\subs{\neg \psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} = \neg \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\]
@@ -1305,11 +1306,11 @@ Inoltre, le regole di sostituzione \(Sub_f\) e \(Sub_P\) possono essere generali
     \AxiomC{\(\Gamma\)}
     \UnaryInfC{\(\vdots\)}
     \RuleLabel{IH}
-    \UnaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+    \UnaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n} \to \subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\)}
 
-    \AxiomC{\({[\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}]}_1\)}
+    \AxiomC{\({[\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}]}_1\)}
     \RuleLabel{\(\to E\)}
-    \BinaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\)}
+    \BinaryInfC{\(\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\)}
     \AxiomC{\({[\neg\subs{\psi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}]}_2\)}
     \RuleLabel{\(\neg E\)}
     \BinaryInfC{\(\bot\)}
@@ -1359,7 +1360,6 @@ Inoltre, le regole di sostituzione \(Sub_f\) e \(Sub_P\) possono essere generali
   \end{prooftree}
   Notando che
   \[\subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \eqdef \subs{\psi_1\land\psi_2}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \eqdef \subs{\psi_1}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \land \subs{\psi_2}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\]
-  \todo{Ma riguardo i quantificatori? Non bisogna stare attenti ai vincoli?}
 \end{proof}
 
 \subsection{Proprietà del calcolo di deduzione naturale per il prim'ordine}
@@ -1437,7 +1437,7 @@ A questo punto possiamo passare alla dimostrazione del teorema di correttezza ve
   \end{prooftree}
   
   Ovviamente, per applicabilità di \(\forall E\), \(t\) è libero per \(x\) in \(\psi\). Da ipotesi induttiva si ha che \(\Gamma\models\forall x,\psi\) e quindi per ogni coppia \(M,\sigma\) si ha, per ogni \(d \in D\):
-  \[M,\sigma\models \Gamma \implies M,\sigma \models \forall x, \psi \models M,\sigma[x\mapsfrom d]\models \psi\]
+  \[M,\sigma\models \Gamma \implies M,\sigma \models \forall x, \psi \implies \models M,\sigma[x\mapsfrom d]\models \psi\]
 
   Ovviamente \(\den{t}[M][\sigma] \in D\) e quindi, per \(d = \den{t}[M][\sigma]\), si ha che \(M,\sigma \models \Gamma \implies M,\sigma[x\mapsfrom \den{t}[M][\sigma]]\models \psi\). Ora, dal \Namedcref{thm:fol_substitution}, si ha che \(M,\sigma[x\mapsfrom \den{t}[M][\sigma]]\models \psi \iff M,\sigma\models \subs{\psi}{x}{t}\) se \(t\) è libero per \(x\) in \(\psi\). Essendo ciò vero per ipotesi, abbiamo che per ogni \(M,\sigma\):
   \[M,\sigma\models \Gamma \implies M,\sigma\models \subs{\psi}{x}{t}\]
