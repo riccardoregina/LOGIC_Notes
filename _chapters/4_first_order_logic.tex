@@ -395,10 +395,11 @@ Per evitare questo problema, è necessario restringere le ipotesi del teorema, r
 In altre parole diremo che \(t\) è libero per \(x\) in \(\phi\) se tutte le variabili presenti in \(t\) sono libere in \(\phi\) nei contesti in cui è libera \(x\).
 
 \begin{example}{}
-  Sia \(\phi = \exists y \, (x < y)\) e \(t_1 = y, t_2 = z\).
+  Sia \(\phi = \exists y \, (x < y)\) e \(t_1 = y, t_2 = z, t_3 = x\).
   \begin{itemize}
     \item \q{\(t_1\) è libero per \(x\) in \(\phi\)?} No, perché tra le variabili di \(t_1\) vi è \(y\), che è legata da \(\exists\) in \(\phi\).
     \item \q{\(t_2\) è libero per \(x\) in \(\phi\)?} Sì, perché la sua unica variabile è \(z\), che non è legata ad alcun quantificatore in \(\phi\).
+    \item \q{\(t_3\) è libero per \(y\) in \(\phi\)?} No, perché \(y\) non è libera in \(\phi\) e, da definizione di sostituzione, non sarebbe nemmeno possibile sostituirla.
   \end{itemize}
 
   In definitiva, chiedersi \q{\(t\) è libero per \(x\) in \(\phi\)?} è l'esatto contrario di chiedersi \q{Se sostituisco, in \(\phi\), la variabile \(x\) con il termine \(t\), sto introducendo qualche variabile che è legata nel contesto di \(x\)?}.
