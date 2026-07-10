@@ -1171,7 +1171,7 @@ Passando quindi all'utilizzo di \(=\) come simbolo logico, è chiaro per la natu
 
 È facile vedere come, applicando queste regole di deduzione dove sono stati usati gli assiomi nelle dimostrazioni precedente, è possibile dimostrare simmetria, transitività e direzione inversa della terza regola. Chiaramente, tali dimostrazioni sono decisamente più succinte non dovendo passare dall'eliminazione dei quantificatori dagli assiomi. Avremo infatti per \(x=y\vdash y = x\):
 
-\begin{prooftree}
+\begin{prooftree}\label{prtree:symmetry}
   \AxiomC{\(x=y\)}
   \AxiomC{}
   \RuleLabel{\(Refl\)}
@@ -1189,7 +1189,7 @@ Passando quindi all'utilizzo di \(=\) come simbolo logico, è chiaro per la natu
 
 Per \(x=y, y=z \vdash x=z\):
 
-\begin{prooftree}
+\begin{prooftree}\label{prtree:transitivity}
   \AxiomC{\(x=y\)}
   \RuleLabel{\(Symm\)}
   \UnaryInfC{\(y=x\)}
