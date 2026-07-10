@@ -223,7 +223,7 @@ Ora, tramite \(\RAA\), potremmo scaricare \(\neq (z=5)\) deducendo \(z=5\) e, co
 
 \begin{prooftree}
   \AxiomC{\({[z=5]}_1\)}
-  \AxiomC{\({[\neq (z=5)]}_2\)}
+  \AxiomC{\({[\neg (z=5)]}_2\)}
   \RuleLabel{\(\neg E\)}
   \BinaryInfC{\(\bot\)}
   \AxiomC{\(\exists x\st x = 5\)}
@@ -470,7 +470,7 @@ Per \(\exists E\) dobbiamo verificare che \(y\) non occorre in \(\phi\), ovvero 
   Infatti, \(y\) occorre libera in \(\psi\), ovvero in \(P(y) \lor R(y)\), e quindi non è possibile applicare \(\exists E\) stesso. Nonostante le deduzioni siano estremamente simili, e in particolare usino le stesse regole, il solo scambiare l'ordine di applicazione di due di queste ci porta a una deduzione errata.
 \end{warning}
 
-\subsubsection*{Dimostrazione di \(\vdash (\exists x, P(x) \lor \exists x, R(x))\to (\exists x, (P(x)\lor R(x)) )\)}
+\subsubsection*{Dimostrazione di \(\vdash (\exists x\st P(x) \lor \exists x\st R(x))\to (\exists x\st (P(x)\lor R(x)) )\)}
 
 Passiamo a dimostrare il verso opposto, ovvero \(\exists x\st P(x) \lor \exists x\st R(x) \vdash \exists x\st (P(x)\lor R(x))\).
 
@@ -665,7 +665,7 @@ Possiamo notare che la dimostrazione è del tutta analoga a quella appena vista 
 
 Vediamo dunque l'altro verso dell'equivalenza, ovvero \(\forall x, P(x) \vdash \neg \exists x\st \neg P(x)\).
 
-In questo caso dobbiamo dimostrare una negazione, e quindi è immediato pensare di procedere con \(\neg I\), la quale ci fornisce come assunzione scaricabile \(\exists x, \neg P(x)\), dalla quale potremmo poi, mediante \(\exists E\), scaricare anche \(\neg P(y)\).
+In questo caso dobbiamo dimostrare una negazione, e quindi è immediato pensare di procedere con \(\neg I\), la quale ci fornisce come assunzione scaricabile \(\exists x\st \neg P(x)\), dalla quale potremmo poi, mediante \(\exists E\), scaricare anche \(\neg P(y)\).
 
 \begin{prooftree}
   \AxiomC{\(\bot\)}
@@ -1231,7 +1231,7 @@ Inoltre, le regole di sostituzione \(Sub_f\) e \(Sub_P\) possono essere generali
 
 \begin{proposition}{Validità di \(Sub_t\)}
   Sia \(\Gamma = \set{r_1 = s_1, \ldots, r_n = s_n}\), con \(r_1, \ldots, r_n, s_1,\ldots s_n \in \Terms\). Dato \(t \in \Terms\) si ha che
-  \[\Gamma \vdash \subs{t}{x_1,\ldots,x_n}{s_1,\ldots,s_n} = \subs{t}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\]
+  \[\Gamma \vdash \subs{t}{x_1,\ldots,x_n}{r_1,\ldots,r_n} = \subs{t}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\]
 \end{proposition}
 
 \begin{proof}
@@ -1273,14 +1273,15 @@ Inoltre, le regole di sostituzione \(Sub_f\) e \(Sub_P\) possono essere generali
 \end{proof}
 
 \begin{proposition}{Validità di \(Sub_\phi\)}
-  Sia \(\Gamma = \set{r_1 = s_1, \ldots, r_n = s_n}\), con \(r_1, \ldots, r_n, s_1,\ldots s_n \in \Terms\). Dato \(\phi \in \FOL\) si ha che
-  \[\Gamma \vdash \subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots,s_n} \to \subs{\phi}{x_1,\ldots,x_n}{r_1,\ldots,r_n}\]
+  Sia \(\Gamma = \set{r_1 = s_1, \ldots, r_n = s_n}\), con \(r_1, \ldots, r_n, s_1,\ldots s_n \in \Terms\). Dato \(\phi \in \FOL\) si ha che, se  \(r_1,\ldots,r_n,s_1,\ldots,s_n\) sono liberi per \(x_1,\ldots,x_n\) in \(\phi\) allora
+  \[\Gamma \vdash \subs{\phi}{x_1,\ldots,x_n}{r_1,\ldots,r_n} \to \subs{\phi}{x_1,\ldots,x_n}{s_1,\ldots,s_n}\]
+
 \end{proposition}
 
 \begin{proof}
   Procediamo per induzione strutturale su \(\phi\).
 
-  Per il caso base \(\phi = P(t_1,\ldots,t_k)\) con \(P \in \PredSyms\) di \(\arty(P) = k\) e \(t_1, \ldots, t_k \in \Terms\). In questo caso, analogamente al caso induttivo di \(Sub_P\) è sufficiente usare \(Sub_P\) per ogni \(t_i\) con \(i \in \set{1,\ldots,k}\) e infine applicare \(Sub_P\).
+  Per il caso base \(\phi = P(t_1,\ldots,t_k)\) con \(P \in \PredSyms\) di \(\arty(P) = k\) e \(t_1, \ldots, t_k \in \Terms\). In questo caso, analogamente al caso induttivo di \(Sub_t\) è sufficiente usare \(Sub_t\) per ogni \(t_i\) con \(i \in \set{1,\ldots,k}\) e infine applicare \(Sub_P\).
 
   I casi induttivi saranno uno per ogni simbolo logico. La struttura di dimostrazione resta sempre bene o male la stessa, di conseguenza ci concentreremo solo su i più interessanti.
 
@@ -1450,14 +1451,14 @@ A questo punto possiamo passare alla dimostrazione del teorema di correttezza ve
     \UnaryInfC{\(\vdots\)}
     \UnaryInfC{\(\subs{\psi}{x}{t}\)}
     \RuleLabel{\(\exists I\)}
-    \UnaryInfC{\(\exists x, \psi\)}
+    \UnaryInfC{\(\exists x\st \psi\)}
   \end{prooftree}
   in cui per ipotesi di applicabilità di \(\exists I\) si ha che \(t\) è libero per \(x\) in \(\psi\).
   
   Da ipotesi induttiva si ha che \(\Gamma \models \subs{\psi}{x}{t}\), e quindi per ogni \(M,\sigma\) si ha che \(M,\sigma\models \Gamma \implies M,\sigma\models \subs{\psi}{x}{t}\). Ora, dal \Namedcref{thm:fol_substitution}, si ha che \(M,\sigma\models \subs{\psi}{x}{t} \iff M,\sigma[x\mapsfrom \den{t}[M][\sigma]]\models \psi\) se \(t\) è libero per \(x\) in \(\psi\). Essendo ciò vero per ipotesi, abbiamo che per ogni \(M,\sigma\):
   \[M,\sigma\models \Gamma \implies M,\sigma[x\mapsfrom \den{t}[M][\sigma]]\models \psi\]
   
-  Essendo chiaramente \(\den{t}[M][\sigma] \in D\), si ha che per ogni \(M,\sigma\) esiste \(d \in D\) tale che \(M,\sigma\models \Gamma \implies M,\sigma[x\mapsfrom d]\models \psi\). Di conseguenza, per definizione di soddisfacibilità di formule esistenziali, si ha che \(M,\sigma\models \Gamma \implies M,\sigma\models \exists x, \psi\), e quindi \(\Gamma \models \exists x, \psi\).
+  Essendo chiaramente \(\den{t}[M][\sigma] \in D\), si ha che per ogni \(M,\sigma\) esiste \(d \in D\) tale che \(M,\sigma\models \Gamma \implies M,\sigma[x\mapsfrom d]\models \psi\). Di conseguenza, per definizione di soddisfacibilità di formule esistenziali, si ha che \(M,\sigma\models \Gamma \implies M,\sigma\models \exists x\st \psi\), e quindi \(\Gamma \models \exists x\st \psi\).
 
   Passiamo dunque alle regole più complesse, ovvero \(\forall I\) e \(\exists E\). Iniziamo con \(\Rule = \forall I\). In tal caso, l'albero di deduzione avrà la forma:
   \begin{prooftree}
@@ -1483,16 +1484,16 @@ A questo punto possiamo passare alla dimostrazione del teorema di correttezza ve
     \UnaryInfC{\(\phi\)}
     \AxiomC{\(\Gamma\)}
     \UnaryInfC{\(\vdots\)}
-    \UnaryInfC{\(\exists x, \psi\)}
+    \UnaryInfC{\(\exists x\st \psi\)}
     \RuleLabel{\(\exists E_1\)}
     \BinaryInfC{\(\phi\)}
   \end{prooftree}
   in cui per ipotesi di applicabilità di \(\exists E\) si ha che \(y\) non compare in \(\psi\) e che non compare libero né in \(\phi\) né in nessuna delle assunzioni non scaricate, ovvero non compare libero in nessuna formula di \(\Gamma\).
 
-  Per ipotesi induttiva abbiamo che \(\Gamma, \subs{\psi}{x}{y} \models \phi\) e che \(\Gamma \models \exists x, \psi\). Chiaramente, per definizione di conseguenza logica, si ha che per entrambe le ipotesi induttive si ha che, per ogni \(M,\sigma\), se \(M,\sigma\) soddisfano le premesse allora soddisfano le rispettive conclusioni.
+  Per ipotesi induttiva abbiamo che \(\Gamma, \subs{\psi}{x}{y} \models \phi\) e che \(\Gamma \models \exists x\st \psi\). Chiaramente, per definizione di conseguenza logica, si ha che per entrambe le ipotesi induttive si ha che, per ogni \(M,\sigma\), se \(M,\sigma\) soddisfano le premesse allora soddisfano le rispettive conclusioni.
 
   In particolare, per ogni \(M,\sigma\), si ha
-  \[M,\sigma \models \Gamma \implies M,\sigma\models \exists x, \psi\]
+  \[M,\sigma \models \Gamma \implies M,\sigma\models \exists x\st \psi\]
   e
   \[M,\sigma\models\Gamma \cup \set{\subs{\psi}{x}{y}} \implies M,\sigma\models \phi \]
 
@@ -1521,25 +1522,25 @@ Per la logica proposizionale abbiamo dimostrato questo teorema passando alla con
 
 Per la logica del prim'ordine però il concetto di modello è più complesso, poiché a differenza della logica del prim'ordine in cui un modello non è altro che un insieme di proposizioni atomiche assunti come vere, ma bensì una struttura con un dominio e una funzione di interpretazione. Di conseguenza, la costruzione del modello dall'insieme massimale di formule non è più così immediata, essendo due oggetti fondamentalmente diversi. Per ovviare a questo problema, essendo che dalla prospettiva della logica gli oggetti in cui i simboli sono interpretati sono irrilevanti, è possibile pensare di costruire un modello partendo da un insieme di formule banalizzando al massimo la funzione di interpretazione, ovvero facendo si che il dominio del modello contenga un oggetto per ogni termine ground e interpretando ognuno di questi termini in tale oggetto.
 
-Questa costruzione è però non banale, e non può essere applicata in automatico a qualsiasi linguaggio poiché potrebbe accadere che la signature che stiamo utilizzando non contenga sufficienti simboli per popolare il dominio del modello, costringendoci a usare lo stesso oggetto per interpretare più termini, con il rischio di non riuscire a soddisfare tutte le formule del sovrainsieme massimale. Consideriamo ad esempio il linguaggio \(L=\langle \set{c}, \emptyset, \set{P}\rangle\) e la teoria \(\Gamma = \set{\neg P(c), \exists x, P(x)}\). Chiaramente esiste un modello di \(\Gamma\), ad esempio \(M = \langle \set{d,d'}, I\rangle\) con \(I(c) = d\) e \(I(P) = \set{d'}\). Tuttavia, essendo che tutti il linguaggio contiene un solo simbolo per formare termini sarà possibile costruire da esso solo domini con un solo elemento, che non potranno mai essere sufficienti a soddisfare \(\Gamma\).
+Questa costruzione è però non banale, e non può essere applicata in automatico a qualsiasi linguaggio poiché potrebbe accadere che la signature che stiamo utilizzando non contenga sufficienti simboli per popolare il dominio del modello, costringendoci a usare lo stesso oggetto per interpretare più termini, con il rischio di non riuscire a soddisfare tutte le formule del sovrainsieme massimale. Consideriamo ad esempio il linguaggio \(L=\langle \set{c}, \emptyset, \set{P}\rangle\) e la teoria \(\Gamma = \set{\neg P(c), \exists x\st P(x)}\). Chiaramente esiste un modello di \(\Gamma\), ad esempio \(M = \langle \set{d,d'}, \Interp\rangle\) con \(\Interp(c) = d\) e \(\Interp(P) = \set{d'}\). Tuttavia, essendo che tutti il linguaggio contiene un solo simbolo per formare termini sarà possibile costruire da esso solo domini con un solo elemento, che non potranno mai essere sufficienti a soddisfare \(\Gamma\).
 
 Intuitivamente, il problema deriva dalle formule esistenziali, o equivalentemente dalla negazione di universali, poiché queste richiedono un testimone nel dominio per essere soddisfatte senza usare termini per riferirsi a tali testimoni.
-Dobbiamo quindi avere modo di arricchire il linguaggio in modo da poter rappresentare i testimoni necessari a soddisfare le formule esistenziali. Quello che faremo è quindi aggiungere costanti al linguaggio che fungeranno da testimoni, aggiungendo alla teoria degli assiomi che leghino le formule esistenziali precedenti a tali costanti, in modo da poter costruire un modello con un dominio sufficientemente popolato da soddisfare tutte le formule del sovrainsieme massimale. Nell'esempio precedente, aggiungendo una costante \(c'\) al linguaggio e l'assioma \(\exists x, P(x) \to P(c')\) è possibile costruire un modello con un dominio con due elementi, che soddisfa \(\Gamma\).
+Dobbiamo quindi avere modo di arricchire il linguaggio in modo da poter rappresentare i testimoni necessari a soddisfare le formule esistenziali. Quello che faremo è quindi aggiungere costanti al linguaggio che fungeranno da testimoni, aggiungendo alla teoria degli assiomi che leghino le formule esistenziali precedenti a tali costanti, in modo da poter costruire un modello con un dominio sufficientemente popolato da soddisfare tutte le formule del sovrainsieme massimale. Nell'esempio precedente, aggiungendo una costante \(c'\) al linguaggio e l'assioma \(\exists x\st P(x) \to P(c')\) è possibile costruire un modello con un dominio con due elementi, che soddisfa \(\Gamma\).
 
-Iniziando con la formalizzazione di questa idea, dato \(\Gamma \subseteq \FOL\) su un linguaggio \(L\) consistente, dovremo costruire un modello \(M\) di \(\Gamma\). Come da definizione di modello, \(M\) sarà una struttura \(M = \langle D, I\rangle\) con \(D = \set{t \in \Terms(L')}[\Var(t) = \emptyset]\), con \(L\subseteq L'\) estensione del linguaggio \(L\) ottenuta aggiungendo nomi aggiuntivi per evitare i conflitti. Tale \(L'\) è costruito mediante un'espansione di \(L\) e di \(\Gamma\) in due sequenze \(\set{L_n}_{n\in\N}\) e \(\set{\Gamma_n}_{n\in\N}\) con \(L_0 = L\) e \(\Gamma_0 = \Gamma\), in cui a ogni passo \(n\) si aggiungono a \(L_{n-1}\) un numero infinito numerabili di nomi di costanti \(c^n_{i}\) con \(i \in \N\), e si aggiungono alla teoria i cosiddetti assiomi di Henkin, ovvero le formule \(\exists x, \phi(x) \to \subs{\phi}{x}{c^n_{i}}\) per le formule esistenziali \(\exists x, \phi(x)\) etichettata da un enumerazione come \(i\)-esima in \(\Gamma_{n-1}\).
+Iniziando con la formalizzazione di questa idea, dato \(\Gamma \subseteq \FOL\) su un linguaggio \(L\) consistente, dovremo costruire un modello \(M\) di \(\Gamma\). Come da definizione di modello, \(M\) sarà una struttura \(M = \langle D, \Interp\rangle\) con \(D = \set{t \in \Terms(L')}[\Var(t) = \emptyset]\), con \(L\subseteq L'\) estensione del linguaggio \(L\) ottenuta aggiungendo nomi aggiuntivi per evitare i conflitti. Tale \(L'\) è costruito mediante un'espansione di \(L\) e di \(\Gamma\) in due sequenze \(\set{L_n}_{n\in\N}\) e \(\set{\Gamma_n}_{n\in\N}\) con \(L_0 = L\) e \(\Gamma_0 = \Gamma\), in cui a ogni passo \(n\) si aggiungono a \(L_{n-1}\) un numero infinito numerabili di nomi di costanti \(c^n_{i}\) con \(i \in \N\), e si aggiungono alla teoria i cosiddetti assiomi di Henkin, ovvero le formule \(\exists x\st \phi(x) \to \subs{\phi}{x}{c^n_{i}}\) per le formule esistenziali \(\exists x\st \phi(x)\) etichettata da un enumerazione come \(i\)-esima in \(\Gamma_{n-1}\).
 
 \begin{definition}{Insieme di Henkin}
-  \(\Theta \subseteq \FOL\) su linguaggio \(L\) è un insieme di Henkin se, per ogni formula \(\theta\) costruibile in \(L\) della forma \(\theta = \exists x, \phi(x)\) esiste un termine ground \(t \in L\) tale che \(\exists x, \phi(x) \to \subs{\phi}{x}{t} \in \Theta\).
+  \(\Theta \subseteq \FOL\) su linguaggio \(L\) è un insieme di Henkin se, per ogni formula \(\theta\) costruibile in \(L\) della forma \(\theta = \exists x\st \phi(x)\) esiste un termine ground \(t \in L\) tale che \(\exists x\st \phi(x) \to \subs{\phi}{x}{t} \in \Theta\).
 \end{definition}
 
-Intuitivamente questi insiemi, detti di Henkin dal nome del logico Leon Henkin che per primo li ha introdotti, sono insiemi che contengono un testimone per ogni formula esistenziale. È importante notare che gli assiomi di Henkin, ovvero le formule della forma \(\exists x, \phi(x) \to \subs{\phi}{x}{t}\), devono essere presenti in \(\Theta\) per ogni formula esistenziale \(\exists x, \phi(x)\) costruibile in \(L\), anche se non presente effettivamente in \(\Theta\). Ciò sarà fondamentale nella seconda fase della costruzione poiché, quando andremo a espandere la teoria alla sua chiusura consistente, potranno essere introdotte formule esistenziali costruibili in \(L\) ma completamente \q{ortogonali} a quelle nella teoria originale che, parlando di tutt'altro, saranno chiaramente consistenti ma necessiteranno di testimoni ad hoc. Richiedendo testimoni e assiomi di Henkin solo per le formule presenti originariamente nella teoria si rischia di incorrere nuovamente nel problema citato precedentemente. Se consideriamo ad esempio il linguaggio \(L\) di prima a cui aggiungiamo un nuovo predicato unario \(Q\), ottenendo \(L' = \langle \set{c}, \emptyset, \set{P,Q}\rangle\), e la teoria \(\Gamma' = \set{\neg P(x), \exists x, P(x), \neg Q(x) \land P(x), \neg Q(x) \land \neg P(x)}\) si ha chiaramente che la formula \(\exists x, Q(x)\) è costruibile in \(L'\), non presente in \(\Gamma'\) e consistente con \(\Gamma'\).\footnote{Ancora una volta basta che ci siano nel dominio due elementi distinti, uno per cui vale \(Q\) e uno no.} Se andassimo ad aggiungere costanti e assiomi solo per gli esistenziali presenti in \(\Gamma'\) andremmo ad aggiungere un solo simbolo di costante, ottenendo così come dominio \(D=\set{c,c'}\) il quale è sufficiente a soddisfare \(\Gamma'\), ma non è sufficiente a soddisfare \(\Gamma' \cup \set{\exists x, Q(x)}\), che essendo consistente con \(\Gamma'\) sarà aggiunta alla chiusura consistente di \(\Gamma'\).
+Intuitivamente questi insiemi, detti di Henkin dal nome del logico Leon Henkin che per primo li ha introdotti, sono insiemi che contengono un testimone per ogni formula esistenziale. È importante notare che gli assiomi di Henkin, ovvero le formule della forma \(\exists x\st \phi(x) \to \subs{\phi}{x}{t}\), devono essere presenti in \(\Theta\) per ogni formula esistenziale \(\exists x\st \phi(x)\) costruibile in \(L\), anche se non presente effettivamente in \(\Theta\). Ciò sarà fondamentale nella seconda fase della costruzione poiché, quando andremo a espandere la teoria alla sua chiusura consistente, potranno essere introdotte formule esistenziali costruibili in \(L\) ma completamente \q{ortogonali} a quelle nella teoria originale che, parlando di tutt'altro, saranno chiaramente consistenti ma necessiteranno di testimoni ad hoc. Richiedendo testimoni e assiomi di Henkin solo per le formule presenti originariamente nella teoria si rischia di incorrere nuovamente nel problema citato precedentemente. Se consideriamo ad esempio il linguaggio \(L\) di prima a cui aggiungiamo un nuovo predicato unario \(Q\), ottenendo \(L' = \langle \set{c}, \emptyset, \set{P,Q}\rangle\) e la teoria \(\Gamma' = \set{\neg P(x), \exists x\st P(x), \neg Q(x) \land P(x), \neg Q(x) \land \neg P(x)}\), si ha chiaramente che la formula \(\exists x\st Q(x)\) è costruibile in \(L'\), non presente in \(\Gamma'\) e consistente con \(\Gamma'\).\footnote{Ancora una volta basta che ci siano nel dominio due elementi distinti, uno per cui vale \(Q\) e uno no.} Se andassimo ad aggiungere costanti e assiomi solo per gli esistenziali presenti in \(\Gamma'\) andremmo ad aggiungere un solo simbolo di costante, ottenendo così come dominio \(D=\set{c,c'}\) il quale è sufficiente a soddisfare \(\Gamma'\), ma non è sufficiente a soddisfare \(\Gamma' \cup \set{\exists x\st Q(x)}\), che essendo consistente con \(\Gamma'\) sarà aggiunta alla chiusura consistente di \(\Gamma'\).
 
 Capiamo quindi come costruire correttamente un insieme di Henkin a partire da un qualsiasi insieme consistente \(\Gamma\subseteq\FOL\) su un linguaggio \(L\).
 
 \begin{definition}{Espansione di Henkin}
   Sia \(\Gamma \subseteq \FOL\) su un linguaggio \(L\). Un'espansione di Henkin di \(\Gamma\) è una coppia di sequenze \(\set{L_n}_{n\in\N}\) e \(\set{\Gamma_n}_{n\in\N}\) con \(L_0 = L\) e \(\Gamma_0 = \Gamma\) e tali che per ogni \(n\in\N\) si ha che:
   \[L_{n+1} = L_n \cup \set{c^{n+1}_{j}}[j \in \N \text{ e } c^{n+1}_{j} \notin L_n]\]
-  \[\Gamma_{n+1} = \Gamma_n \cup \set{\exists x, \phi_j(x) \to \subs{\phi_j}{x}{c^{n+1}_{j}}}[j \in \N \text{ e } \exists x, \phi_j(x) \text{ formula chiusa di } L_n]\]
+  \[\Gamma_{n+1} = \Gamma_n \cup \set{\exists x\st \phi_j(x) \to \subs{\phi_j}{x}{c^{n+1}_{j}}}[j \in \N \text{ e } \exists x\st \phi_j(x) \text{ formula chiusa di } L_n]\]
 
   Dove \(\phi_j\) è la \(j\)-esima formula con \(FV(\phi_j) = \set{x}\) appartenente a un'enumerazione di tutte le formule di \(L_n\).
 
@@ -1570,8 +1571,8 @@ Il procedimento di espansione ricorda in qualche modo quello visto per la logica
 
 Questa procedura garantisce anche che se \(\Gamma\) è consistente, allora anche \(\Gamma'\) è consistente. L'intuizione è che ogni formula aggiunta non interferisce ne con altre formule aggiunte ne con quelle già presenti, poiché ogni formula aggiunta aggiunge informazione solo su un termine completamente nuovo ed esclusivo, e che quindi non può introdurre conflitti. Le uniche possibili fonti di inconsistenza potrebbero dunque essere solo formule universali che in qualche modo entrano in conflitto sullo specifico nuovo testimone aggiunto ma, in tal caso, essendo che le formule aggiunte sono condizionali, l'unico modo per cui tali formule universali possano mai creare conflitto è la presenza a priori dell'antecedente esistenziale di un assioma, implicando la presenza di un conflitto già presente in \(\Gamma\), ovvero la sua inconsistenza.
 
-Se infatti ad esempio \(\Gamma\) contiene la formula \(\forall x, \neg P(x)\) e aggiungiamo l'assioma di Henkin \(\exists x, P(x) \to P(c_j^1)\) queste due formule non portano di per sé a nessuna inconsistenza poiché l'assioma può ancora essere soddisfatto per \(\exists x, P(x)\) e \(P(c_j^1)\) false. L'unico modo per cui queste due formule possono creare un conflitto è se \(\Gamma\) contiene la formula \(\exists x, P(x)\), che porta necessariamente \(P(c_j^1)\) a essere vera, ottenendo una contraddizione con \(\forall x, \neg P(x)\).
-La formula \(\exists x, P(x)\) però non rispetta la forma di un assioma di Henkin, e quindi se è presente in \(\Gamma\) è presente già prima dell'espansione, e quindi è presente già in \(\Gamma_0\). Dunque, se \(\Gamma\) è consistente, non può contenere sia \(\exists x, P(x)\) che \(\forall x, \neg P(x)\).
+Se infatti ad esempio \(\Gamma\) contiene la formula \(\forall x, \neg P(x)\) e aggiungiamo l'assioma di Henkin \(\exists x\st P(x) \to P(c_j^1)\) queste due formule non portano di per sé a nessuna inconsistenza poiché l'assioma può ancora essere soddisfatto per \(\exists x\st P(x)\) e \(P(c_j^1)\) false. L'unico modo per cui queste due formule possono creare un conflitto è se \(\Gamma\) contiene la formula \(\exists x\st P(x)\), che porta necessariamente \(P(c_j^1)\) a essere vera, ottenendo una contraddizione con \(\forall x, \neg P(x)\).
+La formula \(\exists x\st P(x)\) però non rispetta la forma di un assioma di Henkin, e quindi se è presente in \(\Gamma\) è presente già prima dell'espansione, e quindi è presente già in \(\Gamma_0\). Dunque, se \(\Gamma\) è consistente, non può contenere sia \(\exists x\st P(x)\) che \(\forall x, \neg P(x)\).
 
 Per una dimostrazione più formale di ciò si può procedere ragionando sul fatto che l'inconsistenza, essendo deduzione di \(\bot\) è una proprietà finita poiché finito è l'albero di deduzione, di conseguenza l'inconsistenza dev'essere stata introdotta per la prima volta in un certo passaggio della costruzione. A quel punto è sufficiente verificare per induzione che ogni passaggio se parte da un insieme consistente produce un insieme ancora consistente ottenendo l'assurdo che prova la consistenza del limite dell'espansione di Henkin. Non vederemo formalmente questa dimostrazione poiché è molto simile alla dimostrazione di consistenza dell'espansione di Lindenbaum che abbiamo già visto per la logica proposizionale e rivedremo ora per la costruzione dell'sovrainsieme massimalmente consistente.
 
@@ -1599,18 +1600,18 @@ Il primo verso è ovvio, poiché se \(\phi \in \Gamma^*\) allora è possibile de
 
 Una proprietà più interessante è invece \(\Gamma \vdash \phi \implies \phi \in \Gamma^*\), ovvero tutto ciò che era deducibile originariamente da \(\Gamma\) è ora presente nel sovrainsieme massimale. Ovviamente non vale il viceversa. Per dimostrare questa proprietà supponiamo che \(\Gamma \vdash \phi\) ma \(\phi \notin \Gamma^*\). Dunque, per massimalità di \(\Gamma^*\) si ha che \(\neg \phi \in \Gamma^*\). Essendo \(\Gamma\subset\Gamma^*\) per costruzione, si ha che \(\Gamma^* \vdash \phi\). Dunque, da \(\Gamma^* \vdash \phi\) e da \(\Gamma^* \vdash \neg \phi\) è possibile dedurre \(\bot\) da \(\Gamma^*\), assurdo per consistenza di \(\Gamma^*\).
 
-A questo punto ci manca solo costruire finalmente questo \(M^* = \langle D, I\rangle\) la cui teoria \(\Th{M^*} = \set{\phi \in \FOL}[M^* \models \phi] = \Gamma^*\).
+A questo punto ci manca solo costruire finalmente questo \(M^* = \langle D, \Interp\rangle\) la cui teoria \(\Th{M^*} = \set{\phi \in \FOL}[M^* \models \phi] = \Gamma^*\).
 
 Il dominio \(D\) come anticipato sarà
 \[D = \set{t\in \Terms(L')}[\Var(t) = \emptyset]\]
 ovvero l'insieme dei termini ground di \(L'\).
 
-Per quanto riguarda la funzione di interpretazione \(I\) questa sarà definita come segue:
+Per quanto riguarda la funzione di interpretazione \(\Interp\) questa sarà definita come segue:
 
 \begin{itemize}
-  \item Per ogni costante \(c\in \ConstSyms(L')\), \(I(c) = c^{M^*} = c\)
-  \item Per ogni simbolo di funzione \(f\in \FuncSyms(L') = \FuncSyms(L)\) con \(\arty(f) = n\), \(I(f) = f^{M^*} \in D^{D^n}\) tale che \(f^{M^*}(t_1^{M^*}, \ldots, t_n^{M^*}) = f(t_1, \ldots, t_n)\) per ogni \(t_1^{M^*}, \ldots, t_n^{M^*} \in D\). Dunque per qualsiasi termine ground \(I\) coincide con l'identità.
-  \item Per ogni simbolo di predicato \(P\in \PredSyms(L') = \PredSyms(L)\) con \(\arty(P) = n\), \(I(P) = P^{M^*} =\set{(t_1, \ldots, t_n) \in D^n}[P(t_1, \ldots, t_n) \in \Gamma^*]\).
+  \item Per ogni costante \(c\in \ConstSyms(L')\), \(\Interp(c) = c^{M^*} = c\)
+  \item Per ogni simbolo di funzione \(f\in \FuncSyms(L') = \FuncSyms(L)\) con \(\arty(f) = n\), \(\Interp(f) = f^{M^*} \in D^{D^n}\) tale che \(f^{M^*}(t_1^{M^*}, \ldots, t_n^{M^*}) = f(t_1, \ldots, t_n)\) per ogni \(t_1^{M^*}, \ldots, t_n^{M^*} \in D\). Dunque per qualsiasi termine ground \(t\) si ha che \(\Interp(t) = t\).
+  \item Per ogni simbolo di predicato \(P\in \PredSyms(L') = \PredSyms(L)\) con \(\arty(P) = n\), \(\Interp(P) = P^{M^*} =\set{(t_1, \ldots, t_n) \in D^n}[P(t_1, \ldots, t_n) \in \Gamma^*]\).
 \end{itemize}
 
 L'interpretazione dei termini è analoga al passaggio fatto nella logica proposizionale, in cui definivamo \(M = \AP\cap\Gamma'\). Anche in questo caso prendiamo tutte le formule atomiche che sono vere in \(\Gamma^*\) e le aggiungiamo al modello.
@@ -1675,7 +1676,7 @@ Ora dobbiamo mostrare solo che \(M^*\) è un modello di \(\Gamma^*\), il che imp
 
   A questo punto avendo sostituito tutte le occorrenze dell'unica potenziale variabile libera \(x\) con un termine ground \(d\), si ha che \(\subs{\psi}{x}{d}\) è una formula chiusa di \(L'\). Dunque per ipotesi induttiva \(M^* \models \subs{\psi}{x}{d} \iff \subs{\psi}{x}{d} \in \Gamma^*\) per ogni \(d\in D\).
 
-  Ora ipotizziamo per assurdo che \(\forall x, \psi \notin \Gamma^*\). Dunque per massimalità di \(\Gamma^*\) si ha che \(\neg \forall x, \psi \in \Gamma^*\). Si ha però che \(\neg \forall x, \psi\vdash \exists x, \neg \psi\), e dunque anche \(\exists x, \neg \psi \in \Gamma^*\) poiché \(\Gamma^*\) è chiuso per deduzione. Essendo che \(\Gamma^*\) è un'espansione di Henkin, esiste un termine ground \(c\) di \(L'\) tale che \(\exists x, \neg \psi \to \neg \subs{\psi}{x}{c} \in \Gamma^*\). Dunque per modus ponens si ha che \(\neg \subs{\psi}{x}{c} \in \Gamma^*\). Ma allora posso dedurre \(\bot\) da \(\Gamma^*\) tramite \(\neg E\) usando \(\subs{\psi}{x}{c}\) e \(\neg \subs{\psi}{x}{c}\), che è assurdo perché per ipotesi \(\Gamma^*\) è consistente. Dunque \(\forall x, \psi \in \Gamma^*\).
+  Ora ipotizziamo per assurdo che \(\forall x, \psi \notin \Gamma^*\). Dunque per massimalità di \(\Gamma^*\) si ha che \(\neg \forall x, \psi \in \Gamma^*\). Si ha però che \(\neg \forall x, \psi\vdash \exists x\st \neg \psi\), e dunque anche \(\exists x\st \neg \psi \in \Gamma^*\) poiché \(\Gamma^*\) è chiuso per deduzione. Essendo che \(\Gamma^*\) è un'espansione di Henkin, esiste un termine ground \(c\) di \(L'\) tale che \(\exists x\st \neg \psi \to \neg \subs{\psi}{x}{c} \in \Gamma^*\). Dunque per modus ponens si ha che \(\neg \subs{\psi}{x}{c} \in \Gamma^*\). Ma allora posso dedurre \(\bot\) da \(\Gamma^*\) tramite \(\neg E\) usando \(\subs{\psi}{x}{c}\) e \(\neg \subs{\psi}{x}{c}\), che è assurdo perché per ipotesi \(\Gamma^*\) è consistente. Dunque \(\forall x, \psi \in \Gamma^*\).
 
   L'altro verso è molto simile. Dobbiamo dimostrare \(\forall x, \psi \in \Gamma^*\implies M^* \models \forall x, \psi\).
   Essendo che \(\Gamma^*\) è chiuso rispetto alla deduzione, si ha che \(\Gamma \models \subs{\phi}{x}{t}\) per ogni \(t\) ground di \(L'\) mediante \(\forall E\) e quindi \(\subs{\psi}{x}{t} \in \Gamma^*\) per ogni \(t\) ground di \(L'\). Dunque per ipotesi induttiva \(M^* \models \subs{\psi}{x}{t}\) per ogni \(t\) ground di \(L'\). Essendo che tutti i termini ground di \(L'\) sono elementi del dominio \(D\) di \(M^*\), si ha \(M^* \models \subs{\psi}{x}{t}\) per ogni \(t\in D\). Allora se per assurdo \(M^* \not\models \forall x, \psi\) si ha che:

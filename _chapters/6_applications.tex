@@ -1,7 +1,5 @@
 \chapter{Applicazioni ed Espressività della logica}
 
-\todo{Questo capitolo è da intendere dopo la logica del primo ordine, quindi si faranno riferimenti anche a essa.}
-
 Infine, andiamo ad analizzare come i linguaggi logici e i sistemi di deduzione possano essere applicati nell'informatica nella risoluzione di problemi. Una logica col suo calcolo di deduzione infatti fornisce un sistema formale di rappresentazione dei problemi oltre che una sistema di inferenza per risolverli. 
 In tal senso, non si è molto distanti da un modello di calcolo computazionale.
 Infatti, esistono linguaggi di programmazione logica, come Prolog, che si basano su questi principi per esprimere programmi e risolvere problemi.
@@ -41,9 +39,9 @@ Tale formula ci dice che ogni elemento di \(S\) deve stare in \(E\). Inoltre, pe
 \[\phi_{\neq \emptyset} \eqdef \bigvee_{u,v\in V} Y_{u,v} \]
 
 Ci manca solo da definire i vincoli che legano \(S\) al fatto che contenga un ciclo. Seppur in modo non estremamente intuitivo, la formula che ci permette di esprimere questo vincolo è la seguente:
-\[\phi_{cyc} \eqdef \bigwedge_{u,v} (Y_{u,v}\to \bigvee_{z \in V} Y_{v,z})\]
+\[\phi_{cyc} \eqdef \bigwedge_{u,v} (Y_{u,v \in V}\to \bigvee_{z \in V} Y_{v,z})\]
 
-Riflettendoci, essendo che \(\phi_{\not \emptyset}\) ci dice che esiste almeno un \(Y_{u,v}\) vero, \(\phi_{cycle}\) porta ad avere una catena di \(Y_{u,v}\) veri, che può chiudersi solo se esiste un ciclo. Infatti, l'unico modo per far si che la catena di \(Y_{u,v}\) veri non si chiuda è poter scegliere ogni volta un \(Y_{v,z}\) diverso da soddisfare, ma essendo che \(V\) è finito, prima o poi si sarà costretti a chiudere la catena, e dunque ad avere un ciclo. Equivalentemente, il percorso indotto dalle variabili di output vere per non contenere un ciclo dovrebbe essere infinito, ma essendo che \(V\) è finito, questo non è possibile. Viceversa, se esiste un ciclo, allora esiste un assegnamento che soddisfa \(\phi_{cycle}\) e \(\phi_{\not \emptyset}\) che è quello che rende vere le variabili \(Y_{u,v}\) corrispondenti agli archi del ciclo.
+Riflettendoci, essendo che \(\phi_{\neq \emptyset}\) ci dice che esiste almeno un \(Y_{u,v}\) vero, \(\phi_{cycle}\) porta ad avere una catena di \(Y_{u,v}\) veri, che può chiudersi solo se esiste un ciclo. Infatti, l'unico modo per far si che la catena di \(Y_{u,v}\) veri non si chiuda è poter scegliere ogni volta un \(Y_{v,z}\) diverso da soddisfare, ma essendo che \(V\) è finito, prima o poi si sarà costretti a chiudere la catena, e dunque ad avere un ciclo. Equivalentemente, il percorso indotto dalle variabili di output vere per non contenere un ciclo dovrebbe essere infinito, ma essendo che \(V\) è finito, questo non è possibile. Viceversa, se esiste un ciclo, allora esiste un assegnamento che soddisfa \(\phi_{cycle}\) e \(\phi_{\not \emptyset}\) che è quello che rende vere le variabili \(Y_{u,v}\) corrispondenti agli archi del ciclo.
 
 Dunque, concludendo, la formula che rappresenta l'istanza di \(\Sat\) a cui ridurre il problema della ciclicità è la seguente:
 \[\phi \eqdef \phi_E \land \phi_S \land \phi_{\neq \emptyset} \land \phi_{cyc}\]
@@ -66,20 +64,22 @@ In particolare, possiamo avere \(Y_v^c\) con \(v\in V\) e \(c\in C\), in cui ogn
 Ci rimane da imporre i vincoli per rendere tale relazione una funzione, ovvero la funzionalità e la totalità, e il vincolo che impone che vertici adiacenti non abbiano lo stesso colore.
 
 Per la funzionalità e la totalità, ovvero che un vertice sia colorato con uno e un solo colore, possiamo imporre il seguente vincolo:
-\[\phi_{f} \eqdef \bigwedge_{v\in V}(\bigvee_{c\in C} Y_v^c \land \bigvee_{c'\in C\setminus\set{c}} \neg Y_v^{c'})\]
+\[\phi_{f} \eqdef \bigwedge_{v\in V}\left(\bigvee_{c\in C} \left(Y_v^c \land \bigwedge_{c'\in C\setminus\set{c}} \neg Y_v^{c'}\right)\right)\]
 
 Tale vincolo infatti impone che per ogni vertice \(v\) esista almeno un colore \(c\) tale che \(Y_v^c\) sia vero, e che per ogni colore \(c'\) diverso da \(c\), \(Y_v^{c'}\) sia falso. Dunque, ogni vertice è colorato con uno e un solo colore.
 
 Per il vincolo che impone che vertici adiacenti non abbiano lo stesso colore, possiamo imporre il seguente vincolo:
 \[\phi_{adj} \eqdef \bigwedge_{(u,v)\in E} \bigwedge_{c\in C} \neg (Y_u^c \land Y_v^c)\]
 
-Possiamo osservare che \(\abs{\phi_{f}} = \BigO(\abs{V}k^2)\) e \(\abs{\phi_{adj}} = \BigO(\abs{V}^2k)\), dunque la formula risultante dalla congiunzione di queste due formule sia \(\BigO(\abs{V}^3)\). Questa codifica del problema è però problematica se l'input dei colori è rappresentato usando solo \(k\) e non l'intero insieme \(C\), poiché per rappresentare \(C\) è necessario rappresentare ogni elemento di \(C\), il che richiede spazio lineare in \(k\), mentre per rappresentare \(k\) è sufficiente rappresentare il numero \(k\) in notazione posizionale, che richiede spazio logaritmico in \(k\). In tale scenario, una lunghezza lineare in \(k\) è esponenzialmente più grande di quella dell'input e dunque la codifica non è efficiente. 
+Possiamo osservare che \(\abs{\phi_{f}} = \BigO{\abs{V}k^2}\) e \(\abs{\phi_{adj}} = \BigO{\abs{V}^2k}\), dunque la formula risultante dalla congiunzione di queste due formule sarà \(\BigO{\abs{V}^3}\) essendo \(k\leq \abs{V}\). Questa codifica del problema è però problematica se l'input dei colori è rappresentato usando solo \(k\) e non l'intero insieme \(C\), poiché per rappresentare \(C\) è necessario rappresentare ogni elemento di \(C\), il che richiede spazio lineare in \(k\), mentre per rappresentare \(k\) è sufficiente rappresentare il numero \(k\) in notazione posizionale, che richiede spazio logaritmico in \(k\). In tale scenario, una lunghezza lineare in \(k\) è esponenzialmente più grande di quella dell'input e dunque la codifica non è efficiente. 
 
-Esiste fortunatamente modo di ovviare a tale problema sfruttando proprio la rappresentazione in notazione posizionale di \(k\). In particolare, essendo che \(k\) si può rappresentare con \(\lceil \log_2(k) \rceil\) bit, è possibile rappresentare ogni colore \(c\) con una stringa di \(\lceil \log_2(k) \rceil\) bit, e dunque utilizzando \(\lceil \log_2(k) \rceil\) variabili. Dunque, invece di avere \(Y_v^c\) con \(v\in V\) e \(c\in C\), possiamo avere \(Y_v^i\) con \(v\in V\) e \(i=1,\dots,\lceil \log_2(k) \rceil\), in cui ogni assegnamento di tali variabili va interpretato come una colorazione del vertice \(v\) del colore rappresentato dalla stringa di bit formata da tali variabili. Dunque \(\AP' = \set{Y_v^i}[i=1,\dots,\lceil \log_2(k) \rceil \land v \in V]\) e quindi \(\abs{\AP'} = \BigO(\abs{V}\log k)\). È interessante notare che questa nuova rappresentazione non necessità di esprimere il vincolo di funzionalità e totalità, poiché per ogni vertice esiste un solo insieme di variabili \(Y_v^i\) con \(i=1,\dots,\lceil \log_2(k) \rceil\) che può essere vero, e dunque ogni vertice è colorato con uno e un solo colore. Dunque, l'unico vincolo da esprimere è quello che impone che vertici adiacenti non abbiano lo stesso colore, che è il seguente:
-\[\phi_2' = \land_{(u,v)\in E}\left( \bigvee_{i=0}^{\log_2(k)-1} (X_i^u \land \neg X_i^v) \lor (\neg X_i^u \land X_i^v)\right)\] 
+Esiste fortunatamente modo di ovviare a tale problema sfruttando proprio la rappresentazione in notazione posizionale di \(k\). In particolare, essendo che \(k\) si può rappresentare con \(\lceil \log_2(k) \rceil\) bit, è possibile rappresentare ogni colore \(c\) con una stringa di \(\lceil \log_2(k) \rceil\) bit, e dunque utilizzando \(\lceil \log_2(k) \rceil\) variabili. Dunque, invece di avere \(Y_v^c\) con \(v\in V\) e \(c\in C\), possiamo avere \(Y_v^i\) con \(v\in V\) e \(i=1,\dots,\lceil \log_2(k) \rceil\), in cui ogni assegnamento di tali variabili va interpretato come una colorazione del vertice \(v\) del colore rappresentato dalla stringa di bit formata da tali variabili. Dunque \(\AP' = \set{Y_v^i}[i=1,\dots,\lceil \log_2(k) \rceil \land v \in V]\) e quindi \(\abs{\AP'} = \BigO{\abs{V}\log k}\).
+
+È interessante notare che questa nuova rappresentazione non necessita l'espressione del vincolo di funzionalità e totalità, poiché per ogni vertice esiste un solo insieme di variabili \(Y_v^i\) con \(i=1,\dots,\lceil \log_2(k) \rceil\) che può essere vero, e dunque ogni vertice è colorato con uno e un solo colore. Dunque, l'unico vincolo da esprimere è quello che impone che vertici adiacenti non abbiano lo stesso colore, che è il seguente:
+\[\phi_2' = \bigwedge_{(u,v)\in E}\left( \bigvee_{i=0}^{\log_2(k)-1} (Y_u^i \land \neg Y_v^i) \lor (\neg Y_u^i \land Y_v^i)\right)\] 
 
 In altre parole, quello che richiediamo adesso è che ogni coppia di vertici adiacenti abbia almeno un bit diverso nella rappresentazione del colore. Questo può essere espresso in maniera leggermente più compatta utilizzando l'operatore XOR, che è vero se e solo se i disgiunti sono diversi:
-\[\phi_2' = \land_{(u,v)\in E}\left( \bigvee_{i=0}^{\log_2(k)-1} (X_i^u \oplus X_i^v)\right)\]
+\[\phi_2' = \bigwedge_{(u,v)\in E}\left( \bigvee_{i=0}^{\log_2(k)-1} (Y_u^i \oplus Y_v^i)\right)\]
 
 Dunque, concludendo, la formula che rappresenta l'istanza di \(\Sat\) a cui ridurre il problema della \(k\)-colorazione è la seguente:
 
@@ -193,13 +193,13 @@ Ovviamente quest'analisi dipenderà dal linguaggio che stiamo utilizzando, ovver
 Iniziamo definendo propriamente il concetto di proprietà e di espressibilità.
 
 \begin{definition}{Proprietà}
-  Sia \(L\) un linguaggio di \(\FOL\) e sia \(\mathcal{M}\) la classe delle strutture con \(m \in \mathcal{M}\) se \(m = (D,I)\) per \(L\). Una \textbf{proprietà} \(P\) è un qualsiasi un sott'insieme di \(\mathcal{M}\).
+  Sia \(L\) un linguaggio di \(\FOL\) e sia \(\mathcal{M}\) la classe delle strutture con \(M \in \mathcal{M}\) se \(M = \langle D,\Interp\rangle\) per \(L\). Una \textbf{proprietà} \(P\) è un qualsiasi un sott'insieme di \(\mathcal{M}\).
 \end{definition}
 
 Intuitivamente, in ottica descrittivista del linguaggio, una proprietà non è altro che l'insieme degli oggetti del discorso che la rispettano. Ad esempio, se stiamo parlando di persone, la proprietà di essere un uomo è l'insieme di tutte le persone che sono uomini.
 
 \begin{definition}{Espressibilità}
-  Sia \(L\) un linguaggio di \(\FOL\) e sia \(\mathcal{M}\) la classe delle strutture con \(m \in \mathcal{M}\) se \(m = (D,I)\) per \(L\). Una proprietà \(P\) è \textbf{esprimibile} in \(L\) se esiste una formula \(\phi \in \FOL\) tale che \(\set{m\in\mathcal{M}}[ m \models \phi] = P\)
+  Sia \(L\) un linguaggio di \(\FOL\) e sia \(\mathcal{M}\) la classe delle strutture con \(M \in \mathcal{M}\) se \(M = \langle D,\Interp\rangle\) per \(L\). Una proprietà \(P\) è \textbf{esprimibile} in \(L\) se esiste una formula \(\phi \in \FOL\) tale che \(P=\den{\phi}=\set{M \in \mathcal{M} \mid M \models \phi}\)
 \end{definition}
 
 Questo problema è particolarmente interessante per l'informatica poiché ci permette di capire quanto potere espressivo sia necessario per esprimere determinate proprietà nella modellazione di basi di conoscenza. Intuitivamente l'espressività di un linguaggio è inversamente proporzionale alla complessità computazionale dei problemi di decisione di tale linguaggio, quindi è importante capire quali sono le proprietà che possiamo esprimere con un linguaggio e quali no per trovare un giusto equilibrio tra potere espressivo e complessità computazionale.
@@ -212,27 +212,28 @@ con chiaramente un linguaggio che abbia come minimo un simbolo di relazione bina
 
 Chiaramente quindi \(\den{\phi_{lin}}\) è proprio la proprietà di essere linearmente ordinato.
 
-Sempre sullo stesso linguaggio si può pensare anche di esprimere la proprietà \(DSC = \set{m\in\mathcal{M}}[ m \text{ è ordinamento lineare discreto}]\). Sicuramente \(\phi_{lin}\) sarà parte della formula che esprime \(DSC\) ma non è sufficiente. Dovremo congiungere a \(\phi_{lin}\) anche una proprietà che esprima la discretezza. Intuitivamente quello che differenzia insiemi discreti e non discreti è il concetto di successore. Bisogna però stare attenti al fatto che un insieme discreto può ammettere massimo, e che dunque non è richiesto che ogni elemento abbia un successore. Si dovranno dunque trattare come casi particolari anche gli elementi che non hanno successore. Intuitivamente quindi quello che dovremo esprimere è che ogni elemento che ha degli elementi successivi ha un minimo elemento successivo, che è proprio il successore. La formula che esprime tutto ciò è la seguente:
-\[\phi' \eqdef \forall x, (\exists y x< y \to \exists z (x<z \land \forall w, (x<w \to \neg(w<z))))\]
+Sempre sullo stesso linguaggio si può pensare anche di esprimere la proprietà \(DSC = \set{M\in\mathcal{M}}[ M \text{ è ordinamento lineare discreto}]\). Sicuramente \(\phi_{lin}\) sarà parte della formula che esprime \(DSC\) ma non è sufficiente. Dovremo congiungere a \(\phi_{lin}\) anche una proprietà che esprima la discretezza. Intuitivamente quello che differenzia insiemi discreti e non discreti è il concetto di successore. Bisogna però stare attenti al fatto che un insieme discreto può ammettere massimo, e che dunque non è richiesto che ogni elemento abbia un successore. Si dovranno dunque trattare come casi particolari anche gli elementi che non hanno successore. Intuitivamente quindi quello che dovremo esprimere è che ogni elemento che ha degli elementi successivi ha un minimo elemento successivo, che è proprio il successore. La formula che esprime tutto ciò è la seguente:
+\[\phi' \eqdef \forall x, ((\exists y \st x< y) \to \exists z \st(x<z \land \forall w, (x<w \to \neg(w<z))))\]
 E quindi avremo che \(\den{\phi_{lin} \land \phi'} = DSC\).
 
 Questa \(\phi_{lin} \land \phi'\) però chiaramente non caratterizza \((\N,<)\) poiché ha altri modelli che la soddisfano. Un esempio è l'unione disgiunta di \(\N\) con se stesso, ovvero \(\N + \N\), formato da coppie \((n,i)\) con \(n \in \N\) e \(i \in \set{0,1}\) e con l'ordinamento definito come segue:
 \[(n,i) < (m,i) \text{ se } n < m \in \N\]
 \[(n,0) < (m,1) \text{ per ogni } n,m \in \N\]
 
-Passiamo invece alla proprietà \(DNS = \set{m\in\mathcal{M}}[ m \text{ è ordinamento lineare denso}]\). Anche in questo caso \(\phi_{lin}\) è parte della formula che esprime \(DNS\) ma non è sufficiente. Dovremo congiungere a \(\phi_{lin}\) anche
+Passiamo invece alla proprietà \(DNS = \set{M\in\mathcal{M}}[ M \text{ è ordinamento lineare denso}]\). Anche in questo caso \(\phi_{lin}\) è parte della formula che esprime \(DNS\) ma non è sufficiente. Dovremo congiungere a \(\phi_{lin}\) anche
 \[\phi''\eqdef \forall x,y (x<y \to \exists z (x<z \land z<y))\]
 
 Si ha quindi \(\den{\phi_{DNS} \eqdef\phi_{lin} \land \phi'} = DNS\). Chiaramente \((\Q,<)\models \phi_{DNS}\) e \((\R,<)\models \phi_{DNS}\).
 
 È interessante notare che \(\phi'\not\equiv\neg \phi''\). Possiamo considerare ad esempio \(([0,1]\cup \set{2},<)\). Questo chiaramente non è denso poiché per \(x = 1\) e \(y = 2\) non esiste un elemento \(z\) tale che \(1 < z < 2\). D'altra parte però non è discreto poiché per qualsiasi elemento in \([0,1]\) non esiste un successore. 
 
-Passando a qualche risultato negativo, abbiamo che \((\Q,<)\) è indistinguibile da \((\R,<)\), ovvero non esiste una formula \(\phi\) tale che \((\Q,<)\models \phi\) e \((\R,<)\not\models \phi\). Questa è conseguenza diretta del teorema di Löwenhaim-Skolem che recita quanto segue:
-\begin{theorem}{Löwenhaim-Skolem}
-  Se \(\Gamma\) è un insieme di formule chiuse al più numerabile e soddisfacibile, allora \(\phi\) ha un modello al più numerabile.
+Passando a qualche risultato negativo, abbiamo che \((\Q,<)\) è indistinguibile da \((\R,<)\), ovvero non esiste una formula \(\phi\) tale che \((\Q,<)\models \phi\) e \((\R,<)\not\models \phi\). Questa è conseguenza diretta del teorema di Löwenheim-Skolem che recita quanto segue:
+\begin{theorem}{Löwenheim-Skolem}
+  Se \(\Gamma\) è un insieme di formule chiuse al più numerabile e soddisfacibile, allora \(\Gamma\) ha un modello al più numerabile.
 \end{theorem}
 
-Se una formula \(\phi\) è una formula che soddisfa \((\R,<)\) chiaramente sarà soddisfatto anche \(\set{\phi, \phi_{DNS}}\) che è un insieme di formule chiuse al più numerabile e soddisfacibile, quindi per il teorema di Löwenhaim-Skolem esiste un modello al più numerabile che soddisfa \(\set{\phi}\). Tale modello non può essere \((\R,<)\) poiché non è al più numerabile, quindi deve essere \((\Q,<)\).
+Sia infatti \(\phi\) la potenziale formula che distingue \((\Q,<)\) da \((\R,<)\). Dunque \((\Q,<)\models \phi\) e \((\R,<)\not\models \phi\). 
+Equivalentemente, \((\R,<)\models \neg \phi\) e \((\Q,<)\not\models \neg \phi\). Dunque \(\set{\neg \phi, \phi_{DNS}}\) è un insieme di formule chiuse al più numerabile e soddisfatto da \((\R,<)\). Dal teorema di Löwenhaim-Skolem esiste però un modello al più numerabile che soddisfa \(\set{\neg \phi, \phi_{DNS}}\). Tale modello non può essere \((\R,<)\) poiché non è al più numerabile, quindi deve essere \((\Q,<)\). Dunque \((\Q,<)\models \neg \phi\) e \((\Q,<)\not\models \neg \phi\), il che è assurdo. 
 
 Intuitivamente il teorema di Löwenhaim-Skolem vale per la costruzione vista per il teorema di completezza, poiché la costruzione del modello dell'insieme soddisfacibile \(\Gamma\) portava ad avere un dominio al più numerabile, poiché abbiamo aggiunto un numero enumerabile di insiemi enumerabile di costanti che è ancora un insieme enumerabile se lo era quello di partenza.
 
@@ -241,7 +242,7 @@ Questo quindi ci dice che ci sono limiti in ciò che il prim'ordine può esprime
 \begin{theorem}{Compattezza}
   Per ogni \(\Gamma\subseteq\FOL\) (formule chiuse) e per ogni formula \(\phi\) (chiusa), vale che
   
-  \(\Gamma \models \phi \iff \) esiste \(\Gamma_0 \subseteq \Gamma\) finito tale che \(\Gamma_0 \models \phi\)
+  \[\Gamma \models \phi \iff \text{ esiste } \Gamma_0 \subseteq \Gamma \text{ finito tale che } \Gamma_0 \models \phi\]
 \end{theorem}
 
 \begin{proof}
@@ -254,22 +255,24 @@ Una formulazione alternativa della compattezza è la seguente:
 \begin{theorem}{Compattezza Alternativa}
   Per ogni \(\Gamma\subseteq\FOL\) (formule chiuse),
 
-  \(\Gamma \in\Unsat \iff\) esiste \(\Gamma_0 \subseteq \Gamma\) finito tale che \(\Gamma_0 \in\Unsat\)
+  \[\Gamma \in\Unsat \iff \text{ esiste } \Gamma_0 \subseteq \Gamma \text{ finito tale che } \Gamma_0 \in\Unsat\]
   o equivalentemente se
-  \(\Gamma \in\Sat \iff\) per ogni \(\Gamma_0 \subseteq \Gamma\) finito, \(\Gamma_0 \in\Sat\)
+  \[\Gamma \in\Sat \iff \text{ per ogni } \Gamma_0 \subseteq \Gamma \text{ finito, } \Gamma_0 \in\Sat\]
 \end{theorem}
 
-Il teorema di compattezza è uno strumento particolarmente usato, soprattutto in logica matematica, per dimostrare risultati di espressività. Ad esempio \(FIN = \set{m \in \mathcal{M}}[\abs{m} < \infty]\) non è esprimibile in \(\FOL\) semplice, ovvero su linguaggio \(L = (\emptyset, \emptyset, \set{=})\). Supponiamo per assurdo che esista una formula \(\phi_{FIN}\) tale che \(\den{\phi_{FIN}} = FIN\). Consideriamo ora l'insieme parametrico di formule al variare di \(n\) definite come
+Il teorema di compattezza è uno strumento particolarmente usato, soprattutto in logica matematica, per dimostrare risultati di espressività. Ad esempio \(FIN = \set{M \in \mathcal{M}}[\abs{M} < \infty]\) non è esprimibile in \(\FOL\) semplice, ovvero su linguaggio \(L = (\emptyset, \emptyset, \set{=})\). Supponiamo per assurdo che esista una formula \(\phi_{FIN}\) tale che \(\den{\phi_{FIN}} = FIN\). Consideriamo ora l'insieme parametrico di formule al variare di \(n\) definite come
 \[\exists x_1, \ldots, x_n \bigwedge_{\substack{1 \leq i \leq n \\ 1 \leq j \leq n \\ i \neq j}} \neg(x_i = x_j)\]
 Intuitivamente ognuna di queste formule esprime che esistono almeno \(n\) elementi distinti.
 
-Consideriamo quindi \(\Gamma = \set{\phi_n}[n\in\N^*]\). Chiaramente questo insieme è numerabile. Sia ora \(\Sigma = \Gamma \cup \set{\phi_{FIN}}\). Ora se esiste un \(m\) che soddisfa \(\Gamma\) necessariamente deve essere infinito, poiché deve avere almeno \(n\) elementi distinti per ogni \(n\in \N\). Dunque \(\Sigma\) è insoddisfacibile perché qualsiasi modello di \(\Sigma\) dovrebbe essere sia finito che infinito. Ma ora considerando qualsiasi sott'insieme finito \(\Sigma_0\) di \(\Sigma\) allora \(\Sigma_0\) è soddisfacibile, poiché basta un dominio finito di cardinalità maggiore o uguale al massimo indice \(n\) che compare in \(\Sigma_0\) per soddisfare tutte le formule di \(\Sigma_0\). Quindi abbiamo un insieme insoddisfacibile che però non ha nessun sottoinsieme finito insoddisfacibile, il che è assurdo per il teorema di compattezza.
+Consideriamo quindi \(\Gamma = \set{\phi_n}[n\in\N^*]\). Chiaramente questo insieme è numerabile. Sia ora \(\Sigma = \Gamma \cup \set{\phi_{FIN}}\). Ora se esiste un \(m\) che soddisfa \(\Gamma\) necessariamente deve essere infinito, poiché deve avere almeno \(n\) elementi distinti per ogni \(n\in \N\). Dunque \(\Sigma\) è insoddisfacibile perché qualsiasi modello di \(\Sigma\) dovrebbe essere sia finito che infinito. Ma ora considerando qualsiasi sott'insieme finito \(\Sigma_0\) di \(\Sigma\).
+
+Chiaramente \(\Sigma_0\) è soddisfacibile, poiché basta un dominio finito di cardinalità maggiore o uguale al massimo indice \(n\) che compare in \(\Sigma_0\) per soddisfare tutte le formule di \(\Sigma_0\). Quindi abbiamo un insieme insoddisfacibile che però non ha nessun sottoinsieme finito insoddisfacibile, il che è assurdo per il teorema di compattezza.
 
 Un altro esempio di particolare interesse per gli informatici è quello della non esistenza di una formula che caratterizza esattamente la classe dei grafi connessi. Chiaramente ciò non vuol dire che dato uno specifico grafo connesso non esista una formula che lo caratterizza o che esprima se quello specifico sia connesso, ma semplicemente che non esiste una formula che caratterizza tutti i grafi connessi e solo quelli.
 
-Sia \(CONN = \set{m\in\mathcal{M}}[ m \text{ è un grafo connesso}]\). Supponiamo per assurdo che esista una formula \(\phi_{CONN}\) tale che \(\den{\phi_{CONN}} = CONN\). Per essere un grafo mi è sufficiente avere un linguaggio con un simbolo di relazione binaria \(E\) che rappresenta l'adiacenza tra i nodi con \(D\) che rappresenta i nodi. Per comodità aggiungiamo al linguaggio due costanti \(s\) e \(t\). Costruiamo quindi l'insieme di formule \(\Gamma = \set{\phi_n}[n\in\N^*]\) con
-\[\phi_n \eqdef \neq\exists x_1, \ldots, x_n ( x_1 = s \land x_n = t \land \bigwedge_{1 \leq i < n} E(x_i, x_{i+1}))\]
-Costruiamo quindi \(\Gamma' \eqdef \Gamma \cup \set{\forall x, \neg E(x,x)}\). Ogni formula \(\phi_n\) ci dice che non esiste un cammino di lunghezza \(n-1\) tra \(s\) e \(t\). Chiaramente preso \(m\) tale che \(m\models\Gamma'\) si ha che \(t^m\) non sarà raggiungibile da \(s^m\) e quindi \(m\) non sarà connesso. Dunque \(\Sigma \eqdef \Gamma' \cup \set{\phi_{CONN}}\) è insoddisfacibile. Ma ora se prendo un qualsiasi sottoinsieme finito \(\Sigma_0\) di \(\Sigma\) se questo non contiene \(\phi_{CONN}\) allora è banalmente soddisfacibile da qualsiasi grafo non connesso. Se invece \(\Sigma_0\) contiene \(\phi_{CONN}\) allora dalla finitezza esiste un indice massimo di formule di \(\Gamma\) che compare in \(\Sigma_0\), ovvero esiste \(n\) tale che \(\phi_n \in \Sigma_0\) e per ogni \(m > n\) si ha che \(\phi_m \not\in \Sigma_0\). A questo punto basta prendere un qualsiasi grafo in cui \(s\) e \(t\) sono connessi da un cammino di lunghezza strettamente maggiore di \(n\) per soddisfare tutte le formule di \(\Sigma_0\). Quindi anche in questo caso abbiamo un insieme insoddisfacibile che però non ha nessun sottoinsieme finito insoddisfacibile, il che è assurdo per il teorema di compattezza.
+Sia \(CONN = \set{M\in\mathcal{M}}[ M \text{ è un grafo connesso}]\). Supponiamo per assurdo che esista una formula \(\phi_{CONN}\) tale che \(\den{\phi_{CONN}} = CONN\). Per essere un grafo mi è sufficiente avere un linguaggio con un simbolo di relazione binaria \(E\) che rappresenta l'adiacenza tra i nodi con \(D\) che rappresenta i nodi. Per comodità aggiungiamo al linguaggio due costanti \(s\) e \(t\). Costruiamo quindi l'insieme di formule \(\Gamma = \set{\phi_n}[n\in\N \land n > 1]\) con
+\[\phi_n \eqdef \neg\exists x_1, \ldots, x_n ( x_1 = s \land x_n = t \land \bigwedge_{1 \leq i < n} E(x_i, x_{i+1}))\]
+Costruiamo quindi \(\Gamma' \eqdef \Gamma \cup \set{\forall x, \neg E(x,x)}\). Ogni formula \(\phi_n\) ci dice che non esiste un cammino di lunghezza \(n-1\) tra \(s\) e \(t\). Chiaramente preso \(M\) tale che \(M\models\Gamma'\) si ha che \(t^M\) non sarà raggiungibile da \(s^M\) e quindi \(M\) non sarà connesso. Dunque \(\Sigma \eqdef \Gamma' \cup \set{\phi_{CONN}}\) è insoddisfacibile. Ma ora se prendo un qualsiasi sottoinsieme finito \(\Sigma_0\) di \(\Sigma\) se questo non contiene \(\phi_{CONN}\) allora è banalmente soddisfacibile da qualsiasi grafo non connesso. Se invece \(\Sigma_0\) contiene \(\phi_{CONN}\) allora dalla finitezza esiste un indice massimo di formule di \(\Gamma\) che compare in \(\Sigma_0\), ovvero esiste \(n\) tale che \(\phi_n \in \Sigma_0\) e per ogni \(m > n\) si ha che \(\phi_m \not\in \Sigma_0\). A questo punto basta prendere un qualsiasi grafo in cui \(s\) e \(t\) sono connessi da un cammino di lunghezza strettamente maggiore di \(n\) per soddisfare tutte le formule di \(\Sigma_0\). Quindi anche in questo caso abbiamo un insieme insoddisfacibile che però non ha nessun sottoinsieme finito insoddisfacibile, il che è assurdo per il teorema di compattezza.
 
 \subsection{Indecidibilità del prim'ordine}
 
@@ -287,7 +290,7 @@ In termini algoritmici, un linguaggio \(L\) è in RE se esiste un algoritmo che,
 
 Per mostrare ciò dovremo innanzitutto mostrare che VALIDITY è in RE, ovvero mostrare un algoritmo che almeno per le istanze positive del problema termini sempre con risposta \qi{yes}, e poi mostrare che ogni algoritmo che tenta di decidere completamente VALIDITY, e dunque anche di rispondere \qi{no} per le istanze negative porti a una contraddizione, ovvero che esistono formule per cui tale algoritmo diverge.
 
-Iniziando con la prima parte, ovvero mostrare che VALIDITY è in RE, è sufficiente sfruttare i teoremi di completezza e correttezza. In particolare, vale \(\models \phi \iff \vdash \phi\). Riformulando quindi il problema in termini di appartenenza a linguaggi, si ha che \(\phi \in \set{\phi \in \FOL}[ \models \phi] \iff \phi \in \set{\phi \in \FOL}[\vdash \phi]\). Dunque, per mostrare che VALIDITY è in RE, è sufficiente mostrare che l'insieme \(\set{\phi \in \FOL}[\vdash \phi]\) è in RE, ovvero che esiste una procedura per enumerarne tutti gli elementi. Per definizione di dimostrazione, una formula \(\phi\) è dimostrabile se esiste una derivazione di \(\phi\) a partire da \(\emptyset\). Essendo le derivazioni alberi finiti hanno tutti un altezza finita, e dunque è possibile iniziare a enumerare tutte le derivazioni di altezza \(0\), seguite da tutte le derivazioni di altezza \(1\), e così via. Tale enumerazione è ottenibile tramite una procedura poiché è sufficiente enumerare l'insieme finito di regole di inferenza e costruire tutte le possibili combinazioni di tali regole che portano a una derivazione di altezza \(n\) per ogni \(n\). Dunque, per ogni formula \(\phi\), se \(\phi\) è dimostrabile, allora esiste una derivazione di \(\phi\) a partire da \(\emptyset\) che sarà enumerata in un tempo finito, e dunque la procedura terminerà con risposta \qi{yes}.
+Iniziando con la prima parte, ovvero mostrare che VALIDITY è in RE, è sufficiente sfruttare i teoremi di completezza e correttezza. In particolare, vale \(\models \phi \iff \vdash \phi\). Riformulando quindi il problema in termini di appartenenza a linguaggi, si ha che \(\phi \in \Valid \iff \phi \in \set{\psi \in \FOL}[\vdash \psi]\). Dunque, per mostrare che VALIDITY è in RE, è sufficiente mostrare che l'insieme \(\set{\phi \in \FOL}[\vdash \phi]\) è in RE, ovvero che esiste una procedura per enumerarne tutti gli elementi. Per definizione di dimostrazione, una formula \(\phi\) è dimostrabile se esiste una derivazione di \(\phi\) a partire da \(\emptyset\). Essendo le derivazioni alberi finiti hanno tutti un altezza finita, e dunque è possibile iniziare a enumerare tutte le derivazioni di altezza \(0\), seguite da tutte le derivazioni di altezza \(1\), e così via. Tale enumerazione è ottenibile tramite una procedura poiché è sufficiente enumerare l'insieme finito di regole di inferenza e costruire tutte le possibili combinazioni di tali regole che portano a una derivazione di altezza \(n\) per ogni \(n\). Dunque, per ogni formula \(\phi\), se \(\phi\) è dimostrabile, allora esiste una derivazione di \(\phi\) a partire da \(\emptyset\) che sarà enumerata in un tempo finito, e dunque la procedura terminerà con risposta \qi{yes}.
 
 Se si volesse mostrare adesso che VALIDITY è ricorsivo, si potrebbe pensare di mostrare che anche il complemento di VALIDITY, ovvero l'insieme delle formule non valide, è in RE, e dunque che esiste una procedura che termina con risposta \qi{yes} per ogni formula non valida. Un approccio intuitivo potrebbe essere quello di utilizzare lo stesso procedimento con le formule negate. Il problema sorge dal fatto che se \(\phi\) è valida, sicuramente \(\neg \phi\) è non valida, ma se \(\phi\) è non valida, non è detto che \(\neg \phi\) sia valida. In altre parole non tutte le formule non valide sono negazioni di formule valide, poiché è sufficiente che una formula sia soddisfacibile ma non valida per far si che la sua negata non sia valida. In altre parole l'insieme delle formule non valide è più grande dell'insieme delle negazioni di formule valide, e dunque non è sufficiente enumerare le negazioni di formule valide per enumerare tutte le formule non valide. 
 
@@ -350,19 +353,19 @@ Per lavorare in logica del prim'ordine, è necessario definire un linguaggio che
 Per il resto della trattazione, per semplicità di notazione, fisseremo l'utilizzo della variabile \(x\) per descrivere i passi di esecuzione, e le variabili \(y\) e \(z\) per descrivere le posizioni sul nastro.
 
 I predicati \(q_k\), con \(k \in \set{0,\ldots,n}\), che si occuperanno di descrivere le prime due componenti di una configurazione, saranno interpretati come segue:
-\[q_k^I = \set{(x,y)\in\N^2}[{(\pi(x))}_1 = k \land {(\pi(x))}_2 = y ]\]
-ovvero \(q_k^I\) è l'insieme di tutte le coppie \((x,y)\) tali che alla \(i\)-esima configurazione dell'esecuzione, la macchina si trovi nello stato \(q_k\) e la testina sia posizionata sulla cella \(j\).
+\[\Interp(q_k) = \set{(x,y)\in\N^2}[{(\pi(x))}_1 = k \land {(\pi(x))}_2 = y ]\]
+ovvero \(\Interp(q_k)\) è l'insieme di tutte le coppie \((x,y)\) tali che alla \(x\)-esima configurazione dell'esecuzione, la macchina si trovi nello stato \(q_k\) e la testina sia posizionata sulla cella \(y\).
 
 I predicati \(\sigma_l\), con \(l \in \set{0,\ldots,m}\), che si occuperanno di descrivere il contenuto del nastro, saranno interpretati come segue:
-\[\sigma_l^I = \set{(x,y)\in\N^2}[{(\pi(x))}_3(y) = \sigma_l] \]
-ovvero \(\sigma_l^I\) è l'insieme di tutte le coppie \((x,y)\) tali che alla \(i\)-esima configurazione dell'esecuzione, il nastro contenga in posizione \(y\) il simbolo \(\sigma_l\).
+\[\Interp(\sigma_l) = \set{(x,y)\in\N^2}[{(\pi(x))}_3(y) = \sigma_l] \]
+ovvero \(\Interp(\sigma_l)\) è l'insieme di tutte le coppie \((x,y)\) tali che alla \(x\)-esima configurazione dell'esecuzione, il nastro contenga in posizione \(y\) il simbolo \(\sigma_l\).
 
 A questo punto, avendo definito il linguaggio, non ci resta che definire un insieme di formule che descrivano il comportamento della macchina di Turing \(M\) in modo da poter mostrare la tesi.
 
 Le prime formule che dobbiamo definire servono a imporre i vincoli necessari in modo che gli unici comportamenti descritti saranno coerenti con un esecuzione valida di \(M\). Iniziamo con l'assiomatizzare la proprietà di \(s\) e \(p\) di essere inverse.
 
 \begin{equation}
-  \phi_1 \eqdef \forall x, (s(p(x)) = x \land (\neg(x = 0) \to p(s(x)) = x))
+  \phi_1 \eqdef \forall x, (p(s(x)) = x \land (\neg(x = 0) \to s(p(x)) = x))
 \end{equation}
 
 In aggiunta a questa formula sarebbe possibile aggiungere tutte le formule che assiomatizzano la teoria dei numeri naturali, ma non sarà necessario, poiché le formule che andremo a definire in seguito, che descrivono il comportamento di \(M\), implicheranno già tutte le proprietà necessarie per \(s\) e \(p\) per essere interpretati come funzioni di successore e predecessore su \(\N\).
@@ -432,52 +435,58 @@ Queste sette formule quindi descrivono precisamente la macchina di Turing \(M\) 
   \phi_M \eqdef \left(\bigwedge_{i=1}^{7} \phi_i\right) \to \exists x, \exists y, q_n(x,y)
 \end{equation}
 
-Per completare la dimostrazione, è necessario mostrare che \(\models \phi_M\) se e solo se \(M\) termina, ovvero se esiste un \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\).
+A questo punto, per completare la dimostrazione dell'indecidibilità di VALIDITY, è sufficiente mostrare che \(\phi_M\) è valida se e solo se \(M\) termina.
 
-Per mostrare la doppia implicazione possiamo verificare separatamente il caso in cui \(M\) non termina e quello in cui termina.
-
-Iniziamo supponendo che \(M\) non termini, ovvero che non esista \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\).
-Per mostrare che \(\not\models \phi_M\) è sufficiente mostrare che esiste un modello di \(\bigwedge_{i=1}^{7} \phi_i\) in cui \(\neg\exists x, \exists y, q_n(x,y)\) è verificato. Essendo \(M\) non terminante, esiste un'esecuzione \(\pi_M\) di \(M\) in cui non esiste \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\). Dunque, prendendo come modello \(M = (\N,I)\) con \(I\) che interpreta i simboli del linguaggio come descritto precedentemente, si ha che \(M\) è un modello di \(\bigwedge_{i=1}^{7} \phi_i\) in cui \(\neg\exists x, \exists y, q_n(x,y)\) è verificato, e dunque \(M\) è un modello di \(\bigwedge_{i=1}^{7} \phi_i \land \neg\exists x, \exists y, q_n(x,y)\), e dunque \(\not\models \phi_M\).
-
-L'altro verso è invece più complesso. Si vuole mostrare che se \(M\) termina, ovvero se esiste \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\), allora \(\models \phi_M\). Essendo che la proprietà di terminazione è finitaria per definizione, se \(M\) termina deve esistere un prefisso finito di \(\pi_M\) di lunghezza \(i\) tale che \({(\pi_M(i-1))}_1 = n\). Possiamo quindi analizzare per induzione questa sequenza finita, mostrando che la codifica della configurazione di ogni passo è conseguenza logica della codifica della macchina di Turing e che può inoltre essere espressa a partire dalla configurazione iniziale iterando la funzione di successore. Formalmente, se a passo \(k\) si ha \(\pi_M(k) = (j, i, t_k)\) allora vale:
-
-\begin{equation}
-  \bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0)) 
-\end{equation}
-
-E per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), vale anche
-\begin{equation}
-  \bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))
-\end{equation}
-
-Chiaramente, dimostrato questo si ha la tesi, poiché valendo questa conseguenza logica per ogni passo di esecuzione, varrà in particolare per il primo passo in cui lo stato di terminazione è raggiunto. Di conseguenza si avrà che
-\begin{equation}
-  \models \bigwedge_{h=1}^{7} \phi_h \models q_n(s^x(0), s^y(0))
-\end{equation}
-per qualche \(x\) e \(y\), e dunque \(\models \phi_M\) per introduzione di \(\exists\).
-
-Per dimostrare questa invariante verifichiamo innanzitutto il caso base, ovvero \(\pi_M(0) = C_0\). Questo caso è banalmente vero grazie a \(\phi_5\), interpretando chiaramente \(s^0\) come l'identità. Per il passo induttivo, supponiamo che valga per un passo \(k\), ovvero che \(\bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0))\) e che per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), valga anche \(\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))\). Dobbiamo mostrare che allora vale anche per il passo \(k+1\).
-
-Per definizione induttiva di \(\pi_M\) si ha che se \(\pi_M(k) = (j, i, t_k)\) e \(\delta(q_j, t_k(i)) = (q_{j'}, \sigma_{l'}, d)\) allora \(\pi_M(k +1) = (j', i', t_{k+1})\) con
-\begin{itemize}
-  \item \(i' = i + 1\) se \(d = \rightarrow\) e \(i' = i - 1\) se \(d = \leftarrow\);
-  \item \(t_{k+1}(r) = t_k(r)\) per ogni \(r \neq i\) e \(t_{k+1}(i) = \sigma_{l'}\).
-\end{itemize}
-
-Per ipotesi induttiva si ha che
-\[\bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0))\]
-e che per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), vale anche
-\[\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))\]
-
-Rispetto alla direzione, l'unica differenza tra le configurazioni d'arrivo è che in una la posizione della testina, codificata con l'esponente \(i\), è incrementata di \(1\) e nell'altra è decrementata di \(1\). Iniziamo assumendo che \(d = \rightarrow\).
-
-Grazie a \(\phi_7\) e alla definizione di \(\phi^{\delta}_{j,l}\), si ha che
-\[\bigwedge_{h=1}^{7} \phi_h \models (q_j(s^k(0),s^i(0)) \land \sigma_l(s^k(0),s^i(0))) \to q_{j'}((s(s^{k}(0)),s(s^{i})(0)) \land \sigma_{l'}(s(s^{k}(0)),s^{i}(0)))\]
-
-Chiaramente \(s(s^{k}(0)) = s^{k+1}(0)\) e \(s(s^{i}(0)) = s^{i+1}(0)\). Dunque essendo per ipotesi veri entrambi i congiunti di questa implicazione sarà anche vero
-\[\bigwedge_{h=1}^{7} \phi_h \models q_{j'}(s^{k+1}(0),s^{i+1}(0)) \land \sigma_{l'}(s^{k+1}(0),s^{i+1}(0))\]
-
-Inoltre, grazie a \(\phi_6\) si ha che tutte le posizioni diverse da \(i\) del nastro al passo \(k+1\) contengono lo stesso simbolo che avevano al passo \(k\), e dunque per ipotesi induttiva si ha che per ogni posizione \(r\) del nastro al passo \(k+1\), con \(t_{k+1}(r) = \sigma_l\), vale anche
-\[\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^{k+1}(0), s^r(0))\]
-
-Venendo al caso di \(d = \leftarrow\), l'unica differenza si trova della definizione di \(\phi^{\delta}_{j,l}\), che in questo caso presenta la funzione \(p\). Possiamo notare però che grazie a \(\phi_1\) si ha che \(p(s^i(0)) = s^{i-1}(0)\) ottenendo esattamente la posizione della testina corretta al passo \(k+1\). 
+\begin{theorem}{Indecidibilità di VALIDITY}
+  Sia \(M\) una macchina di Turing. Allora \(\models \phi_M\) se e solo se \(M\) termina, ovvero se esiste un \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\).
+\end{theorem}
+\begin{proof}
+  
+  Per mostrare la doppia implicazione possiamo verificare separatamente il caso in cui \(M\) non termina e quello in cui termina.
+  
+  Iniziamo supponendo che \(M\) non termini, ovvero che non esista \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\).
+  Per mostrare che \(\not\models \phi_M\) è sufficiente mostrare che esiste un modello di \(\bigwedge_{i=1}^{7} \phi_i\) in cui \(\neg\exists x, \exists y, q_n(x,y)\) è verificato. Essendo \(M\) non terminante, esiste un'esecuzione \(\pi_M\) di \(M\) in cui non esiste \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\). Dunque, prendendo come modello \(M = (\N,I)\) con \(I\) che interpreta i simboli del linguaggio come descritto precedentemente, si ha che \(M\) è un modello di \(\bigwedge_{i=1}^{7} \phi_i\) in cui \(\neg\exists x, \exists y, q_n(x,y)\) è verificato, e dunque \(M\) è un modello di \(\bigwedge_{i=1}^{7} \phi_i \land \neg\exists x, \exists y, q_n(x,y)\), e dunque \(\not\models \phi_M\).
+  
+  L'altro verso è invece più complesso. Si vuole mostrare che se \(M\) termina, ovvero se esiste \(i \in \N\) tale che \({(\pi_M(i))}_1 = n\), allora \(\models \phi_M\). Essendo che la proprietà di terminazione è finitaria per definizione, se \(M\) termina deve esistere un prefisso finito di \(\pi_M\) di lunghezza \(i\) tale che \({(\pi_M(i-1))}_1 = n\). Possiamo quindi analizzare per induzione questa sequenza finita, mostrando che la codifica della configurazione di ogni passo è conseguenza logica della codifica della macchina di Turing e che può inoltre essere espressa a partire dalla configurazione iniziale iterando la funzione di successore. Formalmente, se a passo \(k\) si ha \(\pi_M(k) = (j, i, t_k)\) allora vale:
+  
+  \begin{equation}
+    \bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0)) 
+  \end{equation}
+  
+  E per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), vale anche
+  \begin{equation}
+    \bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))
+  \end{equation}
+  
+  Chiaramente, dimostrato questo si ha la tesi, poiché valendo questa conseguenza logica per ogni passo di esecuzione, varrà in particolare per il primo passo in cui lo stato di terminazione è raggiunto. Di conseguenza si avrà che
+  \begin{equation}
+    \models \bigwedge_{h=1}^{7} \phi_h \models q_n(s^x(0), s^y(0))
+  \end{equation}
+  per qualche \(x\) e \(y\), e dunque \(\models \phi_M\) per introduzione di \(\exists\).
+  
+  Per dimostrare questa invariante verifichiamo innanzitutto il caso base, ovvero \(\pi_M(0) = C_0\). Questo caso è banalmente vero grazie a \(\phi_5\), interpretando chiaramente \(s^0\) come l'identità. Per il passo induttivo, supponiamo che valga per un passo \(k\), ovvero che \(\bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0))\) e che per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), valga anche \(\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))\). Dobbiamo mostrare che allora vale anche per il passo \(k+1\).
+  
+  Per definizione induttiva di \(\pi_M\) si ha che se \(\pi_M(k) = (j, i, t_k)\) e \(\delta(q_j, t_k(i)) = (q_{j'}, \sigma_{l'}, d)\) allora \(\pi_M(k +1) = (j', i', t_{k+1})\) con
+  \begin{itemize}
+    \item \(i' = i + 1\) se \(d = \rightarrow\) e \(i' = i - 1\) se \(d = \leftarrow\);
+    \item \(t_{k+1}(r) = t_k(r)\) per ogni \(r \neq i\) e \(t_{k+1}(i) = \sigma_{l'}\).
+  \end{itemize}
+  
+  Per ipotesi induttiva si ha che
+  \[\bigwedge_{h=1}^{7} \phi_h \models q_j(s^k(0), s^i(0))\]
+  e che per ogni posizione \(r\) del nastro al passo \(k\), con \(t_k(r) = \sigma_l\), vale anche
+  \[\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^k(0), s^r(0))\]
+  
+  Rispetto alla direzione, l'unica differenza tra le configurazioni d'arrivo è che in una la posizione della testina, codificata con l'esponente \(i\), è incrementata di \(1\) e nell'altra è decrementata di \(1\). Iniziamo assumendo che \(d = \rightarrow\).
+  
+  Grazie a \(\phi_7\) e alla definizione di \(\phi^{\delta}_{j,l}\), si ha che
+  \[\bigwedge_{h=1}^{7} \phi_h \models (q_j(s^k(0),s^i(0)) \land \sigma_l(s^k(0),s^i(0))) \to q_{j'}((s(s^{k}(0)),s(s^{i})(0)) \land \sigma_{l'}(s(s^{k}(0)),s^{i}(0)))\]
+  
+  Chiaramente \(s(s^{k}(0)) = s^{k+1}(0)\) e \(s(s^{i}(0)) = s^{i+1}(0)\). Dunque essendo per ipotesi veri entrambi i congiunti di questa implicazione sarà anche vero
+  \[\bigwedge_{h=1}^{7} \phi_h \models q_{j'}(s^{k+1}(0),s^{i+1}(0)) \land \sigma_{l'}(s^{k+1}(0),s^{i+1}(0))\]
+  
+  Inoltre, grazie a \(\phi_6\) si ha che tutte le posizioni diverse da \(i\) del nastro al passo \(k+1\) contengono lo stesso simbolo che avevano al passo \(k\), e dunque per ipotesi induttiva si ha che per ogni posizione \(r\) del nastro al passo \(k+1\), con \(t_{k+1}(r) = \sigma_l\), vale anche
+  \[\bigwedge_{h=1}^{7} \phi_h \models \sigma_l(s^{k+1}(0), s^r(0))\]
+  
+  Venendo al caso di \(d = \leftarrow\), l'unica differenza si trova della definizione di \(\phi^{\delta}_{j,l}\), che in questo caso presenta la funzione \(p\). Possiamo notare però che grazie a \(\phi_1\) si ha che \(p(s^i(0)) = s^{i-1}(0)\) ottenendo esattamente la posizione della testina corretta al passo \(k+1\). 
+\end{proof}

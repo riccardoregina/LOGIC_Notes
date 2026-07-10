@@ -934,14 +934,14 @@ e per dualità
 Tale teorema è di particolare importanza, poiché ci garantisce che nella verifica dell'insoddisfacibilità di un insieme di formule, è sufficiente considerare solo modelli finiti.
 
 \begin{proof}
-  Per dimostrare la prima direzione, ovvero che \(\Gamma\models\phi\) implica l'esistenza di un sottoinsieme finito \(\Gamma_0\subseteq\Gamma\) tale che \(\Gamma_0\models\phi\), iniziamo notando che dal teorema di correttezza si ha
+  Per dimostrare la prima direzione, ovvero che \(\Gamma\models\phi\) implica l'esistenza di un sottoinsieme finito \(\Gamma_0\subseteq\Gamma\) tale che \(\Gamma_0\models\phi\), iniziamo notando che dal teorema di completezza si ha
   \[\Gamma \models \phi \implies \Gamma \vdash \phi\]
   Ovvero esiste una deduzione \(\pi\) di \(\phi\) da \(\Gamma\).
   Sia allora \(\Gamma_0 = leaf(\pi)\cap \Gamma\). Ovviamente \(\Gamma_0\subseteq\Gamma\) e \(\abs{\Gamma_0}<\infty\).
   Inoltre, per costruzione di \(\Gamma_0\), \(\Gamma_0\vdash\phi\), e quindi \(\Gamma_0\models\phi\) per correttezza.
 
   Nell'altro verso è ovvio per monotònicità che
-  \[\Gamma_0\models\phi\overset{\text{corr}}{\implies}\Gamma_0\vdash\phi\overset{\text{mon}}{\implies}\Gamma\vdash\phi\overset{\text{comp}}{\implies}\Gamma\models\phi\]
+  \[\Gamma_0\models\phi\overset{\text{comp}}{\implies}\Gamma_0\vdash\phi\overset{\text{mon}}{\implies}\Gamma\vdash\phi\overset{\text{corr}}{\implies}\Gamma\models\phi\]
 \end{proof}
 
 Arriviamo infine a un teorema che generalizza il \Namedcref{thm:substitution}, che riguarda la sostituzione nella conseguenza logica invece che nella validità
