@@ -511,38 +511,38 @@ Prendiamo, ad esempio, la formula
 
 \[\phi \eqdef (\exists x\st A(x)\to \exists x\st B(x))\to \forall x, (A(x)\to B(x))\]
 
-Essendo la validità una proprietà universale, il modo più facile per dimostrarla è verificare che non esistano controesempi.
-In questo caso, vuol dire mostrare che non esistono modelli che la falsificano.
+Essendo la validità una proprietà universale, il modo più facile per dimostrarla è verificare che non esistano contromodelli.
 
-Avendo \(\phi\) l'implicazione come operatore principale, un modello \(M\) che la falsifica deve soddisfare \(\exists x\st A(x)\to \exists x\st B(x)\) e falsificare \(\forall x, (A(x)\to B(x))\).
+Avendo \(\phi\) l'implicazione come operatore principale, un contromodello \(M\) deve soddisfare \(\exists x\st A(x)\to \exists x\st B(x)\) e non soddisfare \(\forall x, (A(x)\to B(x))\).
 
 Inoltre, per soddisfare \(\exists x\st A(x)\to \exists x\st B(x)\), dobbiamo far sì che valga \(M,\sigma\not\models \exists x\st A(x)\) oppure \(M,\sigma \models \exists x\st B(x)\). 
 
 Ora, per non soddisfare \(\exists x\st A(x)\) la struttura deve avere \(A^M =\emptyset\) ma con dominio non vuoto. Ora, però, in tali strutture chiaramente nessun punto soddisfa \(A\), quindi è sicuramente soddisfatta \(\forall x, \neg A(x)\) e quindi è soddisfatta la conclusione \(\forall x, (A(x)\to B(x))\). 
 Di conseguenza, se un contromodello esiste, non è grazie al primo caso.
 
-Passando al secondo, l'unica cosa che sappiamo da \(M,\sigma\models \exists x\st B(x)\) è che \(M\) dev'essere tale per cui \(B^M \neq \emptyset\). Ora, possiamo trovare una struttura con queste proprietà che non soddisfa la conclusione \(\forall x, (A(x)\to B(x))\), in particolare con \(M\) che contiene un elemento \(d\) che soddisfa \(A\) e non \(B\). A questo punto, abbiamo trovato un controesempio, da cui si ha che la formula non è valida. Poiché il primo caso ci ha detto che vi sono delle strutture che la soddisfano, \(\phi\) è soddisfacibile.
+Passando al secondo, l'unica cosa che sappiamo da \(M,\sigma\models \exists x\st B(x)\) è che \(M\) dev'essere tale per cui \(B^M \neq \emptyset\). Ora, possiamo trovare una struttura con queste proprietà che non soddisfa la conclusione \(\forall x, (A(x)\to B(x))\), in particolare con \(M\) che contiene un elemento \(d\) che soddisfa \(A\) e non \(B\). A questo punto, abbiamo trovato un contromodello, da cui si ha che la formula non è valida. Poiché il primo caso ci ha detto che vi sono delle strutture che la soddisfano, \(\phi\) è soddisfacibile.
 
 Consideriamo adesso la formula 
 \[\phi \eqdef (\exists x\st A(x)\to \forall x\st B(x))\to \forall x, (A(x)\to B(x))\]
 e analizziamola in modo analogo.
 
-Il primo caso è rimasto identico, ma nel secondo i modelli che soddisfano \(\forall x\st B(x)\) sono tali che \(B^M = D\). Ma questo chiaramente soddisfa \(\forall x, (\neg A(x)\lor B(x))\) perché \(\forall x, (\neg A(x)) \lor \forall x, B(x) \implies \forall x, (\neg A(x)\lor B(x))\). Quindi non è possibile trovare un controesempio, e, di conseguenza, la formula è valida. Ovviamente, è anche soddisfacibile, poiché ogni formula valida è anche soddisfacibile.
+Il primo caso è rimasto identico, ma nel secondo i modelli che soddisfano \(\forall x\st B(x)\) sono tali che \(B^M = D\). Ma questo chiaramente soddisfa \(\forall x, (\neg A(x)\lor B(x))\) perché \(\forall x, (\neg A(x)) \lor \forall x, B(x) \implies \forall x, (\neg A(x)\lor B(x))\). Quindi non è possibile trovare un contromodello, e, di conseguenza, la formula è valida. Ovviamente, è anche soddisfacibile, poiché ogni formula valida è anche soddisfacibile.
 
-Consideriamo ora due formule, di cui la prima ha un albero sintattico che ha come radice un simbolo logico non proposizionale.\footnote{Si intende, un simbolo logico non appartenente alla logica proposizionale, ovvero i quantificatori.}
+Consideriamo ora due formule, di cui la prima ha un albero sintattico che ha la radice etichettata con un simbolo logico unario.
 Con \(Hat\) predicato vero per individui che indossano un cappello, consideriamo le due formule
-\[\exists x\st (Hat(x) \to \forall y, Hat(y))\]
-\[(\exists x\st Hat(x))\to(\forall y, Hat(y))\]
+\[\exists x, (Hat(x) \to \forall y, Hat(y))\]
+\[(\exists x, Hat(x))\to(\forall y, Hat(y))\]
 
 La prima formula potrebbe essere la traduzione di \qi{C'è un individuo tale che se egli ha il cappello allora tutti hanno il cappello}. L'altra invece potrebbe essere la traduzione di \qi{Se c'è un individuo che ha il cappello, allora tutti hanno il cappello}. In linguaggio naturale, possono essere percepite come con lo stesso significato, ma non è così. 
 
-Verifichiamo la validità della prima formula, valutando se è possibile l'esistenza di un contromodello. Affinché essa sia resa falsa, si deve osservare la sua negazione, ovvero \(\forall x \st (Hat(x)\land \neg\forall y,Hat(y))\). 
-Quindi, per tutti gli individui del dominio del modello, deve valere che tutti indossano il cappello e che non tutti indossano il cappello --- ovvero che esiste qualcuno che non lo indossa.
-Queste due richieste, però, sono in evidente contraddizione.
-Pertanto, non può esistere un contromodello e, quindi, questa formula è valida.
+Verifichiamo la validità della prima formula, valutando se è possibile l'esistenza di un contromodello. Chiamiamo \(\phi_1 \eqdef Hat(x)\) e \(\phi_2 \eqdef \forall y, Hat(y)\). Notiamo da subito che, poiché \(x \notin FV(\phi_2)\), vale l'equivalenza \(\exists x, (\phi_1 \to \phi_2) \equiv \forall x, \phi_1 \to \phi_2\), ovvero la formula equivale a
+\[\forall x, Hat(x) \to \forall y, Hat(y)\]
+che è evidentemente valida. Infatti, se esistesse un contromodello \(M\), allora si dovrebbe avere, contemporaneamente, \(Hat^M = D\) e \(Hat^M \neq D\), il che è impossibile.
 
-Adesso, verifichiamo la validità della seconda formula, cercando sempre un contromodello, che dovrà soddisfare la formula negata, ovvero \((\exists x, Hat(x)) \land (\exists y, \neg Hat(y))\).
-È facile vedere che un contromodello può esistere, come, ad esempio, \(D=\set{a, b}\) e \(Hat^M=\set{a}\), e che quindi la formula non è valida.
+Adesso, verifichiamo se la seconda formula è valida.
+Un contromodello \(M\) dovrebbe essere t.c. \(M,\sigma \models \phi_1\) e \(M,\sigma \not\models \phi_2\).
+Per osservare \(M,\sigma \models \phi_1\), si deve avere \(Hat^M \neq \emptyset\), mentre, per osservare \(M,\sigma \not\models \phi_2\), si deve avere \(Hat^M \neq D\).
+Pertanto, basta prendere, ad esempio, \(D=\set{a, b}\) e \(Hat^M=\set{a}\), per non soddisfare la formula. Pertanto, un contromodello esiste e quindi la formula non è valida.
 Inoltre, la formula è soddisfacibile in quanto soddisfatta da ogni struttura con \(Hat^M=D\) --- la conseguenza dell'implicazione è verificata --- o \(Hat^M=\emptyset\) --- la premessa dell'implicazione è falsa, dunque l'implicazione è banalmente verificata.
 
 Infine, prima di passare alla trattazione del calcolo dei predicati, analizziamo, con brevi esempi, come la logica del prim'ordine ci permetta, una volta fissata una segnatura, di poter formalizzare e tradurre il linguaggio naturale. Quest'analisi ci permetterà di evidenziare alcune caratteristiche e correlazioni tipiche tra simboli logici, che ci aiuteranno ad avere una maggiore dimestichezza con la logica del prim'ordine, e a comprendere meglio le sue potenzialità e limitazioni.
