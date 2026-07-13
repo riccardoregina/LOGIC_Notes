@@ -483,7 +483,7 @@ con \(x \notin \Var(\phi_2)\)\footnote{In particolare, \(x \notin FV(\phi_2)\)}.
 
 Ciò è vero, perché quantificare su una variabile non presente in una formula non influenza la verità di quest'ultima.
 
-Per definizione semantica, si ha \(M,\sigma \models \exists x\st\phi \iff M,\sigma[x\mapsfrom d] \models \phi \) per qualche \(d\in D\). Se \(x \notin FV(\phi)\), allora \(\sigma(y)=\sigma[x\mapsfrom d](y)\) per ogni \(y \in FV(\phi)\), dunque dalla \Cref{prop:satisfaction_independence} si ha \(M,\sigma \models \phi\) se e solo se \(M,\sigma[x\mapsfrom d] \models \phi\). Di conseguenza, \(M,\sigma \models \exists x\st\phi\) se e solo se \(M,\sigma \models \phi\).
+Per definizione semantica, si ha \(M,\sigma \models \exists x\st\phi_2 \iff M,\sigma[x\mapsfrom d] \models \phi_2 \) per qualche \(d\in D\). Se \(x \notin FV(\phi_2)\), allora \(\sigma(y)=\sigma[x\mapsfrom d](y)\) per ogni \(y \in FV(\phi_2)\), dunque dalla \Cref{prop:satisfaction_independence} si ha \(M,\sigma \models \phi_2\) se e solo se \(M,\sigma[x\mapsfrom d] \models \phi_2\). Di conseguenza, \(M,\sigma \models \exists x\st\phi_2\) se e solo se \(M,\sigma \models \phi_2\).
 
 La stessa cosa accade col quantificatore universale e \(\lor\), ovvero
 \[\forall x, (\phi_1 \lor \phi_2) \equiv \forall x, \phi_1 \lor \phi_2\]
