@@ -260,7 +260,7 @@ Passiamo dunque a dimostrare alcune proprietà della logica del prim'ordine, che
 
 
 \begin{proposition}[label=prop:term_interpretation_independence]{}
-  Sia \(t \in T\) tale che \(\Var(t) = \set{x_1, \ldots, x_n}\) e siano \(\sigma_1\) e \(\sigma_2\) assegnamenti tali che \(\sigma_1(x_i) = \sigma_2(x_i)\) per ogni \(i\in\{1,\ldots,n\}\). Allora \(\den{t}[M][\sigma_1] = \den{t}[M][\sigma_2]\) per ogni struttura \(M\).
+  Sia \(t \in \Terms\) tale che \(\Var(t) = \set{x_1, \ldots, x_n}\) e siano \(\sigma_1\) e \(\sigma_2\) assegnamenti tali che \(\sigma_1(x_i) = \sigma_2(x_i)\) per ogni \(i\in\{1,\ldots,n\}\). Allora \(\den{t}[M][\sigma_1] = \den{t}[M][\sigma_2]\) per ogni struttura \(M\).
 \end{proposition}
 
 In termini intuitivi, questa proposizione ci sta dicendo che l'interpretazione di un termine dipende solo dall'interpretazione delle variabili che compaiono in quel termine, e non da altre variabili che potrebbero essere presenti in altri termini o formule. Di conseguenza, per valutare l'interpretazione di un termine, è sufficiente considerare solo le variabili che compaiono in quel termine, e non tutte le variabili del linguaggio.
@@ -329,7 +329,7 @@ Definita l'applicazione di sostituzioni ai termini, possiamo facilmente definire
   Sia \(x\in\VarSyms\), \(t\in\Terms\) e \(\phi\in\FOL\). Definiamo la sostituzione, in \(\phi\), di \(t\) con \(x\), denotata con \(\phi[t/x]\) o \(\subs{\phi}{x}{t}\), come segue:
   \[\subs{\phi}{x}{t} = \begin{cases}
     \phi, & x \notin FV(\phi)\\
-    P({(t_1)}^x_{t}, \ldots, {(t_n)}^x_{t}), & \phi = P(t_1,\ldots,t_n), P\in\PredSyms, \arty(P)=n, t_1,\ldots,t_n \in T\\
+    P({(t_1)}^x_{t}, \ldots, {(t_n)}^x_{t}), & \phi = P(t_1,\ldots,t_n), P\in\PredSyms, \arty(P)=n, t_1,\ldots,t_n \in \Terms\\
     \neg {\psi}^x_{t}, & \phi = \neg \psi\\
     {\psi}^x_{t}\circ{\theta}^x_{t}, & \phi = \psi\circ\theta, \circ\in\set{\land,\lor,\to}\\
     Q y. {\psi}^x_{t}, & \phi = Q y. \psi, Q\in\set{\forall,\exists}, (y\neq x)
@@ -348,7 +348,7 @@ Infine, applicando la sostituzione \(\subs{\phi}{y}{f(z)}\) avremmo \(\exists y\
 Passiamo dunque al descrivere alcune proprietà della sostituzione così definita.
 
 \begin{lemma}{Sostituzione}
-  Dati \(t, t' \in T\), \(\sigma\) un assegnamento, e \(M\) una struttura semantica, allora
+  Dati \(t, t' \in \Terms\), \(\sigma\) un assegnamento, e \(M\) una struttura semantica, allora
   \[\den{{\subs{t}{x}{t'}} }[M][\sigma] = \den{t}[M][\sigma[x \mapsfrom \den{t'}[M][\sigma]]]\]
   Dove la prima sostituzione è quella definita sopra, ovvero la sostituzione sintattica, mentre la seconda è semantica.
 \end{lemma}
@@ -367,7 +367,7 @@ Tale lemma intuitivamente ci dice che applicare una sostituzione ai termini a li
   \[\den{t}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]] = \den{x}[M][\sigma[x\mapsfrom \den{t'}[M][\sigma]]] = \sigma[x\mapsfrom \den{t'}[M][\sigma]](x) = \den{t'}[M][\sigma]\]
   che abbiamo visto essere uguale a \(\den{\subs{t}{x}{t'} }[M][\sigma]\), e quindi anche in questo caso la tesi è verificata.
 
-  Per il caso induttivo, si avrà che \(t = f(t_1,\ldots,t_n)\) con \(f\in\FuncSyms\), \(\arty(f)=n\) e \(t_1,\ldots,t_n\in T\).
+  Per il caso induttivo, si avrà che \(t = f(t_1,\ldots,t_n)\) con \(f\in\FuncSyms\), \(\arty(f)=n\) e \(t_1,\ldots,t_n\in \Terms\).
   Dunque, applicando la definizione di sostituzione nei termini al caso induttivo e successivamente la definizione di interpretazione per i simboli funzionali, si ha
   \[\den{\subs{t}{x}{t'} }[M][\sigma] = \den{f(\subs{t_1}{x}{t'},\ldots,\subs{t_n}{x}{t'})}[M][\sigma] = f^M(\den{\subs{t_1}{x}{t'} }[M][\sigma],\ldots,\den{\subs{t_n}{x}{t'} }[M][\sigma])\]
   Inoltre, si ha che 
@@ -379,8 +379,8 @@ Tale lemma intuitivamente ci dice che applicare una sostituzione ai termini a li
 Per passare alla sostituzione nelle formule, si potrebbe pensare di poter estendere banalmente il lemma al teorema seguente:
 
 \begin{theorem}{Sostituzione Naïve}
-  Dati \(\phi\in\FOL\), \(t\in T\), \(\sigma\) un assegnamento, e \(M\) una struttura semantica e \(x\in\VarSyms\) allora
-  \[M,\sigma \models (\phi)^{x}_{t} \iff M,\sigma[x\mapsfrom \den{t}[M][\sigma]] \models \phi\]
+  Dati \(\phi\in\FOL\), \(t\in \Terms\), \(\sigma\) un assegnamento, e \(M\) una struttura semantica e \(x\in\VarSyms\) allora
+  \[M,\sigma \models \subs{\phi}{x}{t} \iff M,\sigma[x\mapsfrom \den{t}[M][\sigma]] \models \phi\]
 \end{theorem}
 
 Sfortunatamente, però, tale teorema non è vero in generale, e ciò è facilmente mostrabile con un semplice controesempio, usando come struttura \(\N\) e la sua interpretazione usuale.
@@ -389,7 +389,7 @@ Presa infatti \(\phi = \exists y \st x<y\), avremo una formula che è vera in \(
 Per evitare questo problema, è necessario restringere le ipotesi del teorema, richiedendo che, in caso di sostituzione di una variabile libera, le variabili introdotte da \(t\) siano ancora libere.
 
 \begin{definition}{Termine libero per una variabile}
-  Sia \(t\in T\), \(x\in\VarSyms\) e \(\phi \in \FOL\). Diremo che \(t\) è \keyword{libero per \(x\) in \(\phi\)} se nessuna variabile di \(t\) è legata in \(\phi\) da un quantificatore che ha \(x\) libera nel suo ambito.
+  Sia \(t\in \Terms\), \(x\in\VarSyms\) e \(\phi \in \FOL\). Diremo che \(t\) è \keyword{libero per \(x\) in \(\phi\)} se nessuna variabile di \(t\) è legata in \(\phi\) da un quantificatore che ha \(x\) libera nel suo ambito.
 \end{definition}
 
 In altre parole diremo che \(t\) è libero per \(x\) in \(\phi\) se tutte le variabili presenti in \(t\) sono libere in \(\phi\) nei contesti in cui è libera \(x\).
@@ -409,7 +409,7 @@ In altre parole diremo che \(t\) è libero per \(x\) in \(\phi\) se tutte le var
 A questo punto, possiamo riformulare il teorema nella sua versione corretta.
 
 \begin{theorem}[namedlabel={thm:fol_substitution}{Sostituzione}]{Sostituzione}
-  Dati \(\phi\in\FOL\), \(t\in T\), \(\sigma\) un assegnamento, e \(M\) una struttura semantica e \(x\in\VarSyms\) allora
+  Dati \(\phi\in\FOL\), \(t\in \Terms\), \(\sigma\) un assegnamento, e \(M\) una struttura semantica e \(x\in\VarSyms\) allora
   \[M,\sigma \models \subs{\phi}{x}{t} \iff M,\sigma[x\mapsfrom \den{t}[M][\sigma]] \models \phi\]
   se \(t\) è libero per \(x\) in \(\phi\).
 \end{theorem}
@@ -417,7 +417,7 @@ A questo punto, possiamo riformulare il teorema nella sua versione corretta.
 \begin{proof}
   Come al solito procediamo per induzione sulla struttura sintattica di \(\phi\) partendo dal caso base.
 
-  Sia \(\phi = P(t_1,\ldots,t_n)\) con \(P\in\PredSyms\), \(\arty(P)=n\) e \(t_1,\ldots,t_n\in T\). In questo caso,
+  Sia \(\phi = P(t_1,\ldots,t_n)\) con \(P\in\PredSyms\), \(\arty(P)=n\) e \(t_1,\ldots,t_n\in \Terms\). In questo caso,
   \[M,\sigma\models \subs{\phi}{x}{t} \iff (\den{\subs{t_1}{x}{t}}[M][\sigma], \ldots, \den{\subs{t_n}{x}{t}}[M][\sigma]) \in P^M\]
   Dal lemma precedente, si ha che \(\den{\subs{t_i}{x}{t} }[M][\sigma] = \den{t_i}[M][\sigma[x\mapsfrom \den{t}[M][\sigma]]]\) per ogni \(i\in\{1,\ldots,n\}\), e quindi 
   \[M,\sigma\models \subs{\phi}{x}{t} \iff (\den{t_1}[M][\sigma[x\mapsfrom \den{t}[M][\sigma]]], \ldots, \den{t_n}[M][\sigma[x\mapsfrom \den{t}[M][\sigma]]]) \in P^M \iff M,\sigma[x\mapsfrom \den{t}[M][\sigma]]\models \phi\]
